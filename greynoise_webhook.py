@@ -16,19 +16,18 @@
 GreyNoise Webhook Handler for SOAR Platform.
 
 This module handles incoming webhooks from GreyNoise's integration,
-processes the alert data, and creates SOAR containers and artifacts.
-The module is structured in a modular way with separate functions for
-each responsibility, following clean code principles.
+processes the alert and feed data, and creates SOAR containers and artifacts.
 """
 
 import json
 import logging
-import uuid
 from datetime import datetime
 from typing import Any, Optional, Union
-from greynoise_consts import *
 
 from phantom_common.install_info import get_verify_ssl_setting
+
+from greynoise_consts import *
+
 
 # Initialize logging
 logger = logging.getLogger("app_interface")
@@ -62,13 +61,14 @@ def validate_request(method: str, body: str) -> tuple[Optional[dict[str, Any]], 
     """
     # Validate request method
     if method.lower() != "post":
-        return None, create_error_response(HTTP_OK, "Method not allowed", "Only POST requests are supported")
+        return None, create_error_response(HTTP_METHOD_NOT_ALLOWED, "Method not allowed", "Only POST requests are supported")
 
     # Parse and validate the incoming JSON data
     try:
         data = json.loads(body)
-    except json.JSONDecodeError:
-        return None, create_error_response(HTTP_BAD_REQUEST, "Invalid JSON", "Request body contains invalid JSON")
+    except json.JSONDecodeError as e:
+        logger.error(f"Invalid JSON in request body: {e}")
+        return None, create_error_response(HTTP_BAD_REQUEST, "Invalid JSON", f"Request body contains invalid JSON: {e}")
 
     # Validate expected data format
     if not data:
@@ -79,37 +79,47 @@ def validate_request(method: str, body: str) -> tuple[Optional[dict[str, Any]], 
 
 def format_utc_timestamp(iso_timestamp: str, mode: str = "datetime") -> str:
     """
-    Format an ISO 8601 UTC timestamp based on mode.
+    Format an ISO timestamp in UTC into a human-readable format.
 
     Args:
-        iso_timestamp (str): Timestamp in 'YYYY-MM-DDTHH:MM:SS.mmmmmmZ' or 'YYYY-MM-DDTHH:MM:SSZ' format.
-        mode (str): 'datetime' for full timestamp, 'date' for date only.
+        iso_timestamp: Timestamp in ISO format
+        mode: 'datetime' for full timestamp, 'date' for date only
 
     Returns:
-        str: Formatted timestamp string based on the mode.
+        A formatted timestamp string
+
+    Raises:
+        ValueError: If there's an issue parsing the timestamp
     """
+    if not iso_timestamp:
+        logger.warning("Empty timestamp provided to format_utc_timestamp")
+        return "Unknown timestamp"
+
     try:
         if "." in iso_timestamp:
-            # Handle timestamp received from GreyNoise CVE feed
+            # Handle timestamp with nanoseconds
             if len(iso_timestamp.split(".")[1]) > 6:
-                # trim the microseconds to 6 digits
+                # Trim nanoseconds to 6 digits
                 iso_timestamp = iso_timestamp[: iso_timestamp.index(".") + 7] + "Z"
             dt = datetime.strptime(iso_timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
         else:
             dt = datetime.strptime(iso_timestamp, "%Y-%m-%dT%H:%M:%SZ")
+
         if mode == "date":
             return dt.strftime("%Y-%m-%d (UTC)")
         elif mode == "datetime":
             return dt.strftime("%Y-%m-%d %H:%M:%S (UTC)")
         else:
             raise ValueError(f"Unsupported mode: {mode}")
+
     except ValueError as e:
-        return f"Error: {e!s}"
+        logger.error(f"Error formatting timestamp '{iso_timestamp}': {e}")
+        raise ValueError(f"Invalid timestamp format: {e}")
 
 
 def determine_severity(classification: str) -> str:
     """
-    Determine the severity level based on classification.
+    Determine the severity based on the classification.
 
     Args:
         classification: The classification string from the alert
@@ -142,6 +152,7 @@ def create_alert_container(alert_metadata: dict[str, Any], alert_timestamp: str,
         alert_metadata: Alert metadata from the alert
         alert_timestamp: Timestamp of the alert
         soar_rest_client: Client for interacting with SOAR platform
+        container_label: The label for the container
 
     Returns:
         The ID of the created container
@@ -149,96 +160,103 @@ def create_alert_container(alert_metadata: dict[str, Any], alert_timestamp: str,
     Raises:
         Exception: If container creation fails
     """
-    # Generate container data
+    try:
+        # Generate container data
+        alert_name = alert_metadata.get("name", "Unknown Alert")
+        alert_type = alert_metadata.get("type", "UNKNOWN").upper()
+        formatted_timestamp = format_utc_timestamp(alert_timestamp)
+        container_name = f"GreyNoise Alert: {alert_name}: {alert_type}: {formatted_timestamp}"
+        logger.info(f"Creating container for GreyNoise alert: {container_name}")
 
-    alert_name = alert_metadata.get("name")
-    alert_id = alert_metadata.get("id")
-    alert_type = alert_metadata.get("type").upper()
-    formatted_timestamp = format_utc_timestamp(alert_timestamp)
-    container_name = f"GreyNoise Alert: {alert_name}: {alert_type}: {formatted_timestamp}"
-    logger.info(f"Creating container for GreyNoise alert: {container_name}")
-
-    container = {
-        "name": container_name,
-        "description": f"GreyNoise alert for {alert_name}",
-        "label": container_label,
-        "tags": [GREYNOISE_ALERT_TAG],
-    }
-
-    # Send API request to create container
-    response = soar_rest_client.session.post(
-        f"{soar_rest_client.base_url}/container",
-        json=container,
-        verify=get_verify_ssl_setting(),
-    )
-
-    # Handle the response
-    response.raise_for_status()
-    container_id = response.json().get("id")
-    logger.info(f"Container created for GreyNoise alert: {container_id}")
-
-    return container_id
-
-
-def create_alert_artifacts(
-    container_id: int, alert_metadata: dict[str, Any], alert_ip_data: str, soar_rest_client: Any, container_label: str
-) -> int:
-    """
-    Create and save an artifacts on the SOAR platform.
-
-    Args:
-        container_id: ID of the parent container
-        alert_metadata: Alert metadata from the alert
-        alert_ip_data: IP address from the alert
-        soar_rest_client: Client for interacting with SOAR platform
-        container_label: The label of the container
-
-    Returns:
-        The ID of the created artifacts
-
-    Raises:
-        Exception: If artifact creation fails
-    """
-
-    artifact_ids = []
-    for ip_data in alert_ip_data:
-        logger.info(f"Creating artifact for GreyNoise alert: {ip_data.get('ip')}")
-        artifact = {
-            "name": f"IP Artifact: {ip_data.get('ip')}",
+        container = {
+            "name": container_name,
+            "description": f"GreyNoise alert for {alert_name}",
             "label": container_label,
-            "severity": determine_severity(ip_data.get("classification")),
-            "container_id": container_id,
-            "run_automation": True,
-            "cef": {
-                "alert": convert_to_cef_fields(alert_metadata),
-                "ip": ip_data.get("ip"),
-                "classification": ip_data.get("classification"),
-                "sourceAddress": ip_data.get("ip"),
-            },
-            "cef_types": {
-                "ip": ["ip"],
-                "sourceAddress": ["ip"],
-            },
             "tags": [GREYNOISE_ALERT_TAG],
         }
 
-        # Send API request to create artifact
-        response_artifact = soar_rest_client.session.post(
-            f"{soar_rest_client.base_url}/artifact",
-            json=artifact,
+        # Send API request to create container
+        response = soar_rest_client.session.post(
+            f"{soar_rest_client.base_url}/container",
+            json=container,
             verify=get_verify_ssl_setting(),
         )
 
         # Handle the response
-        if response_artifact.status_code != HTTP_OK:
-            raise Exception(f"Failed to create artifact: {response_artifact.json()}")
-        artifact_id = response_artifact.json().get("id")
-        artifact_ids.append(artifact_id)
+        response.raise_for_status()
+        container_id = response.json().get("id")
+        logger.info(f"Container created for GreyNoise alert: {container_id}")
+
+        return container_id
+    except Exception as e:
+        logger.error(f"Failed to create alert container: {e}")
+        raise
+
+
+def create_alert_artifacts(
+    container_id: int, alert_metadata: dict[str, Any], alert_ip_data: list[dict[str, Any]], soar_rest_client: Any, container_label: str
+) -> list[int]:
+    """
+    Create and save artifacts on the SOAR platform.
+
+    Args:
+        container_id: ID of the parent container
+        alert_metadata: Alert metadata from the alert
+        alert_ip_data: Data for each IP in the alert
+        soar_rest_client: Client for interacting with SOAR platform
+        container_label: The label of the container
+
+    Returns:
+        The IDs of the created artifacts
+
+    Raises:
+        Exception: If artifact creation fails
+    """
+    artifact_ids = []
+    for ip_data in alert_ip_data:
+        try:
+            logger.info(f"Creating artifact for GreyNoise alert: {ip_data.get('ip')}")
+            artifact = {
+                "name": f"IP Artifact: {ip_data.get('ip')}",
+                "label": container_label,
+                "severity": determine_severity(ip_data.get("classification")),
+                "container_id": container_id,
+                "run_automation": True,
+                "cef": {
+                    "alert": convert_to_cef_fields(alert_metadata),
+                    "ip": ip_data.get("ip"),
+                    "classification": ip_data.get("classification"),
+                    "sourceAddress": ip_data.get("ip"),
+                },
+                "cef_types": {
+                    "ip": ["ip"],
+                    "sourceAddress": ["ip"],
+                },
+                "tags": [GREYNOISE_ALERT_TAG],
+            }
+
+            # Send API request to create artifact
+            response_artifact = soar_rest_client.session.post(
+                f"{soar_rest_client.base_url}/artifact",
+                json=artifact,
+                verify=get_verify_ssl_setting(),
+            )
+
+            # Handle the response
+            response_artifact.raise_for_status()
+            artifact_id = response_artifact.json().get("id")
+            artifact_ids.append(artifact_id)
+
+        except Exception as e:
+            logger.error(f"Failed to create artifact for IP {ip_data.get('ip')}: {e}")
+            # Continue with other IPs even if one fails
+            continue
+
     logger.info(f"Artifacts created for GreyNoise alert: {artifact_ids}")
     return artifact_ids
 
 
-def process_alert(alert: dict[str, Any], soar_rest_client: Any, container_label: str) -> tuple[int, int]:
+def process_alert(alert: dict[str, Any], soar_rest_client: Any, container_label: str) -> tuple[int, list[int]]:
     """
     Process a single alert from the webhook data.
 
@@ -248,56 +266,39 @@ def process_alert(alert: dict[str, Any], soar_rest_client: Any, container_label:
         container_label: The label of the container
 
     Returns:
-        Tuple containing (container_id, artifact_id)
-
-    Raises:
-        Exception: If there's an error creating containers or artifacts
+        Tuple containing (container_id, artifact_ids)
     """
     # Extract critical fields
     alert_timestamp = alert.get("timestamp")
-    alert_metadata = alert.get("alert")
-    alert_ip_data = alert.get("data")
+    alert_metadata = alert.get("alert", {})
+    alert_ip_data = alert.get("data", [])
+
+    # Add links to metadata
     alert_metadata.update({"viz_link": alert.get("viz_link"), "query_link": alert.get("query_link"), "alert_link": alert.get("alert_link")})
 
     # Create container and get container ID
     container_id = create_alert_container(alert_metadata, alert_timestamp, soar_rest_client, container_label)
 
-    # Create artifact and get artifact ID
+    # Create artifacts and get artifact IDs
     artifact_ids = create_alert_artifacts(container_id, alert_metadata, alert_ip_data, soar_rest_client, container_label)
 
     return container_id, artifact_ids
 
 
-def process_feed(feed: dict[str, Any], soar_rest_client: Any, container_label: str) -> tuple[int, int]:
+def convert_activity_state(state_data: Optional[dict[str, Any]]) -> str:
     """
-    Process a single feed from the webhook data.
+    Convert boolean activity_seen to human-readable format
 
     Args:
-        feed: The feed data to process
-        soar_rest_client: Client for interacting with SOAR platform
-        container_label: The label of the container
+        state_data: Dictionary containing activity state information
 
     Returns:
-        Tuple containing (container_id, artifact_id)
-
-    Raises:
-        Exception: If there's an error creating containers or artifacts
+        String indicating activity status
     """
-    # Extract critical fields
-    feed_event_type = feed.get("event_type")
-    feed_timestamp = feed.get("timestamp")
-    container_id = create_feed_container(feed_timestamp, soar_rest_client, container_label)
+    if not state_data:
+        logger.warning("Empty state data provided to convert_activity_state")
+        return "Unknown activity status"
 
-    if feed_event_type == GREYNOISE_FEED_IP_EVENT_TYPE:
-        artifact_id = create_feed_ip_artifact(container_id, feed, soar_rest_client, container_label)
-    elif feed_event_type == GREYNOISE_FEED_CVE_EVENT_TYPE:
-        artifact_id = create_feed_cve_artifact(container_id, feed, soar_rest_client, container_label)
-
-    return container_id, artifact_id
-
-
-def convert_activity_state(state_data):
-    """Convert boolean activity_seen to human-readable format"""
     return "Recent activity" if state_data.get("activity_seen", False) else "No recent activity"
 
 
@@ -316,53 +317,85 @@ def create_feed_container(feed_timestamp: str, soar_rest_client: Any, container_
     Raises:
         Exception: If container creation fails
     """
-    # Generate container data
-    # Extract the date from the timestamp
-    date = format_utc_timestamp(feed_timestamp, mode="date")
-    container_name = f"GreyNoise Feed: {date}"
+    try:
+        # Extract the date from the timestamp
+        date = format_utc_timestamp(feed_timestamp, mode="date")
+        container_name = f"GreyNoise Feed: {date}"
 
-    # Get existing containers for the date
-    logger.info(f"Check if container exists for GreyNoise feed for date: {date}")
-    response = soar_rest_client.session.get(
-        f"{soar_rest_client.base_url}/container",
-        params={"_filter_name": f'"{container_name}"', "_filter_label": f'"{container_label}"'},
-        verify=get_verify_ssl_setting(),
-    )
-    response.raise_for_status()
+        # Get existing containers for the date
+        logger.info(f"Check if container exists for GreyNoise feed for date: {date}")
+        response = soar_rest_client.session.get(
+            f"{soar_rest_client.base_url}/container",
+            params={"_filter_name": f'"{container_name}"', "_filter_label": f'"{container_label}"'},
+            verify=get_verify_ssl_setting(),
+        )
+        response.raise_for_status()
 
-    if response.json().get("count") > 0:
-        # Container with same name exists in provided label\
-        logger.info(f"Container exists for GreyNoise feed for date: {date}")
-        return response.json().get("data")[-1].get("id")  # Return the last container ID, which will be the most recent
+        if response.json().get("count") > 0:
+            # Container with same name exists in provided label
+            container_id = response.json().get("data")[-1].get("id")  # Return the last container ID, which will be the most recent
+            logger.info(f"Using existing container for GreyNoise feed for date: {date}, ID: {container_id}")
+            return container_id
 
-    logger.info(f"Container does not exist for GreyNoise feed for date: {date}")
-    # Create a new container if none exists for the date
-    container = {
-        "name": container_name,
-        "description": f"GreyNoise feed for date: {date}",
+        logger.info(f"Creating new container for GreyNoise feed for date: {date}")
+        # Create a new container if none exists for the date
+        container = {
+            "name": container_name,
+            "description": f"GreyNoise feed for date: {date}",
+            "label": container_label,
+            "tags": [GREYNOISE_FEED_TAG],
+        }
+        response = soar_rest_client.session.post(
+            f"{soar_rest_client.base_url}/container",
+            json=container,
+            verify=get_verify_ssl_setting(),
+        )
+        response.raise_for_status()
+        container_id = response.json().get("id")
+        logger.info(f"Container created for GreyNoise feed for date: {date}, ID: {container_id}")
+        return container_id
+
+    except Exception as e:
+        logger.error(f"Failed to create or find feed container: {e}")
+        raise
+
+
+# Refactored artifact creation functions to reduce code duplication
+def _create_artifact_base(container_id: int, name: str, container_label: str, severity: Optional[str], tags: list[str]) -> dict[str, Any]:
+    """
+    Create the base structure for an artifact.
+
+    Args:
+        container_id: ID of the parent container
+        name: Name of the artifact
+        container_label: Label of the container
+        severity: Severity level (optional)
+        tags: List of tags to apply
+
+    Returns:
+        Base artifact dictionary
+    """
+    artifact = {
+        "name": name,
         "label": container_label,
-        "tags": [GREYNOISE_FEED_TAG],
+        "container_id": container_id,
+        "run_automation": True,
+        "tags": tags,
     }
-    response = soar_rest_client.session.post(
-        f"{soar_rest_client.base_url}/container",
-        json=container,
-        verify=get_verify_ssl_setting(),
-    )
-    response.raise_for_status()
-    container_id = response.json().get("id")
-    logger.info(f"Container created for GreyNoise feed for date: {date}")
-    return container_id
+
+    if severity:
+        artifact["severity"] = severity
+
+    return artifact
 
 
 def create_feed_ip_artifact(container_id: int, feed: dict[str, Any], soar_rest_client: Any, container_label: str) -> int:
     """
-    Create and save an artifact on the SOAR platform.
+    Create and save an IP artifact on the SOAR platform.
 
     Args:
-        container_id: ID of the container
-        ip: IP address from the feed
-        old_classification: Old classification of the IP
-        new_classification: New classification of the IP
+        container_id: ID of the parent container
+        feed: Feed data to process
         soar_rest_client: Client for interacting with SOAR platform
         container_label: The label of the container
 
@@ -372,48 +405,56 @@ def create_feed_ip_artifact(container_id: int, feed: dict[str, Any], soar_rest_c
     Raises:
         Exception: If artifact creation fails
     """
-    formatted_timestamp = format_utc_timestamp(feed.get("timestamp"))
+    try:
+        formatted_timestamp = format_utc_timestamp(feed.get("timestamp"))
+        ip = feed.get("ip", "unknown")
 
-    artifact = {
-        "name": f"IP Artifact: {feed.get('ip')}",
-        "label": container_label,
-        "severity": determine_severity(feed.get("new_state")),
-        "container_id": container_id,
-        "run_automation": True,
-        "cef": {
-            "ip": feed.get("ip"),
+        # Create base artifact
+        artifact = _create_artifact_base(
+            container_id=container_id,
+            name=f"IP Artifact: {ip}",
+            container_label=container_label,
+            severity=determine_severity(feed.get("new_state")),
+            tags=[GREYNOISE_FEED_TAG, GREYNOISE_FEED_IP_TAG],
+        )
+
+        # Add IP-specific CEF fields
+        artifact["cef"] = {
+            "ip": ip,
             "oldClassification": feed.get("old_state"),
             "newClassification": feed.get("new_state"),
-            "sourceAddress": feed.get("ip"),
+            "sourceAddress": ip,
             "timestamp": formatted_timestamp,
-        },
-        "cef_types": {
+        }
+
+        artifact["cef_types"] = {
             "ip": ["ip"],
             "sourceAddress": ["ip"],
-        },
-        "tags": [GREYNOISE_FEED_TAG, GREYNOISE_FEED_IP_TAG],
-    }
-    logger.info(f"Creating artifact for GreyNoise feed for IP: {feed.get('ip')}")
-    response = soar_rest_client.session.post(
-        f"{soar_rest_client.base_url}/artifact",
-        json=artifact,
-        verify=get_verify_ssl_setting(),
-    )
-    response.raise_for_status()
-    artifact_id = response.json().get("id")
-    logger.info(f"Artifact created for GreyNoise feed for IP: {feed.get('ip')}")
-    return artifact_id
+        }
+
+        logger.info(f"Creating artifact for GreyNoise feed for IP: {ip}")
+        response = soar_rest_client.session.post(
+            f"{soar_rest_client.base_url}/artifact",
+            json=artifact,
+            verify=get_verify_ssl_setting(),
+        )
+        response.raise_for_status()
+        artifact_id = response.json().get("id")
+        logger.info(f"Artifact created for GreyNoise feed for IP: {ip}, ID: {artifact_id}")
+        return artifact_id
+
+    except Exception as e:
+        logger.error(f"Failed to create IP feed artifact: {e}")
+        raise
 
 
 def create_feed_cve_artifact(container_id: int, feed: dict[str, Any], soar_rest_client: Any, container_label: str) -> int:
     """
-    Create and save an artifact on the SOAR platform.
+    Create and save a CVE artifact on the SOAR platform.
 
     Args:
-        container_id: ID of the container
-        cve: CVE from the feed
-        old_state: Old state of the CVE
-        new_state: New state of the CVE
+        container_id: ID of the parent container
+        feed: Feed data to process
         soar_rest_client: Client for interacting with SOAR platform
         container_label: The label of the container
 
@@ -423,48 +464,95 @@ def create_feed_cve_artifact(container_id: int, feed: dict[str, Any], soar_rest_
     Raises:
         Exception: If artifact creation fails
     """
-    formatted_timestamp = format_utc_timestamp(feed.get("timestamp"))
+    try:
+        formatted_timestamp = format_utc_timestamp(feed.get("timestamp"))
+        cve = feed.get("cve", "unknown")
 
-    artifact = {
-        "name": f"CVE Artifact: {feed.get('cve')}",
-        "label": container_label,
-        "container_id": container_id,
-        "run_automation": True,
-        "cef": {
-            "cve": feed.get("cve"),
-            "oldState": convert_activity_state(feed.get("old_state")),
-            "newState": convert_activity_state(feed.get("new_state")),
+        # Create base artifact
+        artifact = _create_artifact_base(
+            container_id=container_id,
+            name=f"CVE Artifact: {cve}",
+            container_label=container_label,
+            severity=None,  # CVEs don't have severity in this context
+            tags=[GREYNOISE_FEED_TAG, GREYNOISE_FEED_CVE_TAG],
+        )
+
+        # Process state data safely
+        old_state = feed.get("old_state", {}) or {}
+        new_state = feed.get("new_state", {}) or {}
+
+        # Add CVE-specific CEF fields
+        artifact["cef"] = {
+            "cve": cve,
+            "oldState": convert_activity_state(old_state),
+            "newState": convert_activity_state(new_state),
             "timestamp": formatted_timestamp,
-            "oldCveStats": convert_to_cef_fields(
-                {k: v for k, v in feed.get("old_state", {}).items() if k != "activity_seen"}
-            ),  # Remove activity_seen from old_state since is already added in oldState
-            "newCveStats": convert_to_cef_fields(
-                {k: v for k, v in feed.get("new_state", {}).items() if k != "activity_seen"}
-            ),  # Remove activity_seen from new_state since is already added in newState
-        },
-        "cef_types": {
+            "oldCveStats": convert_to_cef_fields({k: v for k, v in old_state.items() if k != "activity_seen"}),
+            "newCveStats": convert_to_cef_fields({k: v for k, v in new_state.items() if k != "activity_seen"}),
+        }
+
+        artifact["cef_types"] = {
             "cve": ["cve"],
-        },
-        "tags": [GREYNOISE_FEED_TAG, GREYNOISE_FEED_CVE_TAG],
-    }
-    logger.info(f"Creating artifact for GreyNoise feed for CVE: {feed.get('cve')}")
-    response = soar_rest_client.session.post(
-        f"{soar_rest_client.base_url}/artifact",
-        json=artifact,
-        verify=get_verify_ssl_setting(),
-    )
-    response.raise_for_status()
-    artifact_id = response.json().get("id")
-    logger.info(f"Artifact created for GreyNoise feed for CVE: {feed.get('cve')}")
-    return artifact_id
+        }
+
+        logger.info(f"Creating artifact for GreyNoise feed for CVE: {cve}")
+        response = soar_rest_client.session.post(
+            f"{soar_rest_client.base_url}/artifact",
+            json=artifact,
+            verify=get_verify_ssl_setting(),
+        )
+        response.raise_for_status()
+        artifact_id = response.json().get("id")
+        logger.info(f"Artifact created for GreyNoise feed for CVE: {cve}, ID: {artifact_id}")
+        return artifact_id
+
+    except Exception as e:
+        logger.error(f"Failed to create CVE feed artifact: {e}")
+        raise
 
 
-def create_success_response(container_ids: list[int], artifact_ids: list[int]) -> dict[str, Any]:
+def process_feed(feed: dict[str, Any], soar_rest_client: Any, container_label: str) -> tuple[int, int]:
+    """
+    Process a single feed from the webhook data.
+
+    Args:
+        feed: The feed data to process
+        soar_rest_client: Client for interacting with SOAR platform
+        container_label: The label of the container
+
+    Returns:
+        Tuple containing (container_id, artifact_id)
+
+    Raises:
+        Exception: If there's an error creating containers or artifacts
+    """
+    try:
+        # Extract critical fields
+        feed_event_type = feed.get("event_type")
+        feed_timestamp = feed.get("timestamp")
+
+        container_id = create_feed_container(feed_timestamp, soar_rest_client, container_label)
+
+        if feed_event_type == GREYNOISE_FEED_IP_EVENT_TYPE:
+            artifact_id = create_feed_ip_artifact(container_id, feed, soar_rest_client, container_label)
+        elif feed_event_type == GREYNOISE_FEED_CVE_EVENT_TYPE:
+            artifact_id = create_feed_cve_artifact(container_id, feed, soar_rest_client, container_label)
+        else:
+            logger.warning(f"Unknown feed event type: {feed_event_type}")
+            artifact_id = 0  # No artifact created
+
+        return container_id, artifact_id
+    except Exception as e:
+        logger.error(f"Error processing feed: {e}")
+        raise
+
+
+def create_success_response(container_id: int, artifact_ids: list[int]) -> dict[str, Any]:
     """
     Create a success response for the webhook.
 
     Args:
-        container_ids: List of IDs of all created containers
+        container_id: ID of created container
         artifact_ids: List of IDs of all created artifacts
 
     Returns:
@@ -473,12 +561,7 @@ def create_success_response(container_ids: list[int], artifact_ids: list[int]) -
     return {
         "status_code": HTTP_OK,
         "headers": [CONTENT_TYPE_HEADER],
-        "content": json.dumps(
-            {
-                "container_ids": container_ids,
-                "artifact_ids": artifact_ids,
-            }
-        ),
+        "content": json.dumps({"container_id": container_id, "artifact_ids": artifact_ids, "status": "success"}),
     }
 
 
@@ -518,7 +601,7 @@ def handle_webhook(
 
     if validated_data.get("alert"):
         # If request has alert key, process it as a alert
-        logger.info("Received webhook request for alert from GreyNoise")    
+        logger.info("Received webhook request for alert from GreyNoise")
         container_id, artifact_ids = process_alert(validated_data, soar_rest_client, container_label)
 
     if validated_data.get("event_type"):
