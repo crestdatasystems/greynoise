@@ -15,7 +15,7 @@
 """
 GreyNoise Webhook Handler for SOAR Platform.
 
-This module handles incoming webhooks from GreyNoise's integration,
+This module handles incoming webhooks from GreyNoise,
 processes the alert and feed data, and creates SOAR containers and artifacts.
 """
 
@@ -46,6 +46,24 @@ def create_error_response(status_code: int, error: str, message: str) -> dict[st
         A dictionary with the response status code, headers and content
     """
     return {"status_code": status_code, "headers": [CONTENT_TYPE_HEADER], "content": json.dumps({"error": error, "message": message})}
+
+
+def create_success_response(container_id: int, artifact_ids: list[int]) -> dict[str, Any]:
+    """
+    Create a success response for the webhook.
+
+    Args:
+        container_id: ID of created container
+        artifact_ids: List of IDs of all created artifacts
+
+    Returns:
+        A dictionary with the response status code, headers and content
+    """
+    return {
+        "status_code": HTTP_OK,
+        "headers": [CONTENT_TYPE_HEADER],
+        "content": json.dumps({"container_id": container_id, "artifact_ids": artifact_ids, "status": "success"}),
+    }
 
 
 def validate_request(method: str, body: str) -> tuple[Optional[dict[str, Any]], Optional[dict[str, Any]]]:
@@ -142,6 +160,23 @@ def convert_to_cef_fields(data: dict[str, Any]) -> dict[str, Any]:
     """
     cef_fields = {k.split("_")[0] + "".join(word.capitalize() for word in k.split("_")[1:]): v for k, v in data.items()}
     return cef_fields
+
+
+def convert_activity_state(state_data: Optional[dict[str, Any]]) -> str:
+    """
+    Convert boolean activity_seen to human-readable format
+
+    Args:
+        state_data: Dictionary containing activity state information
+
+    Returns:
+        String indicating activity status
+    """
+    if not state_data:
+        logger.warning("Empty state data provided to convert_activity_state")
+        return "Unknown activity status"
+
+    return "Recent activity" if state_data.get("activity_seen", False) else "No recent activity"
 
 
 def create_alert_container(alert_metadata: dict[str, Any], alert_timestamp: str, soar_rest_client: Any, container_label: str) -> int:
@@ -283,23 +318,6 @@ def process_alert(alert: dict[str, Any], soar_rest_client: Any, container_label:
     artifact_ids = create_alert_artifacts(container_id, alert_metadata, alert_ip_data, soar_rest_client, container_label)
 
     return container_id, artifact_ids
-
-
-def convert_activity_state(state_data: Optional[dict[str, Any]]) -> str:
-    """
-    Convert boolean activity_seen to human-readable format
-
-    Args:
-        state_data: Dictionary containing activity state information
-
-    Returns:
-        String indicating activity status
-    """
-    if not state_data:
-        logger.warning("Empty state data provided to convert_activity_state")
-        return "Unknown activity status"
-
-    return "Recent activity" if state_data.get("activity_seen", False) else "No recent activity"
 
 
 def create_feed_container(feed_timestamp: str, soar_rest_client: Any, container_label: str) -> int:
@@ -545,24 +563,6 @@ def process_feed(feed: dict[str, Any], soar_rest_client: Any, container_label: s
     except Exception as e:
         logger.error(f"Error processing feed: {e}")
         raise
-
-
-def create_success_response(container_id: int, artifact_ids: list[int]) -> dict[str, Any]:
-    """
-    Create a success response for the webhook.
-
-    Args:
-        container_id: ID of created container
-        artifact_ids: List of IDs of all created artifacts
-
-    Returns:
-        A dictionary with the response status code, headers and content
-    """
-    return {
-        "status_code": HTTP_OK,
-        "headers": [CONTENT_TYPE_HEADER],
-        "content": json.dumps({"container_id": container_id, "artifact_ids": artifact_ids, "status": "success"}),
-    }
 
 
 def handle_webhook(
