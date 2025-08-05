@@ -1,6 +1,6 @@
 {
-    "appid": "3af2ef2d-6e4a-4e74-8f20-4d6030625562",
-    "name": "GreyNoise for SOAR Webhook",
+    "appid": "3af2ef2d-6e4a-4e74-8f20-4d6030625561",
+    "name": "GreyNoise for SOAR",
     "description": "This app provides investigative capabilities using the GreyNoise plugin",
     "type": "reputation",
     "product_vendor": "GreyNoise",
@@ -15,7 +15,7 @@
     "utctime_updated": "2025-07-02T17:19:45.000000Z",
     "package_name": "phantom_greynoise",
     "main_module": "greynoise_connector.py",
-    "min_phantom_version": "5.5.0",
+    "min_phantom_version": "6.4.1",
     "fips_compliant": false,
     "webhook": {
         "handler": "greynoise_webhook.handle_webhook",
@@ -24,8 +24,7 @@
             "0.0.0.0/0"
         ],
         "allowed_headers": [
-            "Content-Type",
-            "User-Agent"
+            "Content-Type"
         ]
     },
     "configuration": {
@@ -1261,7 +1260,7 @@
             },
             {
                 "module": "cachetools",
-                "input_file": "wheels/py3/cachetools-5.5.2-py3-none-any.whl"
+                "input_file": "wheels/py3/cachetools-6.1.0-py3-none-any.whl"
             },
             {
                 "module": "click",
@@ -1281,7 +1280,7 @@
             },
             {
                 "module": "dict2xml",
-                "input_file": "wheels/py3/dict2xml-1.7.6-py3-none-any.whl"
+                "input_file": "wheels/py3/dict2xml-1.7.7-py3-none-any.whl"
             },
             {
                 "module": "greynoise",
@@ -1321,11 +1320,11 @@
             },
             {
                 "module": "cachetools",
-                "input_file": "wheels/py3/cachetools-5.5.2-py3-none-any.whl"
+                "input_file": "wheels/py3/cachetools-6.1.0-py3-none-any.whl"
             },
             {
                 "module": "click",
-                "input_file": "wheels/py3/click-8.1.8-py3-none-any.whl"
+                "input_file": "wheels/py3/click-8.2.1-py3-none-any.whl"
             },
             {
                 "module": "click_default_group",
@@ -1341,7 +1340,7 @@
             },
             {
                 "module": "dict2xml",
-                "input_file": "wheels/py3/dict2xml-1.7.6-py3-none-any.whl"
+                "input_file": "wheels/py3/dict2xml-1.7.7-py3-none-any.whl"
             },
             {
                 "module": "greynoise",
