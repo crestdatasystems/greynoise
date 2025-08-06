@@ -135,7 +135,7 @@ def format_utc_timestamp(iso_timestamp: str, mode: str = "datetime") -> str:
         raise ValueError(f"Invalid timestamp format: {e}")
 
 
-def determine_severity(classification: str) -> str:
+def determine_severity(classification: Optional[str]) -> str:
     """
     Determine the severity based on the classification.
 
@@ -145,6 +145,8 @@ def determine_severity(classification: str) -> str:
     Returns:
         A severity string (high, medium, or low)
     """
+    if classification is None:
+        classification = "unknown"
     return SEVERITY_MAP.get(classification.lower())
 
 
@@ -320,9 +322,10 @@ def process_alert(alert: dict[str, Any], soar_rest_client: Any, container_label:
     return container_id, artifact_ids
 
 
-def create_feed_container(feed_timestamp: str, soar_rest_client: Any, container_label: str) -> int:
+def get_or_create_feed_container(feed_timestamp: str, soar_rest_client: Any, container_label: str) -> int:
     """
     Create and save a container object in the SOAR platform.
+    If container already exists, return its ID.
 
     Args:
         feed_timestamp: Timestamp of the feed
@@ -370,7 +373,7 @@ def create_feed_container(feed_timestamp: str, soar_rest_client: Any, container_
         )
         response.raise_for_status()
         container_id = response.json().get("id")
-        logger.info(f"Container created for GreyNoise feed for date: {date}, ID: {container_id}")
+        logger.info(f"Container created for GreyNoise feed for date: {date}, Name: {container_name}, ID: {container_id}")
         return container_id
 
     except Exception as e:
@@ -378,7 +381,6 @@ def create_feed_container(feed_timestamp: str, soar_rest_client: Any, container_
         raise
 
 
-# Refactored artifact creation functions to reduce code duplication
 def _create_artifact_base(container_id: int, name: str, container_label: str, severity: Optional[str], tags: list[str]) -> dict[str, Any]:
     """
     Create the base structure for an artifact.
@@ -433,7 +435,7 @@ def create_feed_ip_artifact(container_id: int, feed: dict[str, Any], soar_rest_c
             name=f"IP Artifact: {ip}",
             container_label=container_label,
             severity=determine_severity(feed.get("new_state")),
-            tags=[GREYNOISE_FEED_TAG, GREYNOISE_FEED_IP_TAG],
+            tags=[GREYNOISE_FEED_IP_TAG],
         )
 
         # Add IP-specific CEF fields
@@ -492,7 +494,7 @@ def create_feed_cve_artifact(container_id: int, feed: dict[str, Any], soar_rest_
             name=f"CVE Artifact: {cve}",
             container_label=container_label,
             severity=None,  # CVEs don't have severity in this context
-            tags=[GREYNOISE_FEED_TAG, GREYNOISE_FEED_CVE_TAG],
+            tags=[GREYNOISE_FEED_CVE_TAG],
         )
 
         # Process state data safely
@@ -507,6 +509,7 @@ def create_feed_cve_artifact(container_id: int, feed: dict[str, Any], soar_rest_
             "timestamp": formatted_timestamp,
             "oldCveStats": convert_to_cef_fields({k: v for k, v in old_state.items() if k != "activity_seen"}),
             "newCveStats": convert_to_cef_fields({k: v for k, v in new_state.items() if k != "activity_seen"}),
+            "metadata": feed.get("metadata", {}),
         }
 
         artifact["cef_types"] = {
@@ -549,14 +552,14 @@ def process_feed(feed: dict[str, Any], soar_rest_client: Any, container_label: s
         feed_event_type = feed.get("event_type")
         feed_timestamp = feed.get("timestamp")
 
-        container_id = create_feed_container(feed_timestamp, soar_rest_client, container_label)
+        container_id = get_or_create_feed_container(feed_timestamp, soar_rest_client, container_label)
 
         if feed_event_type == GREYNOISE_FEED_IP_EVENT_TYPE:
             artifact_id = create_feed_ip_artifact(container_id, feed, soar_rest_client, container_label)
         elif feed_event_type == GREYNOISE_FEED_CVE_EVENT_TYPE:
             artifact_id = create_feed_cve_artifact(container_id, feed, soar_rest_client, container_label)
         else:
-            logger.warning(f"Unknown feed event type: {feed_event_type}")
+            logger.error(f"Unknown feed event type: {feed_event_type}")
             artifact_id = 0  # No artifact created
 
         return container_id, artifact_id
