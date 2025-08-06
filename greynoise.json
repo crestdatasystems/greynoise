@@ -11,12 +11,22 @@
     "product_version_regex": ".*",
     "publisher": "GreyNoise",
     "license": "Copyright (c) GreyNoise, 2019-2025",
-    "app_version": "2.3.3",
-    "utctime_updated": "2025-04-29T13:48:37.510093Z",
+    "app_version": "2.3.5",
+    "utctime_updated": "2025-08-05T17:19:45.000000Z",
     "package_name": "phantom_greynoise",
     "main_module": "greynoise_connector.py",
-    "min_phantom_version": "5.5.0",
+    "min_phantom_version": "6.4.1",
     "fips_compliant": false,
+    "webhook": {
+        "handler": "greynoise_webhook.handle_webhook",
+        "requires_auth": false,
+        "ip_allowlist": [
+            "0.0.0.0/0"
+        ],
+        "allowed_headers": [
+            "Content-Type"
+        ]
+    },
     "configuration": {
         "api_key": {
             "description": "API Key for GreyNoise",
@@ -1250,7 +1260,7 @@
             },
             {
                 "module": "cachetools",
-                "input_file": "wheels/py3/cachetools-5.5.2-py3-none-any.whl"
+                "input_file": "wheels/py3/cachetools-6.1.0-py3-none-any.whl"
             },
             {
                 "module": "click",
@@ -1270,7 +1280,7 @@
             },
             {
                 "module": "dict2xml",
-                "input_file": "wheels/py3/dict2xml-1.7.6-py3-none-any.whl"
+                "input_file": "wheels/py3/dict2xml-1.7.7-py3-none-any.whl"
             },
             {
                 "module": "greynoise",
@@ -1310,11 +1320,11 @@
             },
             {
                 "module": "cachetools",
-                "input_file": "wheels/py3/cachetools-5.5.2-py3-none-any.whl"
+                "input_file": "wheels/py3/cachetools-6.1.0-py3-none-any.whl"
             },
             {
                 "module": "click",
-                "input_file": "wheels/py3/click-8.1.8-py3-none-any.whl"
+                "input_file": "wheels/py3/click-8.2.1-py3-none-any.whl"
             },
             {
                 "module": "click_default_group",
@@ -1330,7 +1340,7 @@
             },
             {
                 "module": "dict2xml",
-                "input_file": "wheels/py3/dict2xml-1.7.6-py3-none-any.whl"
+                "input_file": "wheels/py3/dict2xml-1.7.7-py3-none-any.whl"
             },
             {
                 "module": "greynoise",
