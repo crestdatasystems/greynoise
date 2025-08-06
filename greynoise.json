@@ -1220,202 +1220,200 @@
       },
       "versions": "EQ(*)"
     },
-    {
-      "action": "noise ip timeline",
-      "description": "Lookup Similar internet scanner IP using GreyNoise's IP Similarity tool",
-      "verbose": "The GreyNoise IP Similarity tool allows for analysts to identify IP addresses within the GreyNoise internet scanning dataset that are using a similar scanning profile.",
-      "type": "investigate",
-      "identifier": "lookup_ip_timeline",
-      "read_only": true,
-      "parameters": {
-        "ip": {
-          "description": "IP to get timeline information",
-          "data_type": "string",
-          "contains": [
-            "ip"
-          ],
-          "primary": true,
-          "required": true,
-          "order": 0
-        },
-        "days": {
-          "description": "Number of days to show data for",
-          "data_type": "numeric",
-          "required": false,
-          "default": 1,
-          "order": 1
-        },
-        "field": {
-          "description": "Field over which to show activity breakdown",
-          "data_type": "string",
-          "required": true,
-          "default": "classification",
-          "value_list": [
-            "classification",
-            "source_org",
-            "http_path",
-            "ja3",
-            "rdns",
-            "asn",
-            "tags",
-            "category",
-            "spoofable",
-            "cve"
-          ],
-          "order": 2
-        },
-        "granularity": {
-          "description": "Granularity of activity date ranges .This can be in hours (e.g. Xh) or days (Xd). Valid hours are between 1 and 24. Valid days are between 1 and 90.",
-          "data_type": "string",
-          "required": false,
-          "default": "1d",
-          "order": 3
-        }
+   {
+    "action": "noise ip timeline",
+    "description": "Lookup Similar internet scanner IP using GreyNoise's IP Similarity tool",
+    "verbose": "The GreyNoise IP Similarity tool allows for analysts to identify IP addresses within the GreyNoise internet scanning dataset that are using a similar scanning profile.",
+    "type": "investigate",
+    "identifier": "lookup_ip_timeline",
+    "read_only": true,
+    "parameters": {
+      "ip": {
+        "description": "IP to get timeline information",
+        "data_type": "string",
+        "contains": [
+          "ip"
+        ],
+        "primary": true,
+        "required": true,
+        "order": 0
       },
-      "output": [
-        {
-          "data_path": "action_result.parameter.ip",
-          "data_type": "string",
-          "contains": [
-            "ip"
-          ],
-          "example_values": [
-            "71.6.135.131"
-          ]
-        },
-        {
-          "data_path": "action_result.parameter.days",
-          "data_type": "numeric",
-          "example_values": [
-            30
-          ]
-        },
-        {
-          "data_path": "action_result.parameter.field",
-          "data_type": "string",
-          "example_values": [
-            "classification"
-          ]
-        },
-        {
-          "data_path": "action_result.parameter.granularity",
-          "data_type": "string",
-          "example_values": [
-            "4d"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.metadata.ip",
-          "data_type": "string",
-          "contains": [
-            "ip"
-          ],
-          "example_values": [
-            "41.65.223.220"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.metadata.field",
-          "data_type": "string",
-          "example_values": [
-            "classification"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.metadata.first_seen",
-          "data_type": "string",
-          "example_values": [
-            "2020-02-01"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.metadata.start",
-          "data_type": "string",
-          "example_values": [
-            "2025-05-08T04:46:22.037900129Z"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.metadata.end",
-          "data_type": "string",
-          "example_values": [
-            "2025-08-06T04:46:22.037900129Z"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.metadata.granularity",
-          "data_type": "string",
-          "example_values": [
-            "4d"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.metadata.metric",
-          "data_type": "string",
-          "example_values": [
-            "count"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.results.*.data",
-          "data_type": "numeric",
-          "example_values": [
-            1
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.results.*.label",
-          "data_type": "string",
-          "example_values": [
-            "suspicious",
-            "malicious"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.results.*.timestamp",
-          "data_type": "string",
-          "example_values": [
-            "2025-06-25T00:00:00Z"
-          ]
-        },
-        {
-          "data_path": "action_result.status",
-          "data_type": "string",
-          "example_values": [
-            "success",
-            "failed"
-          ]
-        },
-        {
-          "data_path": "action_result.message",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.summary",
-          "data_type": "string"
-        },
-        {
-          "data_path": "summary.total_objects",
-          "data_type": "numeric",
-          "example_values": [
-            1
-          ]
-        },
-        {
-          "data_path": "summary.total_objects_successful",
-          "data_type": "numeric",
-          "example_values": [
-            1
-          ]
-        }
-      ],
-      "render": {
-        "type": "custom",
-        "view": "greynoise_view.display_view_lookup_ip_timeline",
-        "title": "GreyNoise IP Timeline"
+      "days": {
+        "description": "Number of days to show data for",
+        "data_type": "numeric",
+        "required": false,
+        "default": 1,
+        "order": 1
       },
-      "versions": "EQ(*)"
+      "field": {
+        "description": "Field over which to show activity breakdown",
+        "data_type": "string",
+        "required": true,
+        "default": "classification",
+        "value_list": [
+          "classification",
+          "source_org",
+          "source_asn",
+          "source_rdns",
+          "http_path",
+          "http_user_agent",
+          "destination_port",
+          "tag_ids"
+        ],
+        "order": 2
+      },
+      "granularity": {
+        "description": "Granularity of activity date ranges .This can be in hours (e.g. Xh) or days (Xd). Valid hours are between 1 and 24. Valid days are between 1 and 90.",
+        "data_type": "string",
+        "required": false,
+        "default": "1d",
+        "order": 3
+      }
     },
+    "output": [
+      {
+        "data_path": "action_result.parameter.ip",
+        "data_type": "string",
+        "contains": [
+          "ip"
+        ],
+        "example_values": [
+          "71.6.135.131"
+        ]
+      },
+      {
+        "data_path": "action_result.parameter.days",
+        "data_type": "numeric",
+        "example_values": [
+          30
+        ]
+      },
+      {
+        "data_path": "action_result.parameter.field",
+        "data_type": "string",
+        "example_values": [
+          "classification"
+        ]
+      },
+      {
+        "data_path": "action_result.parameter.granularity",
+        "data_type": "string",
+        "example_values": [
+          "4d"
+        ]
+      },
+      {
+        "data_path": "action_result.data.*.metadata.ip",
+        "data_type": "string",
+        "contains": [
+          "ip"
+        ],
+        "example_values": [
+          "41.65.223.220"
+        ]
+      },
+      {
+        "data_path": "action_result.data.*.metadata.field",
+        "data_type": "string",
+        "example_values": [
+          "classification"
+        ]
+      },
+      {
+        "data_path": "action_result.data.*.metadata.first_seen",
+        "data_type": "string",
+        "example_values": [
+          "2020-02-01"
+        ]
+      },
+      {
+        "data_path": "action_result.data.*.metadata.start",
+        "data_type": "string",
+        "example_values": [
+          "2025-05-08T04:46:22.037900129Z"
+        ]
+      },
+      {
+        "data_path": "action_result.data.*.metadata.end",
+        "data_type": "string",
+        "example_values": [
+          "2025-08-06T04:46:22.037900129Z"
+        ]
+      },
+      {
+        "data_path": "action_result.data.*.metadata.granularity",
+        "data_type": "string",
+        "example_values": [
+          "4d"
+        ]
+      },
+      {
+        "data_path": "action_result.data.*.metadata.metric",
+        "data_type": "string",
+        "example_values": [
+          "count"
+        ]
+      },
+      {
+        "data_path": "action_result.data.*.results.*.data",
+        "data_type": "numeric",
+        "example_values": [
+          1
+        ]
+      },
+      {
+        "data_path": "action_result.data.*.results.*.label",
+        "data_type": "string",
+        "example_values": [
+          "suspicious",
+          "malicious"
+        ]
+      },
+      {
+        "data_path": "action_result.data.*.results.*.timestamp",
+        "data_type": "string",
+        "example_values": [
+          "2025-06-25T00:00:00Z"
+        ]
+      },
+      {
+        "data_path": "action_result.status",
+        "data_type": "string",
+        "example_values": [
+          "success",
+          "failed"
+        ]
+      },
+      {
+        "data_path": "action_result.message",
+        "data_type": "string"
+      },
+      {
+        "data_path": "action_result.summary",
+        "data_type": "string"
+      },
+      {
+        "data_path": "summary.total_objects",
+        "data_type": "numeric",
+        "example_values": [
+          1
+        ]
+      },
+      {
+        "data_path": "summary.total_objects_successful",
+        "data_type": "numeric",
+        "example_values": [
+          1
+        ]
+      }
+    ],
+    "render": {
+      "type": "custom",
+      "view": "greynoise_view.display_view_noise_ip_timeline",
+      "title": "GreyNoise IP Timeline"
+    },
+    "versions": "EQ(*)"
+  },
     {
       "action": "get cve details",
       "description": "Get the CVE Details",

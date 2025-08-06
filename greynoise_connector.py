@@ -356,7 +356,11 @@ class GreyNoiseConnector(BaseConnector):
             # make the initial query and add it to the query_results dict
             exclude_raw = param.get("exclude_raw", False)
             quick = param.get("quick", False)
-            results = self._api_client.query(param["query"], exclude_raw=exclude_raw, quick=quick)
+            size = param.get("size", 100)
+            query = param.get("query")
+            ret_val, item_size = self._validate_integer(action_result, param["size"], SIZE_ACTION_PARAM)
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
 
             if is_poll:
                 query_results.append(results["data"])
@@ -370,61 +374,78 @@ class GreyNoiseConnector(BaseConnector):
 
                 return query_results
             else:
-                query_results.append(results)
-
-                # if necessary add the additional results to the query_results dict
-                while "scroll" in results:
-                    results = self._api_client.query(param["query"], scroll=results.get("scroll", ""))
-                    query_results.append(results["data"])
-
-                # this gets parsed a little differently from poll now in order to fit in with the view
-                if isinstance(query_results, list):
-                    full_response = query_results[0]
-
-                # check the number of results to return
-                ret_val, item_size = self._validate_integer(action_result, param["size"], SIZE_ACTION_PARAM)
+                ret_val, results = self._paginator(query, size, exclude_raw, quick)
                 if phantom.is_fail(ret_val):
-                    return action_result.get_status()
-
-                if full_response.get("count", 0) <= item_size:
-                    action_result.add_data(full_response)
-
-                # if there are more results than what is requested delete them from the query results
-                if full_response.get("count", 0) > item_size:
-                    temp = []
-                    for i in range(item_size):
-                        temp.append(full_response["data"][i])
-                    del full_response["data"]
-                    del full_response["count"]
-                    full_response["data"] = temp
-                    full_response["count"] = len(temp)
-                    action_result.add_data(full_response)
-
+                    return action_result.set_status(phantom.APP_ERROR, results)
                 try:
-                    for entry in full_response["data"]:
+                    for entry in results:
                         entry["visualization"] = VISUALIZATION_URL.format(ip=entry["ip"])
                 except KeyError:
                     error_message = "Error occurred while processing API response"
                     return action_result.set_status(phantom.APP_ERROR, error_message)
+                action_result.add_data(results)
         except Exception as e:
             error_message = self._get_error_message_from_exception(e)
             return action_result.set_status(phantom.APP_ERROR, urllib.parse.unquote(error_message))
 
         return action_result.set_status(phantom.APP_SUCCESS, "GNQL Query action successfully completed")
 
+    def _paginator(self, query, size, exclude_raw=False, quick=False, scroll=None):
+        """
+        This action is used to create an iterator that will paginate through responses from called methods.
+
+        :param method_name: Name of method whose response is to be paginated
+        :param action_result: Object of ActionResult class
+        :param **kwargs: Dictionary of Input parameters
+        """
+
+        list_items = list()
+
+        # maximum page size
+        page_size = 10000
+
+        if size and size < page_size:
+            page_size = size
+
+        while True:
+            try:
+                results = self._api_client.query(query, size=page_size, exclude_raw=exclude_raw, quick=quick, scroll=scroll)
+
+                if results.get("data"):
+                    list_items.extend(results.get("data"))
+
+                if size and len(list_items) >= size:
+                    return phantom.APP_SUCCESS, list_items[:size]
+
+                scroll = results.get("request_metadata", {}).get("scroll")
+                if not scroll:
+                    break
+            except Exception as e:
+                message = f"Error occurred while fetching query details: {str(e)}"
+                return phantom.APP_ERROR, message
+
+        return phantom.APP_SUCCESS, list_items
+
     def _lookup_ip_timeline(self, param):
         self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
-
-        session = GreyNoise(api_key=self._api_key, integration_name=self._integration_name)
+        license_type, message = self._check_license_type()
+        if license_type == "community":
+            return action_result.set_status(phantom.APP_ERROR, message)
+        # Extract required parameter
+        ip = param["ip"]
+        field = param["field"]
+        # Build optional parameters dict
+        api_params = {}
+        # Only add parameters if they're provided
+        if "days" in param:
+            api_params["days"] = param["days"]
+        if "granularity" in param:
+            api_params["granularity"] = param["granularity"]
         try:
-            results = session.timelinedaily(param["ip"], days=param["days"], limit=param["limit"])
-            if "activity" not in results:
-                results["activity"] = []
+            results = self._api_client.timeline(ip, field=field, **api_params)
             action_result.add_data(results)
-
             self.save_progress("GreyNoise action complete")
-
         except Exception as e:
             error_message = self._get_error_message_from_exception(e)
             if "403" in error_message:
@@ -433,7 +454,6 @@ class GreyNoiseConnector(BaseConnector):
                 return action_result.set_status(phantom.APP_SUCCESS, "Lookup IP Timeline action not allowed")
             else:
                 return action_result.set_status(phantom.APP_ERROR, urllib.parse.unquote(error_message))
-
         return action_result.set_status(phantom.APP_SUCCESS, "Lookup IP Timeline action successfully completed")
 
     def _lookup_ips(self, param):

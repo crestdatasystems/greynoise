@@ -1,0 +1,317 @@
+{% extends 'widgets/widget_template.html' %}
+{% load custom_template %}
+{% block custom_title_prop %}
+  {% if title_logo %}
+    style="background-size: auto 60%; background-position: 50%;
+    background-repeat: no-repeat; background-image: url('/app_resource/{{ title_logo }}');"
+  {% endif %}
+{% endblock %}
+{% block title1 %}{{ title1 }}{% endblock %}
+{% block title2 %}{{ title2 }}{% endblock %}
+{% block custom_tools %}{% endblock %}
+{% block widget_content %}
+  <!-- Main Start Block -->
+  <!--File: greynoise_riot_lookup_ip.html
+Copyright (c) 2024-2025 Splunk Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the specific language governing permissions
+and limitations under the License.
+-->
+  <style>
+  .greynoise a:link {
+    color: rgb(130, 175, 190);
+  }
+
+    .greynoise a:hover {
+        text-decoration: underline;
+    }
+
+  .greynoise a:visited {
+    color: mediumpurple;
+  }
+
+    .greynoise .wf-table-vertical {
+    width: 100%;
+    font-size: 12px;
+    margin-bottom: 20px;
+    border: 1px solid rgb(70, 70, 70);
+    border-collapse: collapse;
+  }
+
+    .greynoise .wf-table-vertical td {
+        padding: 8px 10px;
+    border: 1px solid rgb(70, 70, 70);
+    }
+
+    .greynoise .wf-table-vertical tr td:first-child {
+        font-weight: bold;
+        width: 30%;
+        background-color: rgba(40, 40, 40, 0.7);
+    }
+
+    .greynoise .wf-table-horizontal {
+        width: 100%;
+        font-size: 12px;
+        margin-bottom: 20px;
+        border: 1px solid rgb(70, 70, 70);
+        border-collapse: collapse;
+    }
+
+    .greynoise .wf-table-horizontal th {
+        text-transform: uppercase;
+        padding: 8px 10px;
+        border: 1px solid rgb(70, 70, 70);
+    }
+
+    .greynoise .wf-table-horizontal td {
+        font-weight: bold;
+        padding-left: 5px;
+        padding: 8px 10px;
+        background-color: rgba(40, 40, 40, 0.7);
+    }
+
+    .greynoise .wf-h3-style {
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: rgb(200, 200, 200);
+    }
+
+    .greynoise .wf-h4-style {
+        font-size: 16px;
+        text-align: center;
+        color: rgb(180, 180, 180);
+        margin: 15px 0;
+    }
+
+    .greynoise .collapse.in {
+        display: block !important;
+    }
+
+    .greynoise .ip-header {
+    padding: 10px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    background-color: rgba(50, 50, 50, 0.7);
+    border-left: 4px solid rgb(130, 175, 190);
+  }
+
+    
+
+    .greynoise .panel-collapse {
+        overflow-x: auto;
+    }
+
+    .greynoise .glyphicon.glyphicon-dot:before {
+        content: "\25cf";
+        font-size: 10px;
+    }
+
+    .risksense .no-word-wrap {
+        white-space: nowrap;
+    }
+
+    .greynoise a.nowrap {
+        white-space: nowrap;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .greynoise .search-container {
+    margin-bottom: 20px;
+  }
+
+  .greynoise .search-box {
+    padding: 8px;
+    width: 250px;
+    border-radius: 4px;
+    border: 1px solid rgb(70, 70, 70);
+    background-color: rgba(30, 30, 30, 0.8);
+    color: white;
+  }
+
+  .greynoise .search-button {
+    padding: 8px 15px;
+    background-color: rgb(130, 175, 190);
+    border: none;
+    border-radius: 4px;
+    color: black;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+
+  .greynoise .search-button:hover {
+    background-color: rgb(150, 195, 210);
+  }
+
+  .greynoise .malicious {
+    color: #ff5252;
+    font-weight: bold;
+  }
+
+  .greynoise .benign {
+    color: #4caf50;
+    font-weight: bold;
+  }
+
+  .greynoise .unknown {
+    color: #ffb74d;
+    font-weight: bold;
+  }
+
+  .greynoise .trust-level {
+    color: #42a5f5;
+    font-weight: bold;
+  }
+
+  .greynoise .hidden {
+    display: none;
+  }
+
+  .greynoise hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(70, 70, 70, 0), rgba(70, 70, 70, 0.75), rgba(70, 70, 70, 0));
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  </style>
+
+<div class="greynoise" style="overflow: auto;
+              width: 100%;
+              height: 100%;
+              padding-left:10px;
+              padding-right:10px">
+    <!-- Main Div -->
+    {% for result in results.0 %}
+        <!-- loop for each result -->
+        <!------------------- For each Result ---------------------->
+        {% for ip in result %}
+            <div class="ip-section" data-ip="{{ ip.ip }}">
+            {% if ip.ip or ip.visualization %}
+            <div class="ip-header">
+                    {% if ip.ip %}
+                    <a href="javascript:;"
+                    onclick="context_menu(this, [{'contains': ['cve'], 'value': '{{ result.0.ip }}' }], 0, {{ container.id }}, null, false);">
+                    <span class="fa fa-caret-down" style="font-size: smaller;"></span> IP: {{ ip.ip }}
+                    </a>
+                    {% endif %}
+                    {% if ip.visualization %}
+                    <span style="float: right;">
+                    <a href="{{ result.0.visualization }}" target="_blank">View Visualization <i class="fa fa-external-link"></i></a>
+                    </span>
+                    {% endif %}
+            </div>
+            {% endif %}
+            {% if ip.business_service_intelligence.found or ip.internet_scanner_intelligence.found or ip.internet_scanner_intelligence.classification  %}
+                <table class="wf-table-vertical">
+                    <tbody>
+                        {% if ip.business_service_intelligence.found %}
+                        <tr>
+                        <td colspan="2" class="center" style="background-color: rgb(79, 106, 116);">Business Service Intelligence</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.business_service_intelligence.trust_level %}
+                        <tr>
+                        <td>Trust Level</td>
+                        <td>{{ ip.business_service_intelligence.trust_level | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.business_service_intelligence.name %}
+                        <tr>
+                        <td>Name</td>
+                        <td>{{ ip.business_service_intelligence.name | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.business_service_intelligence.category %}
+                        <tr>
+                        <td>Category</td>
+                        <td>{{ ip.business_service_intelligence.category | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.business_service_intelligence.reference %}
+                        <tr>
+                        <td>Reference</td>
+                        <td>{{ ip.business_service_intelligence.reference | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.business_service_intelligence.description %}
+                        <tr>
+                        <td>Description</td>
+                        <td>{{ ip.business_service_intelligence.description | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.business_service_intelligence.explaination %}
+                        <tr>
+                        <td>Explaination</td>
+                        <td>{{ ip.business_service_intelligence.explaination | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.internet_scanner_intelligence.found or ip.internet_scanner_intelligence.classification %}
+                        <tr>
+                        <td colspan="2" class="center" style="background-color: rgb(79, 106, 116);">Internet Scanner Intelligence</td>
+                        </tr>
+                        <tr>
+                        {% endif %}
+                        <td>Classification</td>
+                        <td>{{ ip.internet_scanner_intelligence.classification | default:"None" }}</td>
+                        </tr>
+                        {% if ip.internet_scanner_intelligence.actor %}
+                        <tr>
+                        <td>Actor</td>
+                        <td>{{ ip.internet_scanner_intelligence.actor | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.internet_scanner_intelligence.spoofable %}
+                        <tr>
+                        <td>Spoofable</td>
+                        <td>{{ ip.internet_scanner_intelligence.spoofable | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.internet_scanner_intelligence.vpn_service %}
+                        <tr>
+                        <td>VPN Service</td>
+                        <td>{{ ip.internet_scanner_intelligence.vpn_service | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.internet_scanner_intelligence.first_seen %}
+                        <tr>
+                        <td>First Seen</td>
+                        <td>{{ ip.internet_scanner_intelligence.first_seen | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.tag_names %}
+                        <tr>
+                        <td>Tags</td>
+                        <td>{{ ip.tag_names | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if ip.internet_scanner_intelligence.cves %}
+                        <tr>
+                        <td>CVEs</td>
+                        <td>{{ ip.internet_scanner_intelligence.cves | default:"None" }}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                {% else %}
+                <h4 class="ip-header" style="font-size: smaller;">No CVE data found</h4>
+            {% endif %}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <!-- loop for each result end -->
+  </div>
+{% endblock %}

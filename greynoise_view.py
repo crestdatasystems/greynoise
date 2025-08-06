@@ -155,3 +155,41 @@ def display_view_lookup_ips(provides, all_app_runs, context):
     context["results"] = results
 
     return "views/greynoise_lookup_ips.html"
+
+def display_view_noise_ip_timeline(provides, all_app_runs, context):
+    """Display a specific view for IP timeline lookup.
+
+    It processes the action results from 'all_app_runs' and returns the corresponding view path.
+
+    :param provides: Action names
+    :param all_app_runs: List of tuples containing summary and action results
+    :param context: A dictionary containing the results
+    :return: str
+    """
+    context["title1"] = "GreyNoise"
+    context["title2"] = "IP Timeline Lookup"
+    context["title_logo"] = "greynoise_logo.png"
+
+    context["results"] = results = []
+    for summary, action_results in all_app_runs:
+        for result in action_results:
+            data = result.get_data()
+
+            # Format timestamps in results if they exist
+            if data and isinstance(data, list) and len(data) > 0:
+                for item in data:
+                    if "results" in item:
+                        for entry in item["results"]:
+                            if "timestamp" in entry:
+                                # Convert ISO format to more readable date
+                                try:
+                                    from datetime import datetime
+                                    timestamp = datetime.strptime(entry["timestamp"], "%Y-%m-%dT%H:%M:%SZ")
+                                    entry["timestamp"] = timestamp.strftime("%Y-%m-%d %H:%M:%S")
+                                except Exception:
+                                    # Keep original if parsing fails
+                                    pass
+
+            results.append(data)
+
+    return "views/greynoise_noise_ip_timeline.html"
