@@ -135,3 +135,23 @@ def display_view_gnql_query(provides, all_app_runs, context):
 
     if provides == "qnql query":
         return "views/greynoise_gnql_query.html"
+
+def display_view_lookup_ips(provides, all_app_runs, context):
+    """Display a specific view for multiple IP lookup.
+
+    It processes the action results from 'all_app_runs' and returns the corresponding view path.
+
+    :param provides: Action names
+    :param all_app_runs: List of tuples containing summary and action results
+    :param context: A dictionary containing the results
+    :return: str
+    """
+    context["results"] = results = []
+    for summary, action_results in all_app_runs:
+        for result in action_results:
+            data = result.get_data()
+            results.append(data)
+
+    context["results"] = results
+
+    return "views/greynoise_lookup_ips.html"
