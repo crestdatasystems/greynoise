@@ -56,3 +56,5 @@ GREYNOISE_STATE_FILE_CORRUPT_ERROR = (
     "Resetting the state file with the default format. Please try again."
 )
 SEVERITY_MAP = {"malicious": "high", "suspicious": "medium", "benign": "low"}
+
+DEFAULT_SIZE_FOR_ON_POLL = 25

@@ -57,7 +57,7 @@ class GreyNoiseConnector(BaseConnector):
         self._session = None
         self._app_version = None
         self._api_key = None
-        self._integration_name = "splunk-soar-v2.3.2"
+        self._integration_name = "splunk-soar-v3.0.0"
 
     def _get_error_message_from_exception(self, e):
         """
@@ -225,7 +225,7 @@ class GreyNoiseConnector(BaseConnector):
             return action_result, query_success, f"{ERROR_MESSAGE}. Details: {self._get_error_message_from_exception(e)}"
 
         business_service_intelligence = result_data.get("business_service_intelligence", {}).get("found", False)
-        trust_level = result_data.get("business_service_intelligence", {}).get("trust_level")
+        trust_level = result_data.get("business_service_intelligence", {}).get("trust_level", "")
         internet_scanner_intelligence = result_data.get("internet_scanner_intelligence", {}).get("found", False)
 
         try:
@@ -238,7 +238,7 @@ class GreyNoiseConnector(BaseConnector):
             return action_result, query_success, API_PARSE_ERROR_MESSAGE
 
         action_result.add_data(result_data)
-        message = f"IP info obtained successfully"
+        message = f"IP Reputation action successfully completed"
         return action_result, query_success, message
 
     def _greynoise_multi_ip(self, ip, action_result):
@@ -258,6 +258,8 @@ class GreyNoiseConnector(BaseConnector):
 
         try:
             for i in result_data:
+                trust_level = i.get("business_service_intelligence", {}).get("trust_level", "")
+                result_data["trust_level"] = TRUST_LEVELS.get(str(trust_level), trust_level)
                 i["visualization"] = VISUALIZATION_URL.format(ip=i["ip"])
         except KeyError:
             query_success = False
@@ -294,7 +296,7 @@ class GreyNoiseConnector(BaseConnector):
         if not query_result:
             return action_result.set_status(phantom.APP_ERROR, message)
 
-        return action_result.set_status(phantom.APP_SUCCESS, message)
+        return action_result.set_status(phantom.APP_SUCCESS, "Lookup IP action successfully completed")
 
     def _ip_reputation(self, param):
         self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))
@@ -318,9 +320,9 @@ class GreyNoiseConnector(BaseConnector):
         self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        action_result, query_result, message = self._query_greynoise_cve(param["cve_id"], action_result)
+        action_result, query_success, message = self._query_greynoise_cve(param["cve_id"], action_result)
 
-        if query_result:
+        if query_success:
             return action_result.set_status(phantom.APP_SUCCESS, message)
 
         return action_result.set_status(phantom.APP_ERROR, message)
@@ -335,7 +337,7 @@ class GreyNoiseConnector(BaseConnector):
             return action_result, query_success, f"{ERROR_MESSAGE}. Details: {self._get_error_message_from_exception(e)}"
 
         action_result.add_data(result_data)
-        message = "Get CVE Details action executed successfuly"
+        message = "Get CVE Details action successfully completed"
 
         return action_result, query_success, message
 
@@ -363,6 +365,8 @@ class GreyNoiseConnector(BaseConnector):
                 else:
                     if results.get("data", []):
                         for ip_info in results.get("data", []):
+                            trust_level = ip_info.get("business_service_intelligence", {}).get("trust_level", "")
+                            ip_info["trust_level"] = TRUST_LEVELS.get(str(trust_level), trust_level)
                             ip_info["visualization"] = VISUALIZATION_URL.format(ip=ip_info["ip"])
                     action_result.add_data(results)
             except KeyError:
@@ -464,18 +468,17 @@ class GreyNoiseConnector(BaseConnector):
         if not query_result:
             return action_result.set_status(phantom.APP_ERROR, message)
 
-        return action_result.set_status(phantom.APP_SUCCESS, message)
+        return action_result.set_status(phantom.APP_SUCCESS, "Lookup IPs action successfully completed")
 
     def _on_poll(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
-        if self.is_poll_now():
-            self.save_progress("Starting query based on configured GNQL")
 
         config = self.get_config()
         param["query"] = config.get("on_poll_query")
 
         if self.is_poll_now():
-            param["size"] = param.get(phantom.APP_JSON_CONTAINER_COUNT, 25)
+            self.save_progress("Starting query based on configured GNQL")
+            param["size"] = param.get(phantom.APP_JSON_CONTAINER_COUNT, DEFAULT_SIZE_FOR_ON_POLL)
         else:
             on_poll_size = config.get("on_poll_size", 25)
             # Validate 'on_poll_size' config parameter
@@ -503,19 +506,17 @@ class GreyNoiseConnector(BaseConnector):
             self.save_progress(f"Creating container for IP: {ip}")
             classification = result.get("internet_scanner_intelligence", {}).get("classification", "")
             container_severity = SEVERITY_MAP.get(classification)
+            # if classification is empty then the severty of the container will be MEDIUM by default
             container["severity"] = container_severity
-            container["description"] = f"This container was generated due to an on poll action with the query - {param['query']}"
+            container["description"] = f"Container was generated due to an on poll action with the query - {param['query']}"
 
             ret_val, message, cid = self.save_container(container)
             if phantom.is_fail(ret_val):
                 self.save_progress(f"Error saving container: {message}")
                 self.debug_print(f"Error saving container: {message} -- CID: {cid}")
+            artifact = ({"cef": result, "name": "Observed Details", "severity": container_severity, "container_id": cid},)
 
-            artifact = [
-                {"cef": result, "name": "Observed Details", "severity": container_severity, "container_id": cid},
-            ]
-
-            create_artifact_status, create_artifact_message, _ = self.save_artifacts(artifact)
+            create_artifact_status, create_artifact_message, _ = self.save_artifact(artifact)
             if phantom.is_fail(create_artifact_status):
                 self.save_progress(f"Error saving artifact: {create_artifact_message}")
                 self.debug_print(f"Error saving artifact: {create_artifact_message}")
