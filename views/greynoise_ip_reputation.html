@@ -198,56 +198,49 @@ and limitations under the License.
     {% for result in results %}
         <!-- loop for each result -->
         <!------------------- For each Result ---------------------->
+        {% if result.0.business_service_intelligence.found or result.0.internet_scanner_intelligence.found %}
+        <div class="wf-h3-style">Business Service Intelligence</div>
         {% if result.0.business_service_intelligence.found %}
-            <div class="ip-header">
-                <a href="javascript:;"
-                onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ result.0.ip }}' }], 0, {{ container.id }}, null, false);">
-                <span class="fa fa-caret-down" style="font-size: smaller;"></span> IP: {{ result.0.ip }}
-                </a>
-                {% if result.0.visualization %}
-                <span style="float: right;">
-                <a href="{{ result.0.visualization }}" target="_blank">View Visualization <i class="fa fa-external-link"></i></a>
-                </span>
-                {% endif %}
-            </div>
             <table class="wf-table-horizontal">
                 <thead>
                 <tr>
+                    <th>IP</th>
                     <th>Name</th>
                     <th>Category</th>
                     <th>Trust Level</th>
                     <th>Reference</th>
                     <th>Description</th>
                     <th>Explaination</th>
+                    <th>Visualization</th>
                 </tr>
                 </thead>
                 <tbody>
                     <tr>
+                    <td><a href="javascript:;"
+                onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ result.0.ip }}' }], 0, {{ container.id }}, null, false);">
+                {{ result.0.ip }} <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                </a></td>
                     <td>{{ result.0.business_service_intelligence.name | default:"None" }}</td>
                     <td>{{ result.0.business_service_intelligence.category | default:"None" }}</td>
                     <td>{{ result.0.trust_level | default:"None" }}</td>
                     <td>{{ result.0.business_service_intelligence.reference | default:"None" }}</td>
                     <td>{{ result.0.business_service_intelligence.description | default:"None" }}</td>
                     <td>{{ result.0.business_service_intelligence.explanation | default:"None" }}</td>
+                    <td><span>
+                <a href="{{ result.0.visualization }}" target="_blank">View on GreyNoise <i class="fa fa-external-link"></i></a>
+                </span></td>
                     </tr>
                 </tbody>
             </table>
         {% else %}
+        <div class="wf-h4-style">No Business Service Intelligence data found</div>
+        {% endif %}
+        <div class="wf-h3-style">Internet Scanner Intelligence</div>
         {% if result.0.internet_scanner_intelligence.found %}
-            <div class="ip-header">
-                <a href="javascript:;"
-                onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ result.0.ip }}' }], 0, {{ container.id }}, null, false);">
-                <span class="fa fa-caret-down" style="font-size: smaller;"></span> IP: {{ result.0.ip }}
-                </a>
-                {% if result.0.visualization %}
-                <span style="float: right;">
-                <a href="{{ result.0.visualization }}" target="_blank">View Visualization <i class="fa fa-external-link"></i></a>
-                </span>
-                {% endif %}
-            </div>
             <table class="wf-table-horizontal">
                 <thead>
             <tr>
+                <th>IP</th>
                 <th>Actor</th>
                 <th>Classification</th>
                 <th>Spoofable</th>
@@ -255,23 +248,41 @@ and limitations under the License.
                 <th>First Seen</th>
                 <th>Tags</th>
                 <th>CVEs</th>
+                <th>Visualization</th>
             </tr>
             </thead>
             <tbody>
                 <tr>
+                <td><a href="javascript:;"
+                onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ result.0.ip }}' }], 0, {{ container.id }}, null, false);">
+                {{ result.0.ip }} <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                </a></td>
                 <td>{{ result.0.internet_scanner_intelligence.actor | default:"None" }}</td>
-                <td>{{ result.0.internet_scanner_intelligence.classification | default:"None" }}</td>
+                {% if  result.0.internet_scanner_intelligence.classification == "malicious" %}
+                <td class="malicious">malicious</td>
+                {% elif  result.0.internet_scanner_intelligence.classification == "unknown" %}
+                <td class="unknown">unknown</td>
+                {% elif  result.0.internet_scanner_intelligence.classification == "suspicious" %}
+                <td class="suspicious">suspicious</td>
+                {% else %}
+                <td class="benign">benign</td>
+                {% endif %}
                 <td>{{ result.0.internet_scanner_intelligence.spoofable }}</td>
                 <td>{{ result.0.internet_scanner_intelligence.vpn_service | default:"None" }}</td>
                 <td>{{ result.0.internet_scanner_intelligence.first_seen | default:"None" }}</td>
                 <td>{{ result.0.tag_names | default:"None" }}</td>
                 <td>{{ result.0.internet_scanner_intelligence.cves | default:"None" }}</td>
+                <td><span>
+                <a href="{{ result.0.visualization }}" target="_blank">View on GreyNoise <i class="fa fa-external-link"></i></a>
+                </span></td>
                 </tr>
             </tbody>
             </table>
         {% else %}
-        <h4 class="ip-header" style="font-size: smaller;">No Lookup data found</h4>
+        <div class="wf-h4-style">No Internet Scanner Intelligence data found</div>
         {% endif %}
+        {% else  %}
+        <div class="wf-h3-style">No IP reputation data found</div>
         {% endif %}
     {% endfor %}
     <!-- loop for each result end -->
