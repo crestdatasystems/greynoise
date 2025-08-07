@@ -30,15 +30,15 @@ and limitations under the License.
     color: rgb(130, 175, 190);
   }
 
-    .greynoise a:hover {
-        text-decoration: underline;
-    }
+  .greynoise a:hover {
+      text-decoration: underline;
+  }
 
   .greynoise a:visited {
     color: mediumpurple;
   }
 
-    .greynoise .wf-table-vertical {
+  .greynoise .wf-table-vertical {
     width: 100%;
     font-size: 12px;
     margin-bottom: 20px;
@@ -46,57 +46,57 @@ and limitations under the License.
     border-collapse: collapse;
   }
 
-    .greynoise .wf-table-vertical td {
-        padding: 8px 10px;
+  .greynoise .wf-table-vertical td {
+    padding: 8px 10px;
     border: 1px solid rgb(70, 70, 70);
-    }
+  }
 
-    .greynoise .wf-table-vertical tr td:first-child {
-        font-weight: bold;
-        width: 30%;
-        background-color: rgba(40, 40, 40, 0.7);
-    }
+  .greynoise .wf-table-vertical tr td:first-child {
+    font-weight: bold;
+    width: 30%;
+    background-color: rgba(40, 40, 40, 0.7);
+  }
 
-    .greynoise .wf-table-horizontal {
-        width: 100%;
-        font-size: 12px;
-        margin-bottom: 20px;
-        border: 1px solid rgb(70, 70, 70);
-        border-collapse: collapse;
-    }
+  .greynoise .wf-table-horizontal {
+      width: 100%;
+      font-size: 12px;
+      margin-bottom: 20px;
+      border: 1px solid rgb(70, 70, 70);
+      border-collapse: collapse;
+  }
 
-    .greynoise .wf-table-horizontal th {
-        text-transform: uppercase;
-        padding: 8px 10px;
-        border: 1px solid rgb(70, 70, 70);
-    }
+  .greynoise .wf-table-horizontal th {
+      text-transform: uppercase;
+      padding: 8px 10px;
+      border: 1px solid rgb(70, 70, 70);
+  }
 
-    .greynoise .wf-table-horizontal td {
-        font-weight: bold;
-        padding-left: 5px;
-        padding: 8px 10px;
-        background-color: rgba(40, 40, 40, 0.7);
-    }
+  .greynoise .wf-table-horizontal td {
+      font-weight: bold;
+      width: 30%;
+      padding-left: 5px;
+      background-color: rgba(40, 40, 40, 0.7);
+  }
 
-    .greynoise .wf-h3-style {
-    font-size: 20px;
-    margin-top: 15px;
-    margin-bottom: 5px;
-    color: rgb(200, 200, 200);
-    }
+  .greynoise .wf-h3-style {
+  font-size: 20px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: rgb(200, 200, 200);
+  }
 
-    .greynoise .wf-h4-style {
-        font-size: 16px;
-        text-align: center;
-        color: rgb(180, 180, 180);
-        margin: 15px 0;
-    }
+  .greynoise .wf-h4-style {
+      font-size: 16px;
+      text-align: center;
+      color: rgb(180, 180, 180);
+      margin: 15px 0;
+  }
 
-    .greynoise .collapse.in {
-        display: block !important;
-    }
+  .greynoise .collapse.in {
+      display: block !important;
+  }
 
-    .greynoise .ip-header {
+  .greynoise .ip-header {
     padding: 10px;
     margin-top: 25px;
     margin-bottom: 10px;
@@ -106,54 +106,25 @@ and limitations under the License.
     border-left: 4px solid rgb(130, 175, 190);
   }
 
-    
-
-    .greynoise .panel-collapse {
-        overflow-x: auto;
-    }
-
-    .greynoise .glyphicon.glyphicon-dot:before {
-        content: "\25cf";
-        font-size: 10px;
-    }
-
-    .risksense .no-word-wrap {
-        white-space: nowrap;
-    }
-
-    .greynoise a.nowrap {
-        white-space: nowrap;
-    }
-
-    .center {
-        text-align: center;
-    }
-
-    .greynoise .search-container {
-    margin-bottom: 20px;
+  .greynoise .panel-collapse {
+      overflow-x: auto;
   }
 
-  .greynoise .search-box {
-    padding: 8px;
-    width: 250px;
-    border-radius: 4px;
-    border: 1px solid rgb(70, 70, 70);
-    background-color: rgba(30, 30, 30, 0.8);
-    color: white;
+  .greynoise .glyphicon.glyphicon-dot:before {
+      content: "\25cf";
+      font-size: 10px;
   }
 
-  .greynoise .search-button {
-    padding: 8px 15px;
-    background-color: rgb(130, 175, 190);
-    border: none;
-    border-radius: 4px;
-    color: black;
-    cursor: pointer;
-    margin-left: 10px;
+  .risksense .no-word-wrap {
+      white-space: nowrap;
   }
 
-  .greynoise .search-button:hover {
-    background-color: rgb(150, 195, 210);
+  .greynoise a.nowrap {
+      white-space: nowrap;
+  }
+
+  .center {
+      text-align: center;
   }
 
   .greynoise .malicious {
@@ -194,124 +165,86 @@ and limitations under the License.
               height: 100%;
               padding-left:10px;
               padding-right:10px">
+    
     <!-- Main Div -->
-    {% for result in results.0 %}
-        <!-- loop for each result -->
-        <!------------------- For each Result ---------------------->
-        {% for ip in result %}
-            <div class="ip-section" data-ip="{{ ip.ip }}">
-            {% if ip.ip or ip.visualization %}
-            <div class="ip-header">
-                    {% if ip.ip %}
-                    <a href="javascript:;"
-                    onclick="context_menu(this, [{'contains': ['cve'], 'value': '{{ result.0.ip }}' }], 0, {{ container.id }}, null, false);">
-                    <span class="fa fa-caret-down" style="font-size: smaller;"></span> IP: {{ ip.ip }}
-                    </a>
-                    {% endif %}
-                    {% if ip.visualization %}
-                    <span style="float: right;">
-                    <a href="{{ result.0.visualization }}" target="_blank">View Visualization <i class="fa fa-external-link"></i></a>
-                    </span>
-                    {% endif %}
-            </div>
-            {% endif %}
-            {% if ip.business_service_intelligence.found or ip.internet_scanner_intelligence.found or ip.internet_scanner_intelligence.classification  %}
-                <table class="wf-table-vertical">
-                    <tbody>
-                        {% if ip.business_service_intelligence.found %}
-                        <tr>
-                        <td colspan="2" class="center" style="background-color: rgb(79, 106, 116);">Business Service Intelligence</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.business_service_intelligence.trust_level %}
-                        <tr>
-                        <td>Trust Level</td>
-                        <td>{{ ip.business_service_intelligence.trust_level | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.business_service_intelligence.name %}
-                        <tr>
-                        <td>Name</td>
-                        <td>{{ ip.business_service_intelligence.name | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.business_service_intelligence.category %}
-                        <tr>
-                        <td>Category</td>
-                        <td>{{ ip.business_service_intelligence.category | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.business_service_intelligence.reference %}
-                        <tr>
-                        <td>Reference</td>
-                        <td>{{ ip.business_service_intelligence.reference | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.business_service_intelligence.description %}
-                        <tr>
-                        <td>Description</td>
-                        <td>{{ ip.business_service_intelligence.description | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.business_service_intelligence.explaination %}
-                        <tr>
-                        <td>Explaination</td>
-                        <td>{{ ip.business_service_intelligence.explaination | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.internet_scanner_intelligence.found or ip.internet_scanner_intelligence.classification %}
-                        <tr>
-                        <td colspan="2" class="center" style="background-color: rgb(79, 106, 116);">Internet Scanner Intelligence</td>
-                        </tr>
-                        <tr>
-                        {% endif %}
-                        <td>Classification</td>
-                        <td>{{ ip.internet_scanner_intelligence.classification | default:"None" }}</td>
-                        </tr>
-                        {% if ip.internet_scanner_intelligence.actor %}
-                        <tr>
-                        <td>Actor</td>
-                        <td>{{ ip.internet_scanner_intelligence.actor | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.internet_scanner_intelligence.spoofable %}
-                        <tr>
-                        <td>Spoofable</td>
-                        <td>{{ ip.internet_scanner_intelligence.spoofable | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.internet_scanner_intelligence.vpn_service %}
-                        <tr>
-                        <td>VPN Service</td>
-                        <td>{{ ip.internet_scanner_intelligence.vpn_service | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.internet_scanner_intelligence.first_seen %}
-                        <tr>
-                        <td>First Seen</td>
-                        <td>{{ ip.internet_scanner_intelligence.first_seen | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.tag_names %}
-                        <tr>
-                        <td>Tags</td>
-                        <td>{{ ip.tag_names | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                        {% if ip.internet_scanner_intelligence.cves %}
-                        <tr>
-                        <td>CVEs</td>
-                        <td>{{ ip.internet_scanner_intelligence.cves | default:"None" }}</td>
-                        </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-                {% else %}
-                <h4 class="ip-header" style="font-size: smaller;">No CVE data found</h4>
-            {% endif %}
-            </div>
-        {% endfor %}
+    {% for result in results %}
+    <!-- loop for each result -->
+    <!------------------- For each Result ---------------------->
+    <div class="wf-h3-style">Query Results</div>
+    {% if result.0.data %}
+      <table class="wf-table-horizontal datatable">
+        <thead>
+            <tr>
+                <th rowspan="2" style="text-align: center;">IP</th>
+                <th colspan="6" style="text-align: center;">Business Service Intelligence</th>
+                <th colspan="7" style="text-align: center;">Internet Scanner Intelligence</th>
+                <th rowspan="2" style="text-align: center;">Visualization</th>
+            </tr>
+            <tr>
+                <th>Trust Level</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Reference</th>
+                <th>Description</th>
+                <th>Explaination</th>
+                <th>Classification</th>
+                <th>Actor</th>
+                <th>Spoofable</th>
+                <th>VPN Service</th>
+                <th>First Seen</th>
+                <th>Tags</th>
+                <th>CVEs</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ip in result.0.data %}
+            <tr>
+                <td><a href="javascript:;"
+                onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ result.0.ip }}' }], 0, {{ container.id }}, null, false);">
+                {{ ip.ip }} <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+                </a></td>
+                <td>{{ ip.business_service_intelligence.trust_level | default:"-" }}</td>
+                <td>{{ ip.business_service_intelligence.name | default:"-" }}</td>
+                <td>{{ ip.business_service_intelligence.category | default:"-" }}</td>
+                <td>{{ ip.business_service_intelligence.reference | default:"-" }}</td>
+                <td>{{ ip.business_service_intelligence.description | default:"-" }}</td>
+                <td>{{ ip.business_service_intelligence.explaination | default:"-" }}</td>
+                <td>{{ ip.internet_scanner_intelligence.classification | default:"-" }}</td>
+                <td>{{ ip.internet_scanner_intelligence.actor | default:"-" }}</td>
+                <td>{{ ip.internet_scanner_intelligence.spoofable | default:"False" }}</td>
+                <td>{{ ip.internet_scanner_intelligence.vpn_service | default:"-" }}</td>
+                <td>{{ ip.internet_scanner_intelligence.first_seen | default:"-" }}</td>
+                <td>{{ ip.tag_names | default:"-" }}</td>
+                <td>{{ ip.internet_scanner_intelligence.cves | default:"-" }}</td>
+                <td><a href="{{ ip.visualization }}" target="_blank">View on GreyNoise <i class="fa fa-external-link"></i></a>
+                </span></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      {% else %}
+      <div class="wf-h4-style">No query data found</div>
+      {% endif %}
     {% endfor %}
     <!-- loop for each result end -->
   </div>
+<script>
+    $.extend(true, $.fn.dataTable.defaults, {
+        "searching": true,
+        "bLengthChange": false,
+        "language": {
+            "paginate": {
+                "previous": "<i class='fa fa-angle-left fa-lg'></i>",
+                "next": "<i class='fa fa-angle-right fa-lg'></i>"
+            }
+        },
+        "dom": '<"top"f>rt<"bottom"p><"clear">',
+        drawCallback: function (settings) {
+            var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+            pagination.toggle(this.api().page.info().pages > 1);
+        }
+    });
+    $.fn.DataTable.ext.pager.numbers_length = 5;
+    $('.datatable').DataTable();
+  </script>
 {% endblock %}
