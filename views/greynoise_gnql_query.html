@@ -66,15 +66,15 @@ and limitations under the License.
   }
 
   .greynoise .wf-table-horizontal th {
-      text-transform: uppercase;
-      padding: 8px 10px;
-      border: 1px solid rgb(70, 70, 70);
+        text-transform: uppercase;
+        padding: 8px 10px;
+        border: 1px solid rgb(70, 70, 70);
   }
 
   .greynoise .wf-table-horizontal td {
       font-weight: bold;
       width: 30%;
-      padding-left: 5px;
+        padding-left: 5px;
       background-color: rgba(40, 40, 40, 0.7);
   }
 
@@ -209,7 +209,15 @@ and limitations under the License.
                 <td>{{ ip.business_service_intelligence.reference | default:"-" }}</td>
                 <td>{{ ip.business_service_intelligence.description | default:"-" }}</td>
                 <td>{{ ip.business_service_intelligence.explaination | default:"-" }}</td>
-                <td>{{ ip.internet_scanner_intelligence.classification | default:"-" }}</td>
+                {% if  ip.internet_scanner_intelligence.classification == "malicious" %}
+                <td class="malicious">{{ ip.internet_scanner_intelligence.classification | default:"-" }}</td>
+                {% elif  ip.internet_scanner_intelligence.classification == "unknown" %}
+                <td class="unknown">{{ ip.internet_scanner_intelligence.classification | default:"-" }}</td>
+                {% elif  ip.internet_scanner_intelligence.classification == "suspicious" %}
+                <td class="suspicious">{{ ip.internet_scanner_intelligence.classification | default:"-" }}</td>
+                {% else %}
+                <td class="benign">{{ ip.internet_scanner_intelligence.classification | default:"-" }}</td>
+                {% endif %}
                 <td>{{ ip.internet_scanner_intelligence.actor | default:"-" }}</td>
                 <td>{{ ip.internet_scanner_intelligence.spoofable | default:"False" }}</td>
                 <td>{{ ip.internet_scanner_intelligence.vpn_service | default:"-" }}</td>
