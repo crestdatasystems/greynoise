@@ -35,10 +35,6 @@ and limitations under the License.
     text-decoration: underline;
   }
 
-  .greynoise a:visited {
-    color: mediumpurple;
-  }
-
   /* Typography */
   .greynoise .wf-h3-style {
     font-size: 20px;
@@ -106,11 +102,25 @@ and limitations under the License.
   }
 
   /* Column width adjustments */
-  .greynoise .wf-table-vertical .col-ip { width: 15%; }
-  .greynoise .wf-table-vertical .col-bsi { width: 22%; }
-  .greynoise .wf-table-vertical .col-trust { width: 18%; }
-  .greynoise .wf-table-vertical .col-isi { width: 22%; }
-  .greynoise .wf-table-vertical .col-class { width: 23%; }
+  .greynoise .wf-table-vertical .col-ip {
+    width: 15%;
+  }
+
+  .greynoise .wf-table-vertical .col-bsi {
+    width: 22%;
+  }
+
+  .greynoise .wf-table-vertical .col-trust {
+    width: 18%;
+  }
+
+  .greynoise .wf-table-vertical .col-isi {
+    width: 22%;
+  }
+
+  .greynoise .wf-table-vertical .col-class {
+    width: 23%;
+  }
 
   /* Classification styling */
   .greynoise .malicious {
@@ -133,11 +143,6 @@ and limitations under the License.
     font-weight: bold;
   }
 
-  .greynoise .trust-level {
-    color: #42a5f5;
-    font-weight: bold;
-  }
-
   /* Utility classes */
   .greynoise .hidden {
     display: none;
@@ -156,7 +161,7 @@ and limitations under the License.
   $.extend(true, $.fn.dataTable.defaults, {
     "searching": false,
     "bLengthChange": false,
-    "pageLength":5,
+    "pageLength": 5,
     "language": {
       "paginate": {
         "previous": "<i class='fa fa-angle-left fa-lg'></i>",
@@ -185,10 +190,10 @@ and limitations under the License.
         <tr>
           <th>IP Address</th>
           <th>Visualization</th>
+          <th>Internet Service Intelligence</th>
+                    <th>Classification</th>
           <th>Business Service Intelligence</th>
           <th>Trust Level</th>
-          <th>Internet Service Intelligence</th>
-          <th>Classification</th>
         </tr>
       </thead>
       <tbody>
@@ -208,14 +213,6 @@ and limitations under the License.
             -
             {% endif %}
           </td>
-          <td>{{ ip_data.business_service_intelligence.found }}</td>
-          <td>
-            {% if ip_data.business_service_intelligence.found and ip_data.business_service_intelligence.trust_level %}
-            <span class="trust-level">{{ ip_data.business_service_intelligence.trust_level }}</span>
-            {% else %}
-            -
-            {% endif %}
-          </td>
           <td>{{ ip_data.internet_scanner_intelligence.found }}</td>
           <td>
             {% if ip_data.internet_scanner_intelligence.found %}
@@ -223,6 +220,14 @@ and limitations under the License.
               class="{% if ip_data.internet_scanner_intelligence.classification == 'malicious' %}malicious{% elif ip_data.internet_scanner_intelligence.classification == 'benign' %}benign{% elif ip_data.internet_scanner_intelligence.classification == 'suspicious' %}suspicious{% else %}unknown{% endif %}">
               {{ ip_data.internet_scanner_intelligence.classification }}
             </span>
+            {% else %}
+            -
+            {% endif %}
+          </td>
+          <td>{{ ip_data.business_service_intelligence.found }}</td>
+          <td>
+            {% if ip_data.business_service_intelligence.found and ip_data.business_service_intelligence.trust_level %}
+            <span>{{ ip_data.trust_level }}</span>
             {% else %}
             -
             {% endif %}

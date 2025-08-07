@@ -172,7 +172,7 @@ class GreyNoiseConnector(BaseConnector):
         Returns:
             bool: True if validation passes, False otherwise
         """
-        valid_fields = [
+        TIMELINE_VALUE_LIST = [
             "classification",
             "source_org",
             "source_asn",
@@ -180,39 +180,14 @@ class GreyNoiseConnector(BaseConnector):
             "http_path",
             "http_user_agent",
             "destination_port",
-            "tag_ids"
+            "tag_ids",
         ]
 
-        if field not in valid_fields:
-            action_result.set_status(
-                phantom.APP_ERROR,
-                f"Invalid field parameter. Must be one of: {', '.join(valid_fields)}"
-            )
+        if field not in TIMELINE_VALUE_LIST:
+            action_result.set_status(phantom.APP_ERROR, f"Invalid field parameter. Must be one of: {', '.join(TIMELINE_VALUE_LIST)}")
             return False
 
         return True
-
-    def _greynoise_quick_ip(self, ip, action_result):
-        query_success = True
-
-        try:
-            result_data = self._api_client.quick(ip)
-            result_data = result_data[0]
-        except Exception:
-            query_success = False
-            return action_result, query_success, ERROR_MESSAGE
-
-        # format data for quick lookup for visualizer
-
-        try:
-            result_data["visualization"] = VISUALIZATION_URL.format(ip=result_data["ip"])
-        except KeyError:
-            query_success = False
-            return action_result, query_success, API_PARSE_ERROR_MESSAGE
-
-        action_result.add_data(result_data)
-        message = "IP Lookup action successfully completed"
-        return action_result, query_success, message
 
     def _greynoise_ip_reputation(self, ip, action_result):
         query_success = True
@@ -222,7 +197,8 @@ class GreyNoiseConnector(BaseConnector):
             result_data["visualization"] = VISUALIZATION_URL.format(ip=result_data["ip"])
         except Exception as e:
             query_success = False
-            return action_result, query_success, f"{ERROR_MESSAGE}. Details: {self._get_error_message_from_exception(e)}"
+            message=f"{ERROR_MESSAGE}: {self._get_error_message_from_exception(e)}"
+            return action_result, query_success, message
 
         business_service_intelligence = result_data.get("business_service_intelligence", {}).get("found", False)
         trust_level = result_data.get("business_service_intelligence", {}).get("trust_level", "")
@@ -238,7 +214,7 @@ class GreyNoiseConnector(BaseConnector):
             return action_result, query_success, API_PARSE_ERROR_MESSAGE
 
         action_result.add_data(result_data)
-        message = f"IP Reputation action successfully completed"
+        message = IP_REPUTATION_SUCCESS_MESSAGE
         return action_result, query_success, message
 
     def _greynoise_multi_ip(self, ip, action_result):
@@ -249,17 +225,18 @@ class GreyNoiseConnector(BaseConnector):
 
         try:
             result_data = self._api_client.quick(ip)
-        except Exception:
+        except Exception as e:
             query_success = False
-            return action_result, query_success, ERROR_MESSAGE
+            message = f"{ERROR_MESSAGE}: {self._get_error_message_from_exception(e)}"
+            return action_result, query_success, message
 
         action_result.add_data(result_data)
-        message = "Lookup IPs action successfully completed"
+        message = LOOKUP_IPS_SUCCESS_MESSAGE
 
         try:
             for i in result_data:
                 trust_level = i.get("business_service_intelligence", {}).get("trust_level", "")
-                result_data["trust_level"] = TRUST_LEVELS.get(str(trust_level), trust_level)
+                i["trust_level"] = TRUST_LEVELS.get(str(trust_level), trust_level)
                 i["visualization"] = VISUALIZATION_URL.format(ip=i["ip"])
         except KeyError:
             query_success = False
@@ -274,10 +251,10 @@ class GreyNoiseConnector(BaseConnector):
             results = self._api_client.test_connection()
             self.save_progress("Validated API Key. License type: {}, Expiration: {}".format(results["offering"], results["expiration"]))
         except Exception as e:
-            self.save_progress(f"Test Connectivity Failed with error: {str(e)}")
+            self.save_progress(f"Test Connectivity Failed with error: {self._get_error_message_from_exception(e)}")
             return action_result.set_status(phantom.APP_ERROR)
 
-        self.save_progress("Test Connectivity Passed")
+        self.save_progress(TEST_CONNECTIVITY_SUCCESS_MESSAGE)
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _lookup_ip(self, param):
@@ -296,7 +273,7 @@ class GreyNoiseConnector(BaseConnector):
         if not query_result:
             return action_result.set_status(phantom.APP_ERROR, message)
 
-        return action_result.set_status(phantom.APP_SUCCESS, "Lookup IP action successfully completed")
+        return action_result.set_status(phantom.APP_SUCCESS, LOOKUP_IP_SUCCESS_MESSAGE)
 
     def _ip_reputation(self, param):
         self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))
@@ -334,10 +311,11 @@ class GreyNoiseConnector(BaseConnector):
             result_data = self._api_client.cve(cve_id)
         except Exception as e:
             query_success = False
-            return action_result, query_success, f"{ERROR_MESSAGE}. Details: {self._get_error_message_from_exception(e)}"
+            message = f"{ERROR_MESSAGE}: {self._get_error_message_from_exception(e)}"
+            return action_result, query_success, message
 
         action_result.add_data(result_data)
-        message = "Get CVE Details action successfully completed"
+        message = GET_CVE_DETAILS_SUCCESS_MESSAGE
 
         return action_result, query_success, message
 
@@ -352,7 +330,7 @@ class GreyNoiseConnector(BaseConnector):
             quick = param.get("quick", False)
             query = param.get("query")
 
-            ret_val, item_size = self._validate_integer(action_result, param.get("size", 100), SIZE_ACTION_PARAM)
+            ret_val, item_size = self._validate_integer(action_result, param.get("size", DEFAULT_SIZE_FOR_GNQL_QUERY), SIZE_ACTION_PARAM)
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
             message = ""
@@ -370,20 +348,20 @@ class GreyNoiseConnector(BaseConnector):
                             ip_info["visualization"] = VISUALIZATION_URL.format(ip=ip_info["ip"])
                     action_result.add_data(results)
             except KeyError:
-                error_message = "Error occurred while processing API response"
+                error_message = API_PARSE_ERROR_MESSAGE
                 return action_result.set_status(phantom.APP_ERROR, error_message)
         except Exception as e:
             error_message = self._get_error_message_from_exception(e)
             return action_result.set_status(phantom.APP_ERROR, urllib.parse.unquote(error_message))
 
-        return action_result.set_status(phantom.APP_SUCCESS, "GNQL Query action successfully completed")
+        return action_result.set_status(phantom.APP_SUCCESS, GNQL_QUERY_SUCCESS_MESSAGE)
 
     def _paginator(self, query, size=None, exclude_raw=False, quick=False):
         ip_data = []
         query_response = {}
-        message = "Successfully fetched query data"
+        message = GNQL_QUERY_SUCCESS_MESSAGE
 
-        page_size = min(size, 1000) if size else 1000
+        page_size = min(size, PAGINATOR_MAX_SIZE) if size else PAGINATOR_MAX_SIZE
         scroll = None  # Start with no scroll token
 
         while True:
@@ -403,7 +381,7 @@ class GreyNoiseConnector(BaseConnector):
                 message = metadata.get("message") or message
 
                 # If no results, exit early
-                if count == 0:
+                if count == 0 or metadata.get("complete"):
                     return phantom.APP_SUCCESS, query_response, message or "No Results Found"
 
                 # If enough data collected, return sliced data
@@ -417,7 +395,7 @@ class GreyNoiseConnector(BaseConnector):
                     break  # No more pages
 
             except Exception as e:
-                message = f"Error occurred while fetching query details: {self._get_error_message_from_exception(e)}"
+                message = f"{API_PARSE_ERROR_MESSAGE}: {self._get_error_message_from_exception(e)}"
                 return phantom.APP_ERROR, query_response, message
 
         return phantom.APP_SUCCESS, query_response, message
@@ -444,7 +422,6 @@ class GreyNoiseConnector(BaseConnector):
         try:
             results = self._api_client.timeline(ip, field=field, **api_params)
             action_result.add_data(results)
-            self.save_progress("GreyNoise action complete")
         except Exception as e:
             error_message = self._get_error_message_from_exception(e)
             if "403" in error_message:
@@ -453,7 +430,7 @@ class GreyNoiseConnector(BaseConnector):
                 return action_result.set_status(phantom.APP_SUCCESS, "Lookup IP Timeline action not allowed")
             else:
                 return action_result.set_status(phantom.APP_ERROR, urllib.parse.unquote(error_message))
-        return action_result.set_status(phantom.APP_SUCCESS, "Lookup IP Timeline action successfully completed")
+        return action_result.set_status(phantom.APP_SUCCESS, LOOKUP_IP_TIMELINE_SUCCESS_MESSAGE)
 
     def _lookup_ips(self, param):
         self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))
@@ -468,7 +445,7 @@ class GreyNoiseConnector(BaseConnector):
         if not query_result:
             return action_result.set_status(phantom.APP_ERROR, message)
 
-        return action_result.set_status(phantom.APP_SUCCESS, "Lookup IPs action successfully completed")
+        return action_result.set_status(phantom.APP_SUCCESS, LOOKUP_IPS_SUCCESS_MESSAGE)
 
     def _on_poll(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
@@ -480,7 +457,7 @@ class GreyNoiseConnector(BaseConnector):
             self.save_progress("Starting query based on configured GNQL")
             param["size"] = param.get(phantom.APP_JSON_CONTAINER_COUNT, DEFAULT_SIZE_FOR_ON_POLL)
         else:
-            on_poll_size = config.get("on_poll_size", 25)
+            on_poll_size = config.get("on_poll_size", DEFAULT_SIZE_FOR_ON_POLL)
             # Validate 'on_poll_size' config parameter
             ret_val, on_poll_size = self._validate_integer(action_result, on_poll_size, ONPOLL_SIZE_CONFIG_PARAM)
             if phantom.is_fail(ret_val):
@@ -488,7 +465,7 @@ class GreyNoiseConnector(BaseConnector):
             param["size"] = on_poll_size
 
         if param["query"] == "Please refer to the documentation":
-            self.save_progress("Default on poll query unchanged, please enter a valid GNQL query")
+            self.save_progress(ON_POLL_DEFAULT_QUERY_ERROR_MESSAGE)
             return action_result.set_status(phantom.APP_ERROR, "Default on poll query unchanged")
 
         query_results = self._gnql_query(param, is_poll=True, action_result=action_result)
@@ -496,7 +473,7 @@ class GreyNoiseConnector(BaseConnector):
             return action_result.get_status()
 
         if not query_results:
-            return action_result.set_status(phantom.APP_SUCCESS, "No Data Found")
+            return action_result.set_status(phantom.APP_SUCCESS, NO_DATA_FOUND_MESSAGE)
 
         self.save_progress("Creating containers")
         for result in query_results:
@@ -569,9 +546,7 @@ class GreyNoiseConnector(BaseConnector):
             api_config = APIConfig(api_key=self._api_key, timeout=30, integration_name=self._integration_name)
             self._api_client = GreyNoise(api_config)
         except Exception as e:
-            return self.set_status(
-                phantom.APP_ERROR, f"Error occurred while connecting to GreyNoise: {self._get_error_message_from_exception(e)}"
-            )
+            return self.set_status(phantom.APP_ERROR, f"{ERROR_MESSAGE}: {self._get_error_message_from_exception(e)}")
 
         self.save_progress("Session initialized successfully")
 

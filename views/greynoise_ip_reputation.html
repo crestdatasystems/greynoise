@@ -196,11 +196,10 @@ and limitations under the License.
               padding-left:10px;
               padding-right:10px">
   <!-- Main Div -->
-  {% if results %}
+  {% if results.0 %}
   {% for result in results %}
   <!-- loop for each result -->
   <!------------------- For each Result ---------------------->
-  {% if result.0.business_service_intelligence.found or result.0.internet_scanner_intelligence.found %}
   <div class="wf-h3-style">Internet Scanner Intelligence data</div>
   {% if result.0.internet_scanner_intelligence.found %}
   <table class="wf-table-horizontal">
@@ -295,12 +294,9 @@ and limitations under the License.
   {% else %}
   <div class="wf-h4-style">Not found in any identified Business Service</div>
   {% endif %}
-  {% else %}
-  <div class="wf-h3-style">Not found in any identified Business Service or Internet Scanning Observations</div>
-  {% endif %}
   {% endfor %}
   {% else %}
-  <div class="wf-h3-style">No IP reputation data found</div>
+  <div class="wf-h4-style">No IP reputation data found</div>
   {% endif %}
   <!-- loop for each result end -->
 </div>
