@@ -200,12 +200,8 @@ class GreyNoiseConnector(BaseConnector):
         try:
             if trust_level:
                 result_data["trust_level"] = TRUST_LEVELS.get(str(trust_level), trust_level)
-
             if not (business_service_intelligence or internet_scanner_intelligence):
-                if self.get_action_identifier() == "community_lookup_ip":
-                    result_data["community_not_found"] = True
-                else:
-                    result_data["unseen_rep"] = True
+                result_data["unseen_rep"] = True
         except KeyError:
             query_success = False
             return action_result, query_success, API_PARSE_ERROR_MESSAGE
@@ -238,21 +234,17 @@ class GreyNoiseConnector(BaseConnector):
 
         return action_result, query_success, message
 
-    def _query_greynoise_ip(self, ip, query_type, action_result):
+    def _query_greynoise_ip(self, ip, action_result):
         # check to see if it's an internal IP address
-        if query_type != "multi" and ipaddress.ip_address(ip).is_private:
+        if self.get_action_identifier() == "lookup ip" and ipaddress.ip_address(ip).is_private:
             query_success = False
-            message = "Internal IP"
             return action_result, query_success, INTERNAL_IP_ERROR_MESSAGE
 
         # if it's not an internal IP format the query for the type of data
-        if query_type in ("quick", "multi"):
-            action_result, query_success, message = self._greynoise_multi_ip(ip, action_result)
-
-        elif query_type == "ip":
-            action_result, query_success, message = self._greynoise_ip_reputation(ip, action_result)
-
-        return action_result, query_success, message
+        if self.get_action_identifier() == "ip_reputation":
+            return self._greynoise_ip_reputation(ip, action_result)
+        else:
+            return self._greynoise_multi_ip(ip, action_result)
 
     def _test_connectivity(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
@@ -271,18 +263,7 @@ class GreyNoiseConnector(BaseConnector):
         self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        action_result, query_result, message = self._query_greynoise_ip(param["ip"], "quick", action_result)
-
-        if query_result:
-            return action_result.set_status(phantom.APP_SUCCESS, message)
-
-        return action_result.set_status(phantom.APP_ERROR, message)
-
-    def _community_lookup_ip(self, param):
-        self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))
-        action_result = self.add_action_result(ActionResult(dict(param)))
-
-        action_result, query_result, message = self._query_greynoise_ip(param["ip"], "ip", action_result)
+        action_result, query_result, message = self._query_greynoise_ip(param["ip"], action_result)
 
         if query_result:
             return action_result.set_status(phantom.APP_SUCCESS, message)
@@ -293,7 +274,7 @@ class GreyNoiseConnector(BaseConnector):
         self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        action_result, query_result, message = self._query_greynoise_ip(param["ip"], "ip", action_result)
+        action_result, query_result, message = self._query_greynoise_ip(param["ip"], action_result)
 
         if query_result:
             return action_result.set_status(phantom.APP_SUCCESS, message)
@@ -330,7 +311,6 @@ class GreyNoiseConnector(BaseConnector):
         if not is_poll:
             action_result = self.add_action_result(ActionResult(dict(param)))
 
-        query_results = []
         try:
             # make the initial query and add it to the query_results dict
             exclude_raw = param.get("exclude_raw", False)
@@ -340,38 +320,24 @@ class GreyNoiseConnector(BaseConnector):
             ret_val, item_size = self._validate_integer(action_result, param.get("size", 100), SIZE_ACTION_PARAM)
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
-
-            if is_poll:
-                query_results.append(results["data"])
-
-                # if necessary add the additional results to the query_results dict
-                while "scroll" in results.get("request_metadata", {}):
-                    results = self._api_client.query(param["query"], scroll=results.get("request_metadata", {}).get("scroll"))
-                    query_results.append(results["data"])
-
-                self.save_progress("GreyNoise query complete")
-
-                return query_results
-            else:
-                ret_val, query_results, message = self._paginator(query, item_size, exclude_raw, quick)
-
+            message = ""
+            try:
+                ret_val, results, message = self._paginator(query, item_size, exclude_raw, quick)
                 if phantom.is_fail(ret_val):
-                    action_result.add_data(query_results)
                     return action_result.set_status(phantom.APP_ERROR, message)
-
-                try:
-                    if query_results.get("data", []):
-                        for ip_info in query_results.get("data", []):
+                if is_poll:
+                    return results
+                else:
+                    if results.get("data", []):
+                        for ip_info in results.get("data", []):
                             ip_info["visualization"] = VISUALIZATION_URL.format(ip=ip_info["ip"])
-                except KeyError:
-                    error_message = "Error occurred while processing API response"
-                    return action_result.set_status(phantom.APP_ERROR, error_message)
-
+                    action_result.add_data(results)
+            except KeyError:
+                error_message = "Error occurred while processing API response"
+                return action_result.set_status(phantom.APP_ERROR, error_message)
         except Exception as e:
             error_message = self._get_error_message_from_exception(e)
             return action_result.set_status(phantom.APP_ERROR, urllib.parse.unquote(error_message))
-
-        action_result.add_data(query_results)
 
         return action_result.set_status(phantom.APP_SUCCESS, "GNQL Query action successfully completed")
 
@@ -422,9 +388,6 @@ class GreyNoiseConnector(BaseConnector):
     def _lookup_ip_timeline(self, param):
         self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
-        license_type, message = self._check_license_type()
-        if license_type == "community":
-            return action_result.set_status(phantom.APP_ERROR, message)
         # Extract required parameter
         ip = param["ip"]
         field = param["field"]
@@ -457,7 +420,7 @@ class GreyNoiseConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        result_data, query_result, message = self._query_greynoise_ip(ips, "multi", action_result)
+        result_data, query_result, message = self._query_greynoise_ip(ips, action_result)
 
         if query_result:
             return action_result.set_status(phantom.APP_SUCCESS, message)
@@ -494,33 +457,30 @@ class GreyNoiseConnector(BaseConnector):
             return action_result.set_status(phantom.APP_SUCCESS, "No Data Found")
 
         self.save_progress("Creating containers")
-        for result in query_results[0][-int(param["size"]) :]:
+        for result in query_results:
+            ip = result.get("ip")
             container = {}
-            container["name"] = "GreyNoise Alert - {}".format(result["ip"])
-            # set the severity of the container based on the classification
-            container_severity = "low"
-            if result["classification"] == "malicious":
-                container_severity = "high"
-            elif result["classification"] == "unknown":
-                container_severity == "medium"
-
+            container["name"] = f"GreyNoise Alert - {ip}"
+            self.save_progress(f"Creating container for IP: {ip}")
+            classification = result.get("internet_scanner_intelligence", {}).get("classification", "")
+            container_severity = SEVERITY_MAP.get(classification)
             container["severity"] = container_severity
-            container["description"] = "This container was generated due to an on poll action with the query - {}".format(param["query"])
+            container["description"] = f"This container was generated due to an on poll action with the query - {param['query']}"
 
             ret_val, message, cid = self.save_container(container)
             if phantom.is_fail(ret_val):
                 self.save_progress(f"Error saving container: {message}")
                 self.debug_print(f"Error saving container: {message} -- CID: {cid}")
 
-            artifact = [{"cef": result, "name": "Observed Details", "severity": container_severity, "container_id": cid}]
+            artifact = [
+                {"cef": result, "name": "Observed Details", "severity": container_severity, "container_id": cid},
+            ]
 
             create_artifact_status, create_artifact_message, _ = self.save_artifacts(artifact)
             if phantom.is_fail(create_artifact_status):
                 self.save_progress(f"Error saving artifact: {create_artifact_message}")
                 self.debug_print(f"Error saving artifact: {create_artifact_message}")
                 continue
-
-        # iterate through query_results and create a container for each IP returned from GN
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -541,8 +501,6 @@ class GreyNoiseConnector(BaseConnector):
             ret_val = self._lookup_ips(param)
         elif action == "on_poll":
             ret_val = self._on_poll(param)
-        elif action == "community_lookup_ip":
-            ret_val = self._community_lookup_ip(param)
         elif action == "lookup_ip_timeline":
             ret_val = self._lookup_ip_timeline(param)
         elif action == "get_cve_details":
@@ -572,7 +530,7 @@ class GreyNoiseConnector(BaseConnector):
             self._api_client = GreyNoise(api_config)
         except Exception as e:
             return self.set_status(
-                phantom.APP_ERROR, f"Error occured while connecting to GreyNoise: {self._get_error_message_from_exception(e)}"
+                phantom.APP_ERROR, f"Error occurred while connecting to GreyNoise: {self._get_error_message_from_exception(e)}"
             )
 
         self.save_progress("Session initialized successfully")
