@@ -58,3 +58,17 @@ GREYNOISE_STATE_FILE_CORRUPT_ERROR = (
 SEVERITY_MAP = {"malicious": "high", "suspicious": "medium", "benign": "low"}
 
 DEFAULT_SIZE_FOR_ON_POLL = 25
+
+# Constants for webhook
+CONTENT_TYPE_HEADER = ["Content-Type", "application/json"]
+GREYNOISE_FEED_IP_EVENT_TYPE = "ip-classification-change"
+GREYNOISE_FEED_CVE_EVENT_TYPE = "cve-status-change"
+GREYNOISE_ALERT_TAG = "greynoise-alert"
+GREYNOISE_FEED_TAG = "greynoise-feed"
+GREYNOISE_FEED_CVE_TAG = "greynoise-feed-cve"
+GREYNOISE_FEED_IP_TAG = "greynoise-feed-ip"
+
+# Response status codes for webhook
+HTTP_OK = 200
+HTTP_BAD_REQUEST = 400
+HTTP_METHOD_NOT_ALLOWED = 405
