@@ -196,135 +196,6 @@
       "versions": "EQ(*)"
     },
     {
-      "action": "riot lookup ip",
-      "description": "Lookup IP using GreyNoise's RIOT endpoint",
-      "verbose": "RIOT identifies IPs from known benign services and organizations that commonly cause false positives in network security and threat intelligence products. The collection of IPs in RIOT is continually curated and verified to provide accurate results.",
-      "type": "investigate",
-      "identifier": "riot_lookup_ip",
-      "read_only": true,
-      "parameters": {
-        "ip": {
-          "description": "IP to query",
-          "data_type": "string",
-          "contains": [
-            "ip"
-          ],
-          "primary": true,
-          "required": true,
-          "order": 0
-        }
-      },
-      "output": [
-        {
-          "data_path": "action_result.parameter.ip",
-          "data_type": "string",
-          "contains": [
-            "ip"
-          ],
-          "example_values": [
-            "71.6.135.131"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.category",
-          "data_type": "string",
-          "example_values": [
-            "public_dns"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.description",
-          "data_type": "string",
-          "example_values": [
-            "Global domain name system (DNS) resolution service."
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.explanation",
-          "data_type": "string",
-          "example_values": [
-            "Public DNS services are used as alternatives to ISP's name servers. You may see devices on your network communicating with Public DNS over port XX/TCP or XX/UDP to resolve DNS lookups."
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.last_updated",
-          "data_type": "string",
-          "example_values": [
-            "2021-05-26T17:55:35Z"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.name",
-          "data_type": "string",
-          "example_values": [
-            "Public DNS"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.reference",
-          "data_type": "string",
-          "contains": [
-            "url"
-          ],
-          "example_values": [
-            "https://developers.google.com/speed/public-dns/docs/isp#alternative"
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.riot",
-          "data_type": "boolean",
-          "example_values": [
-            true,
-            false
-          ]
-        },
-        {
-          "data_path": "action_result.data.*.trust_level",
-          "data_type": "string",
-          "example_values": [
-            "1",
-            "2"
-          ]
-        },
-        {
-          "data_path": "action_result.status",
-          "data_type": "string",
-          "example_values": [
-            "success",
-            "failed"
-          ]
-        },
-        {
-          "data_path": "action_result.message",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.summary",
-          "data_type": "string"
-        },
-        {
-          "data_path": "summary.total_objects",
-          "data_type": "numeric",
-          "example_values": [
-            1
-          ]
-        },
-        {
-          "data_path": "summary.total_objects_successful",
-          "data_type": "numeric",
-          "example_values": [
-            1
-          ]
-        }
-      ],
-      "render": {
-        "type": "custom",
-        "view": "greynoise_view.display_view_riot_lookup_ip",
-        "title": "GreyNoise RIOT IP Lookup"
-      },
-      "versions": "EQ(*)"
-    },
-    {
       "action": "ip reputation",
       "description": "Get full GreyNoise reputation and context for a specific IP",
       "verbose": "Get more information about a given IP address. Returns time ranges, IP metadata (network owner, ASN, reverse DNS pointer, country), associated actors, activity tags, raw port scan, and web request information.",
@@ -633,13 +504,13 @@
           "order": 1
         },
         "exclude_raw": {
-          "description": "exclude raw data",
+          "description": "Exclude the raw_data details from the query response",
           "data_type": "boolean",
           "default": false,
           "order": 2
         },
         "quick": {
-          "description": "quick",
+          "description": "If true, the response will only include the IP address and the classification or trust level",
           "data_type": "boolean",
           "default": false,
           "order": 3
@@ -1263,7 +1134,7 @@
         "order": 2
       },
       "granularity": {
-        "description": "Granularity of activity date ranges .This can be in hours (e.g. Xh) or days (Xd). Valid hours are between 1 and 24. Valid days are between 1 and 90.",
+        "description": "Granularity of activity date ranges .This can be either in hour(1h) or in day(1d)",
         "data_type": "string",
         "required": false,
         "default": "1d",
@@ -1416,16 +1287,20 @@
   },
     {
       "action": "get cve details",
-      "description": "Get the CVE Details",
+      "description": "Retrieve details about a specific Common Vulnerabilities and Exposures (CVE)",
       "type": "investigate",
       "identifier": "get_cve_details",
       "read_only": true,
       "parameters": {
         "cve_id": {
-          "description": "CVE ID to get details",
+          "description": "The CVE ID to query (e.g., CVE-2024-12345)",
           "data_type": "string",
           "required": true,
-          "order": 0
+          "primary":true,
+          "order": 0,
+          "contains":[
+            "greynoise cve"
+          ]
         }
       },
       "output": [
@@ -1433,7 +1308,7 @@
           "data_path": "action_result.parameter.cve_id",
           "data_type": "string",
           "contains": [
-            "ip"
+            "greynoise cve"
           ],
           "example_values": [
             "71.6.135.131"
