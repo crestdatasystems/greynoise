@@ -161,6 +161,37 @@ class GreyNoiseConnector(BaseConnector):
 
         return True
 
+    def _validate_timeline_field(self, field, action_result):
+        """
+        Validate that the field parameter for timeline API is one of the allowed values.
+
+        Args:
+            field: The field parameter to validate
+            action_result: The action result object to set status on if validation fails
+
+        Returns:
+            bool: True if validation passes, False otherwise
+        """
+        valid_fields = [
+            "classification",
+            "source_org",
+            "source_asn",
+            "source_rdns",
+            "http_path",
+            "http_user_agent",
+            "destination_port",
+            "tag_ids"
+        ]
+
+        if field not in valid_fields:
+            action_result.set_status(
+                phantom.APP_ERROR,
+                f"Invalid field parameter. Must be one of: {', '.join(valid_fields)}"
+            )
+            return False
+
+        return True
+
     def _greynoise_quick_ip(self, ip, action_result):
         query_success = True
 
@@ -393,8 +424,14 @@ class GreyNoiseConnector(BaseConnector):
         # Extract required parameter
         ip = param["ip"]
         field = param["field"]
+
+        # Validate field parameter
+        if not self._validate_timeline_field(field, action_result):
+            return action_result
+
         # Build optional parameters dict
         api_params = {}
+
         # Only add parameters if they're provided
         if "days" in param:
             api_params["days"] = param["days"]
