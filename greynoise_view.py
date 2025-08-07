@@ -166,9 +166,6 @@ def display_view_noise_ip_timeline(provides, all_app_runs, context):
     :param context: A dictionary containing the results
     :return: str
     """
-    context["title1"] = "GreyNoise"
-    context["title2"] = "IP Timeline Lookup"
-    context["title_logo"] = "greynoise_logo.png"
 
     context["results"] = results = []
     for summary, action_results in all_app_runs:

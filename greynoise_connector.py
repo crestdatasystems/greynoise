@@ -234,18 +234,6 @@ class GreyNoiseConnector(BaseConnector):
 
         return action_result, query_success, message
 
-    def _query_greynoise_ip(self, ip, action_result):
-        # check to see if it's an internal IP address
-        if self.get_action_identifier() == "lookup ip" and ipaddress.ip_address(ip).is_private:
-            query_success = False
-            return action_result, query_success, INTERNAL_IP_ERROR_MESSAGE
-
-        # if it's not an internal IP format the query for the type of data
-        if self.get_action_identifier() == "ip_reputation":
-            return self._greynoise_ip_reputation(ip, action_result)
-        else:
-            return self._greynoise_multi_ip(ip, action_result)
-
     def _test_connectivity(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
@@ -263,18 +251,32 @@ class GreyNoiseConnector(BaseConnector):
         self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        action_result, query_result, message = self._query_greynoise_ip(param["ip"], action_result)
+        # Extract required parameter
+        ip = param["ip"]
 
-        if query_result:
-            return action_result.set_status(phantom.APP_SUCCESS, message)
+        # check to see if it's an internal IP address
+        if ipaddress.ip_address(ip).is_private:
+            return action_result.set_status(phantom.APP_ERROR, INTERNAL_IP_ERROR_MESSAGE)
 
-        return action_result.set_status(phantom.APP_ERROR, message)
+        action_result, query_result, message = self._greynoise_multi_ip(param["ip"], action_result)
+
+        if not query_result:
+            return action_result.set_status(phantom.APP_ERROR, message)
+
+        return action_result.set_status(phantom.APP_SUCCESS, message)
 
     def _ip_reputation(self, param):
         self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        action_result, query_result, message = self._query_greynoise_ip(param["ip"], action_result)
+        # Extract required parameter
+        ip = param["ip"]
+
+        # check to see if it's an internal IP address
+        if ipaddress.ip_address(ip).is_private:
+            return action_result.set_status(phantom.APP_ERROR, INTERNAL_IP_ERROR_MESSAGE)
+
+        action_result, query_result, message = self._greynoise_ip_reputation(ip, action_result)
 
         if query_result:
             return action_result.set_status(phantom.APP_SUCCESS, message)
@@ -420,12 +422,12 @@ class GreyNoiseConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        result_data, query_result, message = self._query_greynoise_ip(ips, action_result)
+        result_data, query_result, message = self._greynoise_multi_ip(ips, action_result)
 
-        if query_result:
-            return action_result.set_status(phantom.APP_SUCCESS, message)
+        if not query_result:
+            return action_result.set_status(phantom.APP_ERROR, message)
 
-        return action_result.set_status(phantom.APP_ERROR, message)
+        return action_result.set_status(phantom.APP_SUCCESS, message)
 
     def _on_poll(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
@@ -504,7 +506,7 @@ class GreyNoiseConnector(BaseConnector):
         elif action == "lookup_ip_timeline":
             ret_val = self._lookup_ip_timeline(param)
         elif action == "get_cve_details":
-            ret_val == self._get_cve_details(param)
+            ret_val = self._get_cve_details(param)
 
         return ret_val
 
