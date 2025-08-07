@@ -1,19 +1,6 @@
-# Copyright (c) 2025 Splunk Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 # File: greynoise_connector.py
 #
-# Copyright (c) GreyNoise, 2019-2022.
+# Copyright (c) GreyNoise, 2019-2025
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,7 +27,7 @@ from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 from six.moves.urllib.parse import urljoin as _urljoin
 
-from greynoise.api import GreyNoise, APIConfig
+from greynoise.api import APIConfig, GreyNoise
 from greynoise_consts import *
 
 
@@ -180,14 +167,11 @@ class GreyNoiseConnector(BaseConnector):
             "http_path",
             "http_user_agent",
             "destination_port",
-            "tag_ids"
+            "tag_ids",
         ]
 
         if field not in valid_fields:
-            action_result.set_status(
-                phantom.APP_ERROR,
-                f"Invalid field parameter. Must be one of: {', '.join(valid_fields)}"
-            )
+            action_result.set_status(phantom.APP_ERROR, f"Invalid field parameter. Must be one of: {', '.join(valid_fields)}")
             return False
 
         return True
@@ -274,7 +258,7 @@ class GreyNoiseConnector(BaseConnector):
             results = self._api_client.test_connection()
             self.save_progress("Validated API Key. License type: {}, Expiration: {}".format(results["offering"], results["expiration"]))
         except Exception as e:
-            self.save_progress(f"Test Connectivity Failed with error: {str(e)}")
+            self.save_progress(f"Test Connectivity Failed with error: {e!s}")
             return action_result.set_status(phantom.APP_ERROR)
 
         self.save_progress("Test Connectivity Passed")

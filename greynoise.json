@@ -1,6 +1,6 @@
 {
-  "appid": "3af2ef2d-6e4a-4e74-8f20-4d6030625561",
-  "name": "GreyNoise for SOAR",
+    "appid": "3af2ef2d-6e4a-4e74-8f20-4d6030625561",
+    "name": "GreyNoise for SOAR",
     "description": "This app provides investigative capabilities using the GreyNoise plugin",
     "type": "reputation",
     "product_vendor": "GreyNoise",
@@ -9,7 +9,7 @@
     "product_name": "GreyNoise",
     "python_version": "3",
     "product_version_regex": ".*",
-  "publisher": "GreyNoise",
+    "publisher": "GreyNoise",
     "license": "Copyright (c) GreyNoise, 2019-2025",
     "app_version": "2.3.5",
     "utctime_updated": "2025-08-05T17:19:45.000000Z",
@@ -1336,7 +1336,7 @@
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                      "Lookup IP Timeline action successfully completed"
+                        "Lookup IP Timeline action successfully completed"
                     ]
                 },
                 {
@@ -1486,10 +1486,6 @@
                 "input_file": "wheels/py3/greynoise-3.0.1-py3-none-any.whl"
             },
             {
-                "module": "ipaddress",
-                "input_file": "wheels/shared/ipaddress-1.0.23-py2.py3-none-any.whl"
-            },
-            {
                 "module": "jinja2",
                 "input_file": "wheels/py3/jinja2-3.1.6-py3-none-any.whl"
             },
@@ -1523,7 +1519,7 @@
             },
             {
                 "module": "click",
-                "input_file": "wheels/py3/click-8.2.1-py3-none-any.whl"
+                "input_file": "wheels/py3/click-8.1.8-py3-none-any.whl"
             },
             {
                 "module": "click_default_group",
@@ -1544,10 +1540,6 @@
             {
                 "module": "greynoise",
                 "input_file": "wheels/py3/greynoise-3.0.1-py3-none-any.whl"
-            },
-            {
-                "module": "ipaddress",
-                "input_file": "wheels/shared/ipaddress-1.0.23-py2.py3-none-any.whl"
             },
             {
                 "module": "jinja2",

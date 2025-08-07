@@ -1,18 +1,6 @@
-{% extends 'widgets/widget_template.html' %}
-{% load custom_template %}
-{% block custom_title_prop %}
-{% if title_logo %}
-style="background-size: auto 60%; background-position: 50%;
-background-repeat: no-repeat; background-image: url('/app_resource/{{ title_logo }}');"
-{% endif %}
-{% endblock %}
-{% block title1 %}{{ title1 }}{% endblock %}
-{% block title2 %}{{ title2 }}{% endblock %}
-{% block custom_tools %}{% endblock %}
-{% block widget_content %}
-<!-- Main Start Block -->
-<!--File: greynoise_noise_ip_timeline.html
-Copyright (c) 2024-2025 Splunk Inc.
+<!--
+File: greynoise_noise_timeline.html
+Copyright (c) GreyNoise, 2019-2025
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,7 +13,19 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
 either express or implied. See the License for the specific language governing permissions
 and limitations under the License.
 -->
-<style>
+{% extends 'widgets/widget_template.html' %}
+{% load custom_template %}
+{% block custom_title_prop %}
+  {% if title_logo %}
+    style="background-size: auto 60%; background-position: 50%;
+    background-repeat: no-repeat; background-image: url('/app_resource/{{ title_logo }}');"
+  {% endif %}
+{% endblock %}
+{% block title1 %}{{ title1 }}{% endblock %}
+{% block title2 %}{{ title2 }}{% endblock %}
+{% block custom_tools %}{% endblock %}
+{% block widget_content %}
+  <style>
     .greynoise a:link {
         color: rgb(130, 175, 190);
     }
@@ -163,9 +163,8 @@ and limitations under the License.
         margin-top: 20px;
         margin-bottom: 20px;
     }
-</style>
-
-<script>
+  </style>
+  <script>
     // Initialize DataTable
     $.extend(true, $.fn.dataTable.defaults, {
         "searching": true,
@@ -181,87 +180,87 @@ and limitations under the License.
         "dom": '<"top"f>rt<"bottom"p><"clear">',
     });
     $('.dataTable').DataTable();
-</script>
-
-<div class="greynoise" style="overflow: auto;
+  </script>
+  <div class="greynoise"
+       style="overflow: auto;
               width: 100%;
               height: 100%;
               padding-left:10px;
               padding-right:10px">
     <!-- Main Div -->
     {% for result in results %}
-    {% if result.0.metadata %}
-    <!-- Timeline Results -->
-    <div class="wf-h4-style">Timeline Results for <b>{{ result.0.metadata.ip }}</b></div>
-    <div class="ip-section">
-        {% if result.0.results %}
-        <table class="dataTable">
-            <thead>
+      {% if result.0.metadata %}
+        <!-- Timeline Results -->
+        <div class="wf-h4-style">
+          Timeline Results for <b>{{ result.0.metadata.ip }}</b>
+        </div>
+        <div class="ip-section">
+          {% if result.0.results %}
+            <table class="dataTable">
+              <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Label</th>
-                    <th>Count</th>
+                  <th>Date</th>
+                  <th>Label</th>
+                  <th>Count</th>
                 </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
                 {% for entry in result.0.results %}
-                <tr>
+                  <tr>
                     <td>{{ entry.timestamp }}</td>
                     <td>
-                        {% if entry.label == "malicious" %}
+                      {% if entry.label == "malicious" %}
                         <span class="malicious">{{ entry.label }}</span>
-                        {% elif entry.label == "suspicious" %}
+                      {% elif entry.label == "suspicious" %}
                         <span class="suspicious">{{ entry.label }}</span>
-                        {% elif entry.label == "benign" %}
+                      {% elif entry.label == "benign" %}
                         <span class="benign">{{ entry.label }}</span>
-                        {% else %}
+                      {% else %}
                         <span class="unknown">{{ entry.label }}</span>
-                        {% endif %}
+                      {% endif %}
                     </td>
                     <td>{{ entry.data }}</td>
-                </tr>
+                  </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <div class="wf-h4-style">No timeline data found</div>
-        {% endif %}
-
-        <hr>
-
-        <!-- Metadata Section -->
-        <div class="wf-h4-style">Timeline Metadata</div>
-        <table class="wf-table-horizontal">
+              </tbody>
+            </table>
+          {% else %}
+            <div class="wf-h4-style">No timeline data found</div>
+          {% endif %}
+          <hr>
+          <!-- Metadata Section -->
+          <div class="wf-h4-style">Timeline Metadata</div>
+          <table class="wf-table-horizontal">
             <thead>
-                <tr>
-                    <th>IP</th>
-                    <th>Field</th>
-                    <th>First Seen</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Granularity</th>
-                    <th>Metric</th>
-                </tr>
+              <tr>
+                <th>IP</th>
+                <th>Field</th>
+                <th>First Seen</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Granularity</th>
+                <th>Metric</th>
+              </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <a href="javascript:;"
-                            onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ result.0.metadata.ip }}' }], 0, {{ container.id }}, null, false);">
-                            {{ result.0.metadata.ip }} <i class="fa fa-caret-down" style="font-size: smaller;"></i>
-                        </a>
-                    </td>
-                    <td>{{ result.0.metadata.field }}</td>
-                    <td>{{ result.0.metadata.first_seen }}</td>
-                    <td>{{ result.0.metadata.start }}</td>
-                    <td>{{ result.0.metadata.end }}</td>
-                    <td>{{ result.0.metadata.granularity }}</td>
-                    <td>{{ result.0.metadata.metric }}</td>
-                </tr>
+              <tr>
+                <td>
+                  <a href="javascript:;"
+                     onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ result.0.metadata.ip }}' }], 0, {{ container.id }}, null, false);">
+                    {{ result.0.metadata.ip }} <i class="fa fa-caret-down" style="font-size: smaller;"></i>
+                  </a>
+                </td>
+                <td>{{ result.0.metadata.field }}</td>
+                <td>{{ result.0.metadata.first_seen }}</td>
+                <td>{{ result.0.metadata.start }}</td>
+                <td>{{ result.0.metadata.end }}</td>
+                <td>{{ result.0.metadata.granularity }}</td>
+                <td>{{ result.0.metadata.metric }}</td>
+              </tr>
             </tbody>
-        </table>
-    </div>
-    {% endif %}
+          </table>
+        </div>
+      {% endif %}
     {% endfor %}
-</div>
+  </div>
 {% endblock %}
