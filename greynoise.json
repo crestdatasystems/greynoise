@@ -112,7 +112,7 @@
             "url"
           ],
           "example_values": [
-            "https://viz.greynoise.io/ip/115.60.214.27"
+            "https://viz.greynoise.io/ip/1.1.1.1"
                     ]
         },
         {
@@ -237,7 +237,7 @@
             "data_path": "action_result.data.*.visualization",
             "data_type": "string",
             "example_values": [
-                "https://viz.greynoise.io/ip/8.8.8.8"
+                "https://viz.greynoise.io/ip/1.1.1.1"
             ]
         },
         {
@@ -266,7 +266,7 @@
             "data_path": "action_result.data.*.business_service_intelligence.reference",
             "data_type": "string",
             "example_values": [
-                "https://developers.google.com/speed/public-dns/docs/isp#alternative"
+                "https://developers.test.com/speed/test/test/isp#alternative"
             ]
         },
         {
@@ -808,7 +808,7 @@
     {
       "action": "gnql query",
       "description": "Use the GreyNoise Query Language to run a query",
-      "verbose": "Please refer to <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs.greynoise.io/reference/gnqlquery-1\">https://docs.greynoise.io/reference/gnqlquery-1/a> for further information.",
+      "verbose": "Please refer to <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs.greynoise.io/docs/using-the-greynoise-query-language-gnql\">https://docs.greynoise.io/docs/using-the-greynoise-query-language-gnql/a> for further information.",
       "type": "investigate",
       "identifier": "gnql_query",
       "read_only": true,
@@ -891,7 +891,7 @@
             "data_path": "action_result.data.*.data.*.visualization",
             "data_type": "string",
             "example_values": [
-                "https://viz.greynoise.io/ip/203.210.181.107"
+                "https://viz.greynoise.io/ip/1.1.1.1"
             ]
         },
         {
@@ -1433,7 +1433,7 @@
             "url"
           ],
           "example_values": [
-            "https://viz.greynoise.io/ip/115.60.214.27"
+            "https://viz.greynoise.io/ip/1.1.1.1"
                     ]
         },
         {
