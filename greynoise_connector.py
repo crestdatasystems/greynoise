@@ -243,7 +243,7 @@ class GreyNoiseConnector(BaseConnector):
         try:
             for i in result_data:
                 trust_level = i.get("business_service_intelligence", {}).get("trust_level", "")
-                result_data["trust_level"] = TRUST_LEVELS.get(str(trust_level), trust_level)
+                i["trust_level"] = TRUST_LEVELS.get(str(trust_level), trust_level)
                 i["visualization"] = VISUALIZATION_URL.format(ip=i["ip"])
         except KeyError:
             query_success = False
@@ -331,7 +331,6 @@ class GreyNoiseConnector(BaseConnector):
             action_result = self.add_action_result(ActionResult(dict(param)))
 
         try:
-            # make the initial query and add it to the query_results dict
             exclude_raw = param.get("exclude_raw", False)
             quick = param.get("quick", False)
             query = param.get("query")
@@ -363,46 +362,57 @@ class GreyNoiseConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "GNQL Query action successfully completed")
 
     def _paginator(self, query, size=None, exclude_raw=False, quick=False):
-        ip_data = []
-        query_response = {}
+        """Fetch paginated results for a GreyNoise query."""
+        query_response = {"data": []}
         message = "Successfully fetched query data"
+        
+        # Calculate optimal page size
+        page_size = 1000
+        remaining = size  # Track remaining items to fetch
+        
+        scroll = None  # Initial pagination token
 
-        page_size = min(size, 1000) if size else 1000
-        scroll = None  # Start with no scroll token
-
-        while True:
-            try:
-                # Actual API call to fetch results
-                results = self._api_client.query(query=query, size=page_size, exclude_raw=exclude_raw, quick=quick, scroll=scroll)
+        try:
+            while True:
+                # Calculate optimal page size for this request
+                if remaining is not None:
+                    page_size = min(1000, remaining)
+                    if page_size <= 0:
+                        break  # We've collected enough data
+                    
+                # Make API call
+                api_response = self._api_client.query(query=query, size=page_size, exclude_raw=exclude_raw, quick=quick, scroll=scroll)
 
                 # Extract data and metadata
-                data = results.get("data", [])
-                metadata = results.get("request_metadata", {})
+                current_data = api_response.get("data", [])
+                request_metadata = api_response.get("request_metadata", {})
+                
+                # Check for empty results
+                if request_metadata.get("count", 0) == 0:
+                    message = "No Results Found"
+                    break
 
-                ip_data.extend(data)
-                query_response["request_metadata"] = metadata
-                query_response["data"] = ip_data
+                # Update custom message if available
+                if request_metadata.get("message"):
+                    message = request_metadata.get("message")
 
-                count = metadata.get("count", 0)
-                message = metadata.get("message") or message
-
-                # If no results, exit early
-                if count == 0:
-                    return phantom.APP_SUCCESS, query_response, message or "No Results Found"
-
-                # If enough data collected, return sliced data
-                if size and len(ip_data) >= size:
-                    query_response["data"] = ip_data[:size]
-                    return phantom.APP_SUCCESS, query_response, message
+                # Add current data to results
+                query_response["data"].extend(current_data)
+                
+                # Update remaining count
+                if remaining is not None:
+                    remaining -= len(current_data)
+                    if remaining <= 0:
+                        break
 
                 # Get scroll token for next page
-                scroll = metadata.get("scroll")
+                scroll = request_metadata.get("scroll")
                 if not scroll:
-                    break  # No more pages
+                    break  # No more pages available
 
-            except Exception as e:
-                message = f"Error occurred while fetching query details: {self._get_error_message_from_exception(e)}"
-                return phantom.APP_ERROR, query_response, message
+        except Exception as e:
+            message = f"Error occurred while fetching query details: {self._get_error_message_from_exception(e)}"
+            return phantom.APP_ERROR, query_response, message
 
         return phantom.APP_SUCCESS, query_response, message
 
@@ -483,7 +493,7 @@ class GreyNoiseConnector(BaseConnector):
             return action_result.set_status(phantom.APP_SUCCESS, "No Data Found")
 
         self.save_progress("Creating containers")
-        for result in query_results:
+        for result in query_results["data"]:
             ip = result.get("ip")
             container = {}
             container["name"] = f"GreyNoise Alert - {ip}"
@@ -498,7 +508,7 @@ class GreyNoiseConnector(BaseConnector):
             if phantom.is_fail(ret_val):
                 self.save_progress(f"Error saving container: {message}")
                 self.debug_print(f"Error saving container: {message} -- CID: {cid}")
-            artifact = ({"cef": result, "name": "Observed Details", "severity": container_severity, "container_id": cid},)
+            artifact = {"cef": result, "name": "Observed Details", "severity": container_severity, "container_id": cid}
 
             create_artifact_status, create_artifact_message, _ = self.save_artifact(artifact)
             if phantom.is_fail(create_artifact_status):
