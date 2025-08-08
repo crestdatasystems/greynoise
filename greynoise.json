@@ -832,7 +832,7 @@
                     "order": 1
                 },
                 "exclude_raw": {
-                    "description": "if true, the raw data will not be included in the response",
+                    "description": "If true, the raw data will not be included in the response",
                     "data_type": "boolean",
                     "default": false,
                     "order": 2

@@ -206,13 +206,13 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.ip | string | `ip` | 8.8.8.8 |
-action_result.data.\*.\*.ip | string | `ip` | 8.8.8.8 |
-action_result.data.\*.\*.trust_level | string | | 1 - Reasonably Ignore |
-action_result.data.\*.\*.visualization | string | `url` | https://viz.greynoise.io/ip/1.1.1.1 |
-action_result.data.\*.\*.business_service_intelligence.found | boolean | | False True |
-action_result.data.\*.\*.business_service_intelligence.trust_level | string | | trusted |
-action_result.data.\*.\*.internet_scanner_intelligence.found | boolean | | True False |
-action_result.data.\*.\*.internet_scanner_intelligence.classification | string | | malicious benign |
+action_result.data.\*.ip | string | `ip` | 8.8.8.8 |
+action_result.data.\*.trust_level | string | | 1 - Reasonably Ignore |
+action_result.data.\*.visualization | string | `url` | https://viz.greynoise.io/ip/1.1.1.1 |
+action_result.data.\*.business_service_intelligence.found | boolean | | False True |
+action_result.data.\*.business_service_intelligence.trust_level | string | | trusted |
+action_result.data.\*.internet_scanner_intelligence.found | boolean | | True False |
+action_result.data.\*.internet_scanner_intelligence.classification | string | | malicious benign |
 action_result.status | string | | success failed |
 action_result.message | string | | Lookup IP action successfully completed |
 action_result.summary | string | | |
@@ -345,7 +345,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **query** | required | GNQL query | string | `greynoise query` |
 **size** | required | The number of results to return (warning: returning over 1000 results may degrade widget performance) | numeric | |
-**exclude_raw** | optional | Exclude the raw_data details from the query response | boolean | |
+**exclude_raw** | optional | If true, the raw data will not be included in the response | boolean | |
 **quick** | optional | If true, the response will only include the IP address and the classification or trust level | boolean | |
 
 #### Action Output
@@ -453,13 +453,13 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.ips | string | | 8.8.8.8,8.8.4.4 |
-action_result.data.\*.\*.ip | string | `ip` | 8.8.8.8 |
-action_result.data.\*.\*.trust_level | string | | 1 - Reasonably Ignore |
-action_result.data.\*.\*.visualization | string | `url` | https://viz.greynoise.io/ip/1.1.1.1 |
-action_result.data.\*.\*.business_service_intelligence.found | boolean | | False True |
-action_result.data.\*.\*.business_service_intelligence.trust_level | string | | trusted |
-action_result.data.\*.\*.internet_scanner_intelligence.found | boolean | | True False |
-action_result.data.\*.\*.internet_scanner_intelligence.classification | string | | malicious benign |
+action_result.data.\*.ip | string | `ip` | 8.8.8.8 |
+action_result.data.\*.trust_level | string | | 1 - Reasonably Ignore |
+action_result.data.\*.visualization | string | `url` | https://viz.greynoise.io/ip/1.1.1.1 |
+action_result.data.\*.business_service_intelligence.found | boolean | | False True |
+action_result.data.\*.business_service_intelligence.trust_level | string | | trusted |
+action_result.data.\*.internet_scanner_intelligence.found | boolean | | True False |
+action_result.data.\*.internet_scanner_intelligence.classification | string | | malicious benign |
 action_result.status | string | | success failed |
 action_result.message | string | | Lookup IP action successfully completed |
 action_result.summary | string | | |
