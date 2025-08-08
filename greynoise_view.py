@@ -12,7 +12,17 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
+from datetime import datetime  # Move imports to the top
 
+def format_timestamp(timestamp_str, input_format="%Y-%m-%dT%H:%M:%SZ", output_format="%Y-%m-%d %H:%M:%S"):
+    """Helper function to format timestamps consistently."""
+    try:
+        # Handle timestamps with nanosecond precision by stripping everything after the second
+        if '.' in timestamp_str:
+            timestamp_str = timestamp_str.split('.')[0] + 'Z'
+        return datetime.strptime(timestamp_str, input_format).strftime(output_format)
+    except Exception as e:
+        return timestamp_str  # Return original if parsing fails
 
 def display_view_ip_reputation(provides, all_app_runs, context):
     """Display a specific view based on the 'provides' parameter.
@@ -131,46 +141,32 @@ def display_view_noise_ip_timeline(provides, all_app_runs, context):
     It processes the action results from 'all_app_runs' and returns the corresponding view path.
 
     :param provides: Action names
-    :param all_app_runs: List of tuples containing summary and action results
-    :param context: A dictionary containing the results
-    :return: str
+    :param all_app_runs: List of tuples containing (summary, action_results)
+    :param context: A dictionary to store processed results
+    :return: str - Path to the HTML view template
     """
+    results = []
 
-    context["results"] = results = []
     for summary, action_results in all_app_runs:
         for result in action_results:
             data = result.get_data()
 
-            # Format timestamps in results if they exist
-            if data and isinstance(data, list) and len(data) > 0:
+            # Process timestamp data if available
+            if data and isinstance(data, list) and data:
                 for item in data:
-                    # Format start and end in metadata if they exist
+                    # Format timestamps in metadata
                     if "metadata" in item:
                         for time_field in ["start", "end"]:
                             if time_field in item["metadata"]:
-                                try:
-                                    from datetime import datetime
-                                    # Handle the specific format with nanosecond precision
-                                    timestamp_str = item["metadata"][time_field]
-                                    # Parse the timestamp string - handling high precision
-                                    timestamp = datetime.strptime(timestamp_str.split('.')[0] + 'Z', "%Y-%m-%dT%H:%M:%SZ")
-                                    item["metadata"][time_field] = timestamp.strftime("%Y-%m-%d %H:%M:%S")
-                                except Exception:
-                                    # Keep original if parsing fails
-                                    pass
+                                item["metadata"][time_field] = format_timestamp(item["metadata"][time_field])
+
+                    # Format timestamps in results
                     if "results" in item:
                         for entry in item["results"]:
                             if "timestamp" in entry:
-                                # Convert ISO format to more readable date
-                                try:
-                                    from datetime import datetime
-
-                                    timestamp = datetime.strptime(entry["timestamp"], "%Y-%m-%dT%H:%M:%SZ")
-                                    entry["timestamp"] = timestamp.strftime("%Y-%m-%d %H:%M:%S")
-                                except Exception:
-                                    # Keep original if parsing fails
-                                    pass
+                                entry["timestamp"] = format_timestamp(entry["timestamp"])
 
             results.append(data)
 
+    context["results"] = results
     return "views/greynoise_noise_ip_timeline.html"
