@@ -207,6 +207,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.ip | string | `ip` | 115.60.214.27 |
 action_result.data.\*.\*.ip | string | `ip` | 115.60.214.27 |
+action_result.data.\*.\*.trust_level | string | | 1 - Reasonably Ignore |
 action_result.data.\*.\*.visualization | string | `url` | https://viz.greynoise.io/ip/115.60.214.27 |
 action_result.data.\*.\*.business_service_intelligence.found | boolean | | False True |
 action_result.data.\*.\*.business_service_intelligence.trust_level | string | | trusted |
@@ -217,12 +218,6 @@ action_result.message | string | | Lookup IP action successfully completed |
 action_result.summary | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
-action_result.data.\*.ip | string | | 8.8.8.8 |
-action_result.data.\*.visualization | string | | https://viz.greynoise.io/ip/8.8.8.8 |
-action_result.data.\*.business_service_intelligence.found | boolean | | True False |
-action_result.data.\*.business_service_intelligence.trust_level | string | | 1 |
-action_result.data.\*.internet_scanner_intelligence.found | boolean | | True False |
-action_result.data.\*.internet_scanner_intelligence.classification | string | | |
 
 ## action: 'ip reputation'
 
@@ -244,36 +239,8 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.ip | string | `ip` | 71.6.135.131 |
-action_result.data.\*.actor | string | | Shodan.io |
-action_result.data.\*.bot | boolean | | True False |
-action_result.data.\*.classification | string | | benign malicious |
-action_result.data.\*.cve.\* | string | | CVE-2021-12345 CVE-2023-5678 |
-action_result.data.\*.first_seen | string | | 2020-12-25 |
-action_result.data.\*.last_seen | string | | 2020-12-25 |
-action_result.data.\*.metadata.\* | string | | { "country":"United States" "country_code":"US" "city":"Seattle" "organization":"Org. Name" "rdns":"crawl-66-249-79-17.testbot.com" "asn":"AS521" "tor":false "category":"education" "os":"Windows 7/8" } |
-action_result.data.\*.metadata.asn | string | | AS12345 |
-action_result.data.\*.metadata.category | string | | isp |
-action_result.data.\*.metadata.city | string | | Madrid |
-action_result.data.\*.metadata.destination_countries.\* | string | | Spain United Kingdom Turkey |
-action_result.data.\*.metadata.destination_country_codes.\* | string | | ES GB TR |
-action_result.data.\*.metadata.organization | string | | Acme, Inc |
-action_result.data.\*.metadata.os | string | | Linux 3 |
-action_result.data.\*.metadata.rdns | string | | bot.acme.lcl |
-action_result.data.\*.metadata.region | string | | Madrid |
-action_result.data.\*.metadata.source_country | string | | Spain |
-action_result.data.\*.metadata.source_country_code | string | | ES |
-action_result.data.\*.metadata.tor | boolean | | True False |
-action_result.data.\*.raw_data.\* | string | | { "scan":[ 0:{ "port":80 "protocol":"TCP" } ] "web":{ "paths":[ 0:"/robots.txt" ] "useragents":[ 0:"test/5.0 (compatible; testbot/2.1; +http://www.test.com/bot.html)" ] } "ja3":[ 0:{ "fingerprint":"c3a6cf0bf2e690ac8e1ecf6081f17a50" "port":443 } ] } |
-action_result.data.\*.raw_data.hassh.\* | string | | [{ "fingerprint":"c3a6cf0bf2e690ac8e1ecf6081f17a50" "port":443 }] |
-action_result.data.\*.raw_data.ja3.\* | string | | [{ "fingerprint":"c3a6cf0bf2e690ac8e1ecf6081f17a50" "port":443 }] |
-action_result.data.\*.raw_data.scan.\* | string | | [ { "port":23, "protocol":"TCP" }, { "port":80, "protocol":"TCP" }, { "port":8080, "protocol":"TCP" } ] |
-action_result.data.\*.raw_data.web.\* | string | | { "paths":[ "/" ], "useragents":[ "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36" ] } |
-action_result.data.\*.seen | boolean | | True False |
-action_result.data.\*.spoofable | boolean | | True False |
-action_result.data.\*.tags.\* | string | | Mirai Telnet Worm |
-action_result.data.\*.vpn | boolean | | True False |
-action_result.data.\*.vpn_service | string | | PRETTY_VPN |
 action_result.data.\*.ip | string | | 8.8.8.8 |
+action_result.data.\*.trust_level | string | | 1 - Reasonably Ignore |
 action_result.data.\*.visualization | string | | https://viz.greynoise.io/ip/8.8.8.8 |
 action_result.data.\*.business_service_intelligence.name | string | | Google Public DNS |
 action_result.data.\*.business_service_intelligence.found | boolean | | True False |
@@ -282,7 +249,7 @@ action_result.data.\*.business_service_intelligence.reference | string | | https
 action_result.data.\*.business_service_intelligence.description | string | | Google's global domain name system (DNS) resolution service. |
 action_result.data.\*.business_service_intelligence.explanation | string | | Public DNS services are used as alternatives to ISP's name servers. You may see devices on your network communicating with Google Public DNS over port 53/TCP or 53/UDP to resolve DNS lookups. |
 action_result.data.\*.business_service_intelligence.trust_level | string | | 1 |
-action_result.data.\*.business_service_intelligence.last_updated | string | | 2025-08-05T09:11:00Z |
+action_result.data.\*.business_service_intelligence.last_updated | string | | 2025-08-06T13:10:58Z |
 action_result.data.\*.internet_scanner_intelligence.bot | boolean | | True False |
 action_result.data.\*.internet_scanner_intelligence.tor | boolean | | True False |
 action_result.data.\*.internet_scanner_intelligence.vpn | boolean | | True False |
@@ -315,24 +282,50 @@ action_result.data.\*.internet_scanner_intelligence.first_seen | string | | |
 action_result.data.\*.internet_scanner_intelligence.vpn_service | string | | |
 action_result.data.\*.internet_scanner_intelligence.classification | string | | |
 action_result.data.\*.internet_scanner_intelligence.last_seen_timestamp | string | | |
-action_result.data.\*.internet_scanner_intelligence.tags.\*.id | string | | 537cee16-c4a9-45cd-baf1-75963ab7bdd2 |
-action_result.data.\*.internet_scanner_intelligence.tags.\*.name | string | | SSH Connection Attempt |
-action_result.data.\*.internet_scanner_intelligence.tags.\*.slug | string | | ssh-connection-attempt |
-action_result.data.\*.internet_scanner_intelligence.tags.\*.created | string | | 2024-09-30 |
+action_result.data.\*.internet_scanner_intelligence.tags.\*.id | string | | fddc4698-fb29-4fd6-946f-5598100fe716 |
+action_result.data.\*.internet_scanner_intelligence.tags.\*.name | string | | MSSQL Login Attempt |
+action_result.data.\*.internet_scanner_intelligence.tags.\*.slug | string | | mssql-login-attempt |
+action_result.data.\*.internet_scanner_intelligence.tags.\*.created | string | | 2024-10-28 |
 action_result.data.\*.internet_scanner_intelligence.tags.\*.category | string | | activity |
 action_result.data.\*.internet_scanner_intelligence.tags.\*.intention | string | | suspicious |
-action_result.data.\*.internet_scanner_intelligence.tags.\*.updated_at | string | | 2025-08-05T04:14:41.474681Z |
-action_result.data.\*.internet_scanner_intelligence.tags.\*.description | string | | IP addresses with this tag have been observed attempting to negotiate an SSH session. |
+action_result.data.\*.internet_scanner_intelligence.tags.\*.updated_at | string | | 2025-08-06T19:35:46.749018Z |
+action_result.data.\*.internet_scanner_intelligence.tags.\*.description | string | | IP addresses with this tag have been observed attempting to perform a Microsoft SQL (MSSQL) login. |
 action_result.data.\*.internet_scanner_intelligence.tags.\*.recommend_block | boolean | | True False |
-action_result.data.\*.internet_scanner_intelligence.raw_data.ja3.\*.port | numeric | | 50111 |
-action_result.data.\*.internet_scanner_intelligence.raw_data.ja3.\*.fingerprint | string | | 19e29534fd49dd27d09234e639c4057e |
-action_result.data.\*.internet_scanner_intelligence.raw_data.scan.\*.port | numeric | | 2105 |
+action_result.data.\*.internet_scanner_intelligence.raw_data.scan.\*.port | numeric | | 10083 |
 action_result.data.\*.internet_scanner_intelligence.raw_data.scan.\*.protocol | string | | tcp |
-action_result.data.\*.error | string | | ip not found |
-action_result.data.\*.unseen_rep | boolean | | True False |
-action_result.data.\*.trust_level | string | | 1 - Reasonably Ignore |
+action_result.data.\*.internet_scanner_intelligence.raw_data.ja3.\*.port | numeric | | 9042 |
+action_result.data.\*.internet_scanner_intelligence.raw_data.ja3.\*.fingerprint | string | | 19e29534fd49dd27d09234e639c4057e |
+action_result.data.\*.actor | string | | Shodan.io |
+action_result.data.\*.bot | boolean | | True False |
+action_result.data.\*.classification | string | | benign malicious |
+action_result.data.\*.cve.\* | string | | CVE-2021-12345 CVE-2023-5678 |
+action_result.data.\*.first_seen | string | | 2020-12-25 |
+action_result.data.\*.last_seen | string | | 2020-12-25 |
+action_result.data.\*.metadata.\* | string | | { "country":"United States" "country_code":"US" "city":"Seattle" "organization":"Org. Name" "rdns":"crawl-66-249-79-17.testbot.com" "asn":"AS521" "tor":false "category":"education" "os":"Windows 7/8" } |
+action_result.data.\*.metadata.asn | string | | AS12345 |
+action_result.data.\*.metadata.category | string | | isp |
+action_result.data.\*.metadata.city | string | | Madrid |
+action_result.data.\*.metadata.destination_countries.\* | string | | Spain United Kingdom Turkey |
+action_result.data.\*.metadata.destination_country_codes.\* | string | | ES GB TR |
+action_result.data.\*.metadata.organization | string | | Acme, Inc |
+action_result.data.\*.metadata.os | string | | Linux 3 |
+action_result.data.\*.metadata.rdns | string | | bot.acme.lcl |
+action_result.data.\*.metadata.region | string | | Madrid |
+action_result.data.\*.metadata.source_country | string | | Spain |
+action_result.data.\*.metadata.source_country_code | string | | ES |
+action_result.data.\*.metadata.tor | boolean | | True False |
+action_result.data.\*.raw_data.\* | string | | { "scan":[ 0:{ "port":80 "protocol":"TCP" } ] "web":{ "paths":[ 0:"/robots.txt" ] "useragents":[ 0:"test/5.0 (compatible; testbot/2.1; +http://www.test.com/bot.html)" ] } "ja3":[ 0:{ "fingerprint":"c3a6cf0bf2e690ac8e1ecf6081f17a50" "port":443 } ] } |
+action_result.data.\*.raw_data.hassh.\* | string | | [{ "fingerprint":"c3a6cf0bf2e690ac8e1ecf6081f17a50" "port":443 }] |
+action_result.data.\*.raw_data.ja3.\* | string | | [{ "fingerprint":"c3a6cf0bf2e690ac8e1ecf6081f17a50" "port":443 }] |
+action_result.data.\*.raw_data.scan.\* | string | | [ { "port":23, "protocol":"TCP" }, { "port":80, "protocol":"TCP" }, { "port":8080, "protocol":"TCP" } ] |
+action_result.data.\*.raw_data.web.\* | string | | { "paths":[ "/" ], "useragents":[ "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36" ] } |
+action_result.data.\*.seen | boolean | | True False |
+action_result.data.\*.spoofable | boolean | | True False |
+action_result.data.\*.tags.\* | string | | Mirai Telnet Worm |
+action_result.data.\*.vpn | boolean | | True False |
+action_result.data.\*.vpn_service | string | | PRETTY_VPN |
 action_result.status | string | | success failed |
-action_result.message | string | | |
+action_result.message | string | | IP Reputation action successfully completed |
 action_result.summary | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
@@ -360,9 +353,71 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.query | string | `greynoise query` | metadata.organization:your_organization classification:malicious 8.0.0.0/8 |
-action_result.parameter.quick | boolean | | |
-action_result.parameter.exclude_raw | boolean | | |
+action_result.parameter.quick | boolean | | True |
+action_result.parameter.exclude_raw | boolean | | False |
 action_result.parameter.size | numeric | | 1000 |
+action_result.data.\*.data.\*.ip | string | | 203.210.181.107 |
+action_result.data.\*.data.\*.trust_level | string | | |
+action_result.data.\*.data.\*.visualization | string | | https://viz.greynoise.io/ip/203.210.181.107 |
+action_result.data.\*.data.\*.business_service_intelligence.name | string | | |
+action_result.data.\*.data.\*.business_service_intelligence.found | boolean | | True False |
+action_result.data.\*.data.\*.business_service_intelligence.category | string | | |
+action_result.data.\*.data.\*.business_service_intelligence.reference | string | | |
+action_result.data.\*.data.\*.business_service_intelligence.description | string | | |
+action_result.data.\*.data.\*.business_service_intelligence.explanation | string | | |
+action_result.data.\*.data.\*.business_service_intelligence.trust_level | string | | |
+action_result.data.\*.data.\*.business_service_intelligence.last_updated | string | | |
+action_result.data.\*.data.\*.internet_scanner_intelligence.bot | boolean | | True False |
+action_result.data.\*.data.\*.internet_scanner_intelligence.tor | boolean | | True False |
+action_result.data.\*.data.\*.internet_scanner_intelligence.vpn | boolean | | True False |
+action_result.data.\*.data.\*.internet_scanner_intelligence.tags.\*.id | string | | 23e6932c-e2bd-48cf-80b8-aa98ae9276c4 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.tags.\*.name | string | | Open Proxy Scanner |
+action_result.data.\*.data.\*.internet_scanner_intelligence.tags.\*.slug | string | | open-proxy-scanner |
+action_result.data.\*.data.\*.internet_scanner_intelligence.tags.\*.created | string | | 2020-04-07 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.tags.\*.category | string | | activity |
+action_result.data.\*.data.\*.internet_scanner_intelligence.tags.\*.intention | string | | malicious |
+action_result.data.\*.data.\*.internet_scanner_intelligence.tags.\*.updated_at | string | | 2025-08-06T19:35:47.874643Z |
+action_result.data.\*.data.\*.internet_scanner_intelligence.tags.\*.description | string | | IP addresses with this tag have been observed crawling the Internet for unauthenticated web proxies and testing if they are functional. |
+action_result.data.\*.data.\*.internet_scanner_intelligence.tags.\*.recommend_block | boolean | | True False |
+action_result.data.\*.data.\*.internet_scanner_intelligence.actor | string | | unknown |
+action_result.data.\*.data.\*.internet_scanner_intelligence.found | boolean | | True False |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.os | string | | |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.asn | string | | AS45899 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.rdns | string | | |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.domain | string | | vnpt.vn |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.mobile | boolean | | True False |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.region | string | | Thừa Thiên Huế Province |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.carrier | string | | |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.category | string | | isp |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.latitude | numeric | | 16.4619 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.longitude | numeric | | 107.5955 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.datacenter | string | | |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.rdns_parent | string | | |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.sensor_hits | numeric | | 38303 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.source_city | string | | Huế |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.organization | string | | VNPT Corp |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.sensor_count | numeric | | 5 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.rdns_validated | boolean | | True False |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.source_country | string | | Vietnam |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.single_destination | boolean | | True False |
+action_result.data.\*.data.\*.internet_scanner_intelligence.metadata.source_country_code | string | | VN |
+action_result.data.\*.data.\*.internet_scanner_intelligence.raw_data.scan.\*.port | numeric | | 1001 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.raw_data.scan.\*.protocol | string | | tcp |
+action_result.data.\*.data.\*.internet_scanner_intelligence.raw_data.source.bytes | numeric | | 2054653 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.last_seen | string | | 2025-08-07 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.spoofable | boolean | | True False |
+action_result.data.\*.data.\*.internet_scanner_intelligence.first_seen | string | | 2025-08-06 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.vpn_service | string | | |
+action_result.data.\*.data.\*.internet_scanner_intelligence.classification | string | | malicious |
+action_result.data.\*.data.\*.internet_scanner_intelligence.last_seen_timestamp | string | | 2025-08-07 00:00:35 |
+action_result.data.\*.request_metadata.count | numeric | | 1727718 |
+action_result.data.\*.request_metadata.query | string | | classification:malicious |
+action_result.data.\*.request_metadata.scroll | string | | FGluY2x1ZGVfY29udGV4dF91dWlkDnF1ZXJ5VGhlbkZldGNoAhZmeVI3dE1WUVFxQ216bGNuR3B0VnJ3AAAAAAQVqCIWZF9Tdzc3Yk1Td1MwRXRPcFFwR1NOURZpdUFkYmlxNVJWQ0otbG5hR1Q5NjBBAAAAAANxuBgWUHFxZDZVbHJSb2VLTE05eWdFSFV4QQ== |
+action_result.data.\*.request_metadata.message | string | | |
+action_result.data.\*.request_metadata.complete | boolean | | True False |
+action_result.data.\*.request_metadata.adjusted_query | string | | (classification:malicious) last_seen:90d |
+action_result.data.\*.data.\*.internet_scanner_intelligence.raw_data.ja3.\*.port | numeric | | 8001 |
+action_result.data.\*.data.\*.internet_scanner_intelligence.raw_data.ja3.\*.fingerprint | string | | 19e29534fd49dd27d09234e639c4057e |
 action_result.data.\*.actor | string | | Shodan.io |
 action_result.data.\*.classification | string | | benign malicious |
 action_result.data.\*.first_seen | string | | 2020-12-25 |
@@ -373,7 +428,7 @@ action_result.data.\*.raw_data.\* | string | | { "scan":[ 0:{ "port":80 "protoco
 action_result.data.\*.seen | boolean | | True False |
 action_result.data.\*.tags.\* | string | | Mirai Telnet Worm |
 action_result.status | string | | success failed |
-action_result.message | string | | |
+action_result.message | string | | GNQL Query action successfully completed |
 action_result.summary | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
@@ -399,6 +454,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.ips | string | | 71.6.135.131,111.111.111.111 |
 action_result.data.\*.\*.ip | string | `ip` | 115.60.214.27 |
+action_result.data.\*.\*.trust_level | string | | 1 - Reasonably Ignore |
 action_result.data.\*.\*.visualization | string | `url` | https://viz.greynoise.io/ip/115.60.214.27 |
 action_result.data.\*.\*.business_service_intelligence.found | boolean | | False True |
 action_result.data.\*.\*.business_service_intelligence.trust_level | string | | trusted |
@@ -457,6 +513,7 @@ action_result.parameter.days | numeric | | 30 |
 action_result.parameter.field | string | | classification |
 action_result.parameter.granularity | string | | 4d |
 action_result.data.\*.metadata.ip | string | `ip` | 41.65.223.220 |
+action_result.data.\*.ip | string | | 65.18.121.215 |
 action_result.data.\*.metadata.field | string | | classification |
 action_result.data.\*.metadata.first_seen | string | | 2020-02-01 |
 action_result.data.\*.metadata.start | string | | 2025-05-08T04:46:22.037900129Z |
@@ -490,10 +547,33 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.cve_id | string | `cve` | 71.6.135.131 |
-action_result.data.\*.metadata.\* | string | | { "country":"United States" "country_code":"US" "city":"Seattle" "organization":"Org. Name" "rdns":"crawl-66-249-79-17.testbot.com" "asn":"AS521" "tor":false "category":"education" "os":"Windows 7/8" } |
-action_result.data.\*.activity.\* | string | | { "country":"United States" "country_code":"US" "city":"Seattle" "organization":"Org. Name" "rdns":"crawl-66-249-79-17.testbot.com" "asn":"AS521" "tor":false "category":"education" "os":"Windows 7/8" } |
+action_result.data.\*.id | string | | CVE-2022-40684 |
+action_result.data.\*.details.vendor | string | | Fortinet |
+action_result.data.\*.details.product | string | | Multiple Products |
+action_result.data.\*.details.cve_cvss_score | numeric | | 9.8 |
+action_result.data.\*.details.vulnerability_name | string | | Fortinet Multiple Products Authentication Bypass Vulnerability |
+action_result.data.\*.details.published_to_nist_nvd | boolean | | True False |
+action_result.data.\*.details.vulnerability_description | string | | An authentication bypass using an alternate path or channel [CWE-288] in Fortinet FortiOS version 7.2.0 through 7.2.1 and 7.0.0 through 7.0.6, FortiProxy version 7.2.0 and version 7.0.0 through 7.0.6 and FortiSwitchManager version 7.2.0 and 7.0.0 allows an unauthenticated atttacker to perform operations on the administrative interface via specially crafted HTTP or HTTPS requests. |
+action_result.data.\*.timeline.cve_published_date | string | | 2022-10-18T14:15:09Z |
+action_result.data.\*.timeline.cisa_kev_date_added | string | | 2022-10-11T00:00:00Z |
+action_result.data.\*.timeline.cve_last_updated_date | string | | 2025-02-19T19:37:18Z |
+action_result.data.\*.timeline.first_known_published_date | string | | 2022-10-10T00:00:00Z |
+action_result.data.\*.exploitation_stats.number_of_available_exploits | numeric | | 30 |
+action_result.data.\*.exploitation_stats.number_of_botnets_exploiting_vulnerability | numeric | | |
+action_result.data.\*.exploitation_stats.number_of_threat_actors_exploiting_vulnerability | numeric | | 4 |
+action_result.data.\*.exploitation_details.epss_score | numeric | | 0.94427 |
+action_result.data.\*.exploitation_details.attack_vector | string | | NETWORK |
+action_result.data.\*.exploitation_details.exploit_found | boolean | | True False |
+action_result.data.\*.exploitation_details.exploitation_registered_in_kev | boolean | | True False |
+action_result.data.\*.exploitation_activity.activity_seen | boolean | | True False |
+action_result.data.\*.exploitation_activity.benign_ip_count_1d | numeric | | |
+action_result.data.\*.exploitation_activity.threat_ip_count_1d | numeric | | 4 |
+action_result.data.\*.exploitation_activity.benign_ip_count_10d | numeric | | |
+action_result.data.\*.exploitation_activity.benign_ip_count_30d | numeric | | |
+action_result.data.\*.exploitation_activity.threat_ip_count_10d | numeric | | 12 |
+action_result.data.\*.exploitation_activity.threat_ip_count_30d | numeric | | 22 |
 action_result.status | string | | success failed |
-action_result.message | string | | |
+action_result.message | string | | Get CVE Details action successfully completed |
 action_result.summary | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
