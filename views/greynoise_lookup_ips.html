@@ -187,7 +187,7 @@ and limitations under the License.
     <div class="wf-h3-style">GreyNoise IP Lookup Results</div>
     <!-- Horizontal table for all IPs -->
     {% for result in results %}
-      {% if result.0 %}
+      {% if result %}
         <div id="results-container">
           <table class="wf-table-horizontal datatable">
             <thead>
@@ -201,7 +201,7 @@ and limitations under the License.
               </tr>
             </thead>
             <tbody>
-              {% for ip_data in result.0 %}
+              {% for ip_data in result %}
                 <tr>
                   <td>
                     <a href="javascript:;"
