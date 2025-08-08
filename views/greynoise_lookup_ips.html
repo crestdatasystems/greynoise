@@ -178,62 +178,59 @@ and limitations under the License.
               height: 100%;
               padding-left:10px;
               padding-right:10px">
-  <div class="wf-h3-style">GreyNoise IP Lookup Results</div>
-
-  <!-- Horizontal table for all IPs -->
-  {% for result in results %}
-  {% if result.0 %}
-  <div id="results-container">
-    <table class="wf-table-vertical">
-      <thead>
-        <tr>
-          <th>IP Address</th>
-          <th>Visualization</th>
-          <th>Internet Service Intelligence</th>
-                    <th>Classification</th>
-          <th>Business Service Intelligence</th>
-          <th>Trust Level</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for ip_data in result.0 %}
-        <tr>
-          <td>
-            <a href="javascript:;"
-              onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ ip_data.ip }}' }], 0, {{ container.id }}, null, false);">
-              {{ ip_data.ip }} <i class="fa fa-caret-down" style="font-size: smaller;"></i>
-            </a>
-          </td>
-          <td>
-            {% if ip_data.visualization %}
-            <a href="{{ ip_data.visualization }}" target="_blank">View on GreyNoise <i
-                class="fa fa-external-link"></i></a>
-            {% else %}
-            -
-            {% endif %}
-          </td>
-          <td>{{ ip_data.internet_scanner_intelligence.found }}</td>
-          <td>
-            {% if ip_data.internet_scanner_intelligence.found %}
-            <span
-              class="{% if ip_data.internet_scanner_intelligence.classification == 'malicious' %}malicious{% elif ip_data.internet_scanner_intelligence.classification == 'benign' %}benign{% elif ip_data.internet_scanner_intelligence.classification == 'suspicious' %}suspicious{% else %}unknown{% endif %}">
-              {{ ip_data.internet_scanner_intelligence.classification }}
-            </span>
-            {% else %}
-            -
-            {% endif %}
-          </td>
-          <td>{{ ip_data.business_service_intelligence.found }}</td>
-          <td>
-            {% if ip_data.business_service_intelligence.found and ip_data.business_service_intelligence.trust_level %}
-            <span>{{ ip_data.trust_level }}</span>
-            {% else %}
-            -
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-{% endblock %}
+    <div class="wf-h3-style">GreyNoise IP Lookup Results</div>
+    <!-- Horizontal table for all IPs -->
+    {% for result in results %}
+      {% if result.0 %}
+        <div id="results-container">
+          <table class="wf-table-vertical">
+            <thead>
+              <tr>
+                <th>IP Address</th>
+                <th>Visualization</th>
+                <th>Internet Service Intelligence</th>
+                <th>Classification</th>
+                <th>Business Service Intelligence</th>
+                <th>Trust Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ip_data in result.0 %}
+                <tr>
+                  <td>
+                    <a href="javascript:;"
+                       onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ ip_data.ip }}' }], 0, {{ container.id }}, null, false);">
+                      {{ ip_data.ip }} <i class="fa fa-caret-down" style="font-size: smaller;"></i>
+                    </a>
+                  </td>
+                  <td>
+                    {% if ip_data.visualization %}
+                      <a href="{{ ip_data.visualization }}" target="_blank">View on GreyNoise <i class="fa fa-external-link"></i></a>
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  <td>{{ ip_data.internet_scanner_intelligence.found }}</td>
+                  <td>
+                    {% if ip_data.internet_scanner_intelligence.found %}
+                      <span class="{% if ip_data.internet_scanner_intelligence.classification == 'malicious' %}malicious{% elif ip_data.internet_scanner_intelligence.classification == 'benign' %}benign{% elif ip_data.internet_scanner_intelligence.classification == 'suspicious' %}suspicious{% else %}unknown{% endif %}">
+                        {{ ip_data.internet_scanner_intelligence.classification }}
+                      </span>
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  <td>{{ ip_data.business_service_intelligence.found }}</td>
+                  <td>
+                    {% if ip_data.business_service_intelligence.found and ip_data.business_service_intelligence.trust_level %}
+                      <span>{{ ip_data.trust_level }}</span>
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endblock %}

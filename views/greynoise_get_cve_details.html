@@ -198,129 +198,129 @@ and limitations under the License.
         <!-- loop for each result -->
         <!------------------- For each Result ---------------------->
         {% if result.0.id %}
-        <div>
-                <a href="javascript:;"
-                onclick="context_menu(this, [{'contains': ['cve'], 'value': '{{ result.0.ip }}' }], 0, {{ container.id }}, null, false);">
-                CVE: {{ result.0.id }} <span class="fa fa-caret-down" style="font-size: smaller;"></span>
-                </a>6
-        </div>
+          <div>
+            <a href="javascript:;"
+               onclick="context_menu(this, [{'contains': ['cve'], 'value': '{{ result.0.ip }}' }], 0, {{ container.id }}, null, false);">
+              CVE: {{ result.0.id }} <span class="fa fa-caret-down" style="font-size: smaller;"></span>
+            </a>
+          </div>
         {% endif %}
         {% if result.0.details %}
-            <table class="wf-table-vertical">
-                <tbody>
-                    {% if result.0.details %}
-                    <tr>
-                      <td colspan="2" class="center" class="wf-table-horizontal-head">Details</td>
-                    </tr>
-                    <tr>
-                    <td>Vulnerability Name</td>
-                    <td>{{ result.0.details.vulnerability_name | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Description</td>
-                    <td>{{ result.0.details.vulnerability_description | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>CVSS Score</td>
-                    <td>{{ result.0.details.cve_cvss_score | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Published to NIST NVD</td>
-                    <td>{{ result.0.details.published_to_nist_nvd | default:"False" }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if result.0.exploitation_activity %}
-                    <tr>
-                      <td colspan="2" class="center" class="wf-table-horizontal-head">Exploitation Activity</td>
-                    </tr>
-                    <tr>
-                    <td>Activity Seen</td>
-                    <td>{{ result.0.exploitation_activity.activity_seen | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Benign IP Count 1d</td>
-                    <td>{{ result.0.exploitation_activity.benign_ip_count_1d | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Threat IP Count 1d</td>
-                    <td>{{ result.0.exploitation_activity.threat_ip_count_1d | default:"False" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Benign IP Count 10d</td>
-                    <td>{{ result.0.exploitation_activity.benign_ip_count_10d | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Threat IP Count 10d</td>
-                    <td>{{ result.0.exploitation_activity.threat_ip_count_10d | default:"False" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Benign IP Count 30d</td>
-                    <td>{{ result.0.exploitation_activity.benign_ip_count_30d | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Threat IP Count 30d</td>
-                    <td>{{ result.0.exploitation_activity.threat_ip_count_30d | default:"False" }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if result.0.exploitation_stats %}
-                    <tr>
-                      <td colspan="2" class="center" class="wf-table-horizontal-head">Exploitation Stats</td>
-                    </tr>
-                    <tr>
-                    <td>Available exploits</td>
-                    <td>{{ result.0.exploitation_stats.number_of_available_exploits | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Threat Actors</td>
-                    <td>{{ result.0.exploitation_stats.number_of_threat_actors_exploiting_vulnerability | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Botnets</td>
-                    <td>{{ result.0.exploitation_stats.number_of_botnets_exploiting_vulnerability | default:"False" }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if result.0.timeline %}
-                    <tr>
-                      <td colspan="2" class="center" class="wf-table-horizontal-head">Timeline</td>
-                    </tr>
-                    <tr>
-                    <td>CISA date</td>
-                    <td>{{ result.0.timeline.cisa_kev_date_added | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Last Updated</td>
-                    <td>{{ result.0.timeline.cve_last_updated_date | default:"None" }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if result.0.exploitation_details %}
-                    <tr>
-                      <td colspan="2" class="center" class="wf-table-horizontal-head">Exploitation Details</td>
-                    </tr>
-                    <tr>
-                    <td>Attack Vector</td>
-                    <td>{{ result.0.exploitation_details.attack_vector | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Exploit Found</td>
-                    <td>{{ result.0.exploitation_details.exploit_found | default:"None" }}</td>
-                    </tr>
-                    <tr>
-                    <td>Registered in KEV</td>
-                    <td>{{ result.0.exploitation_details.exploitation_registered_in_kev | default:"False" }}</td>
-                    </tr>
-                    <tr>
-                    <td>EPSS Score</td>
-                    <td>{{ result.0.exploitation_details.epss_score | default:"None" }}</td>
-                    </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-          {% else %}
+          <table class="wf-table-vertical">
+            <tbody>
+              {% if result.0.details %}
+                <tr>
+                  <td colspan="2" class="center" class="wf-table-horizontal-head">Details</td>
+                </tr>
+                <tr>
+                  <td>Vulnerability Name</td>
+                  <td>{{ result.0.details.vulnerability_name | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>Description</td>
+                  <td>{{ result.0.details.vulnerability_description | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>CVSS Score</td>
+                  <td>{{ result.0.details.cve_cvss_score | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>Published to NIST NVD</td>
+                  <td>{{ result.0.details.published_to_nist_nvd | default:"False" }}</td>
+                </tr>
+              {% endif %}
+              {% if result.0.exploitation_activity %}
+                <tr>
+                  <td colspan="2" class="center" class="wf-table-horizontal-head">Exploitation Activity</td>
+                </tr>
+                <tr>
+                  <td>Activity Seen</td>
+                  <td>{{ result.0.exploitation_activity.activity_seen | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>Benign IP Count 1d</td>
+                  <td>{{ result.0.exploitation_activity.benign_ip_count_1d | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>Threat IP Count 1d</td>
+                  <td>{{ result.0.exploitation_activity.threat_ip_count_1d | default:"False" }}</td>
+                </tr>
+                <tr>
+                  <td>Benign IP Count 10d</td>
+                  <td>{{ result.0.exploitation_activity.benign_ip_count_10d | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>Threat IP Count 10d</td>
+                  <td>{{ result.0.exploitation_activity.threat_ip_count_10d | default:"False" }}</td>
+                </tr>
+                <tr>
+                  <td>Benign IP Count 30d</td>
+                  <td>{{ result.0.exploitation_activity.benign_ip_count_30d | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>Threat IP Count 30d</td>
+                  <td>{{ result.0.exploitation_activity.threat_ip_count_30d | default:"False" }}</td>
+                </tr>
+              {% endif %}
+              {% if result.0.exploitation_stats %}
+                <tr>
+                  <td colspan="2" class="center" class="wf-table-horizontal-head">Exploitation Stats</td>
+                </tr>
+                <tr>
+                  <td>Available exploits</td>
+                  <td>{{ result.0.exploitation_stats.number_of_available_exploits | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>Threat Actors</td>
+                  <td>{{ result.0.exploitation_stats.number_of_threat_actors_exploiting_vulnerability | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>Botnets</td>
+                  <td>{{ result.0.exploitation_stats.number_of_botnets_exploiting_vulnerability | default:"False" }}</td>
+                </tr>
+              {% endif %}
+              {% if result.0.timeline %}
+                <tr>
+                  <td colspan="2" class="center" class="wf-table-horizontal-head">Timeline</td>
+                </tr>
+                <tr>
+                  <td>CISA date</td>
+                  <td>{{ result.0.timeline.cisa_kev_date_added | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>Last Updated</td>
+                  <td>{{ result.0.timeline.cve_last_updated_date | default:"None" }}</td>
+                </tr>
+              {% endif %}
+              {% if result.0.exploitation_details %}
+                <tr>
+                  <td colspan="2" class="center" class="wf-table-horizontal-head">Exploitation Details</td>
+                </tr>
+                <tr>
+                  <td>Attack Vector</td>
+                  <td>{{ result.0.exploitation_details.attack_vector | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>Exploit Found</td>
+                  <td>{{ result.0.exploitation_details.exploit_found | default:"None" }}</td>
+                </tr>
+                <tr>
+                  <td>Registered in KEV</td>
+                  <td>{{ result.0.exploitation_details.exploitation_registered_in_kev | default:"False" }}</td>
+                </tr>
+                <tr>
+                  <td>EPSS Score</td>
+                  <td>{{ result.0.exploitation_details.epss_score | default:"None" }}</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        {% else %}
           <h4 class="wf-h4-style">No CVE details found</h4>
         {% endif %}
       {% endfor %}
     {% else %}
-    <div class="wf-h4-style">No CVE details found</div>
+      <div class="wf-h4-style">No CVE details found</div>
     {% endif %}
     <!-- loop for each result end -->
   </div>

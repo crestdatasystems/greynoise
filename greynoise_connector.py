@@ -184,7 +184,7 @@ class GreyNoiseConnector(BaseConnector):
             result_data["visualization"] = VISUALIZATION_URL.format(ip=result_data["ip"])
         except Exception as e:
             query_success = False
-            message=f"{ERROR_MESSAGE}: {self._get_error_message_from_exception(e)}"
+            message = f"{ERROR_MESSAGE}: {self._get_error_message_from_exception(e)}"
             return action_result, query_success, message
 
         business_service_intelligence = result_data.get("business_service_intelligence", {}).get("found", False)
@@ -346,11 +346,11 @@ class GreyNoiseConnector(BaseConnector):
         """Fetch paginated results for a GreyNoise query."""
         query_response = {"data": []}
         message = "Successfully fetched query data"
-        
+
         # Calculate optimal page size
         page_size = 1000
         remaining = size  # Track remaining items to fetch
-        
+
         scroll = None  # Initial pagination token
 
         try:
@@ -360,14 +360,14 @@ class GreyNoiseConnector(BaseConnector):
                     page_size = min(1000, remaining)
                     if page_size <= 0:
                         break  # We've collected enough data
-                    
+
                 # Make API call
                 api_response = self._api_client.query(query=query, size=page_size, exclude_raw=exclude_raw, quick=quick, scroll=scroll)
 
                 # Extract data and metadata
                 current_data = api_response.get("data", [])
                 request_metadata = api_response.get("request_metadata", {})
-                
+
                 # Check for empty results
                 if request_metadata.get("count", 0) == 0:
                     message = "No Results Found"
@@ -379,7 +379,7 @@ class GreyNoiseConnector(BaseConnector):
 
                 # Add current data to results
                 query_response["data"].extend(current_data)
-                
+
                 # Update remaining count
                 if remaining is not None:
                     remaining -= len(current_data)
