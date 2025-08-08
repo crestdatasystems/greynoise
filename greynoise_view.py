@@ -12,17 +12,19 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
-from datetime import datetime  # Move imports to the top
+from datetime import datetime
+
 
 def format_timestamp(timestamp_str, input_format="%Y-%m-%dT%H:%M:%SZ", output_format="%Y-%m-%d %H:%M:%S"):
     """Helper function to format timestamps consistently."""
     try:
         # Handle timestamps with nanosecond precision by stripping everything after the second
-        if '.' in timestamp_str:
-            timestamp_str = timestamp_str.split('.')[0] + 'Z'
+        if "." in timestamp_str:
+            timestamp_str = timestamp_str.split(".")[0] + "Z"
         return datetime.strptime(timestamp_str, input_format).strftime(output_format)
     except Exception as e:
         return timestamp_str  # Return original if parsing fails
+
 
 def display_view_ip_reputation(provides, all_app_runs, context):
     """Display a specific view based on the 'provides' parameter.
