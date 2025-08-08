@@ -80,39 +80,39 @@
           "example_values": ["115.60.214.27"]
         },
         {
-          "data_path": "action_result.data.*.*.ip",
+          "data_path": "action_result.data.*.ip",
           "data_type": "string",
           "contains": ["ip"],
           "example_values": ["115.60.214.27"]
         },
         {
-          "data_path": "action_result.data.*.*.trust_level",
+          "data_path": "action_result.data.*.trust_level",
           "data_type": "string",
           "example_values": ["1 - Reasonably Ignore"]
         },
         {
-          "data_path": "action_result.data.*.*.visualization",
+          "data_path": "action_result.data.*.visualization",
           "data_type": "string",
           "contains": ["url"],
           "example_values": ["https://viz.greynoise.io/ip/1.1.1.1"]
         },
         {
-          "data_path": "action_result.data.*.*.business_service_intelligence.found",
+          "data_path": "action_result.data.*.business_service_intelligence.found",
           "data_type": "boolean",
           "example_values": [false, true]
         },
         {
-          "data_path": "action_result.data.*.*.business_service_intelligence.trust_level",
+          "data_path": "action_result.data.*.business_service_intelligence.trust_level",
           "data_type": "string",
           "example_values": ["trusted"]
         },
         {
-          "data_path": "action_result.data.*.*.internet_scanner_intelligence.found",
+          "data_path": "action_result.data.*.internet_scanner_intelligence.found",
           "data_type": "boolean",
           "example_values": [true, false]
         },
         {
-          "data_path": "action_result.data.*.*.internet_scanner_intelligence.classification",
+          "data_path": "action_result.data.*.internet_scanner_intelligence.classification",
           "data_type": "string",
           "example_values": ["malicious", "benign"]
         },
@@ -651,7 +651,7 @@
           "order": 1
         },
         "exclude_raw": {
-          "description": "Exclude the raw_data details from the query response",
+          "description": "if true, the raw data will not be included in the response",
           "data_type": "boolean",
           "default": false,
           "order": 2
@@ -1091,39 +1091,39 @@
           "example_values": ["71.6.135.131,111.111.111.111"]
         },
         {
-          "data_path": "action_result.data.*.*.ip",
+          "data_path": "action_result.data.*.ip",
           "data_type": "string",
           "contains": ["ip"],
           "example_values": ["115.60.214.27"]
         },
         {
-          "data_path": "action_result.data.*.*.trust_level",
+          "data_path": "action_result.data.*.trust_level",
           "data_type": "string",
           "example_values": ["1 - Reasonably Ignore"]
         },
         {
-          "data_path": "action_result.data.*.*.visualization",
+          "data_path": "action_result.data.*.visualization",
           "data_type": "string",
           "contains": ["url"],
           "example_values": ["https://viz.greynoise.io/ip/1.1.1.1"]
         },
         {
-          "data_path": "action_result.data.*.*.business_service_intelligence.found",
+          "data_path": "action_result.data.*.business_service_intelligence.found",
           "data_type": "boolean",
           "example_values": [false, true]
         },
         {
-          "data_path": "action_result.data.*.*.business_service_intelligence.trust_level",
+          "data_path": "action_result.data.*.business_service_intelligence.trust_level",
           "data_type": "string",
           "example_values": ["trusted"]
         },
         {
-          "data_path": "action_result.data.*.*.internet_scanner_intelligence.found",
+          "data_path": "action_result.data.*.internet_scanner_intelligence.found",
           "data_type": "boolean",
           "example_values": [true, false]
         },
         {
-          "data_path": "action_result.data.*.*.internet_scanner_intelligence.classification",
+          "data_path": "action_result.data.*.internet_scanner_intelligence.classification",
           "data_type": "string",
           "example_values": ["malicious", "benign"]
         },
