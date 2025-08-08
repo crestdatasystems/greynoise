@@ -144,6 +144,20 @@ def display_view_noise_ip_timeline(provides, all_app_runs, context):
             # Format timestamps in results if they exist
             if data and isinstance(data, list) and len(data) > 0:
                 for item in data:
+                    # Format start and end in metadata if they exist
+                    if "metadata" in item:
+                        for time_field in ["start", "end"]:
+                            if time_field in item["metadata"]:
+                                try:
+                                    from datetime import datetime
+                                    # Handle the specific format with nanosecond precision
+                                    timestamp_str = item["metadata"][time_field]
+                                    # Parse the timestamp string - handling high precision
+                                    timestamp = datetime.strptime(timestamp_str.split('.')[0] + 'Z', "%Y-%m-%dT%H:%M:%SZ")
+                                    item["metadata"][time_field] = timestamp.strftime("%Y-%m-%d %H:%M:%S")
+                                except Exception:
+                                    # Keep original if parsing fails
+                                    pass
                     if "results" in item:
                         for entry in item["results"]:
                             if "timestamp" in entry:
