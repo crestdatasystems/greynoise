@@ -28,8 +28,13 @@ and limitations under the License.
   <style>
   /* Link styling */
   .greynoise a:link {
+    color: rgb(35, 126, 170);
+  }
+
+  .dark-theme .greynoise a:link {
     color: rgb(130, 175, 190);
   }
+
 
   .greynoise a:hover {
     text-decoration: underline;
@@ -40,14 +45,20 @@ and limitations under the License.
     font-size: 20px;
     margin-top: 15px;
     margin-bottom: 5px;
+  }
+
+  .dark-theme .greynoise .wf-h3-style {
     color: rgb(200, 200, 200);
   }
 
   .greynoise .wf-h4-style {
     font-size: 16px;
     text-align: center;
-    color: rgb(180, 180, 180);
     margin: 15px 0;
+  }
+
+  .dark-theme .greynoise .wf-h4-style {
+    color: rgb(180, 180, 180);
   }
 
   /* Table styling */
@@ -83,11 +94,6 @@ and limitations under the License.
   .greynoise #results-container .wf-table-horizontal tr td:first-child {
     background-color: transparent;
     font-weight: normal;
-  }
-
-  /* Table header spacing */
-  .greynoise .wf-table-horizontal thead th:not(:last-child) {
-    border-right: 2px solid rgb(90, 90, 90);
   }
 
   /* Column width adjustments */
@@ -144,13 +150,17 @@ and limitations under the License.
     margin: 20px 0;
   }
 
-  .dark-theme .greynoise .wf-table-horizontal th {
+  .greynoise .wf-table-horizontal th {
     font-weight: bold;
     padding-left: 5px;
     padding: 8px 10px;
+    text-align: center;
+    border: 1px solid #e1e6eb;
+  }
+
+  .dark-theme .greynoise .wf-table-horizontal th {
     border: 1px solid rgb(70, 70, 70);
     background-color: rgba(40, 40, 40, 0.7);
-    text-align: center;
   }
 
   .dark-theme .greynoise .wf-table-horizontal.datatable th.sorting {

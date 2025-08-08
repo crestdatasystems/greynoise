@@ -44,7 +44,7 @@ class GreyNoiseConnector(BaseConnector):
         self._session = None
         self._app_version = None
         self._api_key = None
-        self._integration_name = f"splunk-soar-v{self.get_app_json().get("app_version")}"
+        self._integration_name = f"splunk-soar-v{self.get_app_json().get('app_version')}"
 
     def _get_error_message_from_exception(self, e):
         """
@@ -401,7 +401,7 @@ class GreyNoiseConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         # Extract required parameter
         ip = param["ip"]
-        field = param["field"]
+        field = param.get("field", "classification")
 
         # Validate field parameter
         if not self._validate_timeline_field(field, action_result):
@@ -423,10 +423,10 @@ class GreyNoiseConnector(BaseConnector):
             if "403" in error_message:
                 results = {"ip": param["ip"], "message": "Not allowed.", "activity": []}
                 action_result.add_data(results)
-                return action_result.set_status(phantom.APP_SUCCESS, "Lookup IP Timeline action not allowed")
+                return action_result.set_status(phantom.APP_SUCCESS, NOISE_IP_TIMELINE_403_MESSAGE)
             else:
                 return action_result.set_status(phantom.APP_ERROR, urllib.parse.unquote(error_message))
-        return action_result.set_status(phantom.APP_SUCCESS, LOOKUP_IP_TIMELINE_SUCCESS_MESSAGE)
+        return action_result.set_status(phantom.APP_SUCCESS, NOISE_IP_TIMELINE_SUCCESS_MESSAGE)
 
     def _lookup_ips(self, param):
         self.save_progress(GREYNOISE_ACTION_HANDLER_MESSAGE.format(identifier=self.get_action_identifier()))

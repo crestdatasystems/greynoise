@@ -6,7 +6,7 @@ Product Vendor: GreyNoise \
 Product Name: GreyNoise \
 Minimum Product Version: 6.4.1
 
-This app provides investigative capabilities using the GreyNoise plugin
+This app provides investigative capabilities using the GreyNoise plugin and supports receiving alerts and feeds via webhook from GreyNoise
 
 ## ⚠️ Playbook Backward Compatibility
 
@@ -205,14 +205,14 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.ip | string | `ip` | 115.60.214.27 |
-action_result.data.\*.\*.ip | string | `ip` | 115.60.214.27 |
-action_result.data.\*.\*.trust_level | string | | 1 - Reasonably Ignore |
-action_result.data.\*.\*.visualization | string | `url` | https://viz.greynoise.io/ip/1.1.1.1 |
-action_result.data.\*.\*.business_service_intelligence.found | boolean | | False True |
-action_result.data.\*.\*.business_service_intelligence.trust_level | string | | trusted |
-action_result.data.\*.\*.internet_scanner_intelligence.found | boolean | | True False |
-action_result.data.\*.\*.internet_scanner_intelligence.classification | string | | malicious benign |
+action_result.parameter.ip | string | `ip` | 8.8.8.8 |
+action_result.data.\*.ip | string | `ip` | 8.8.8.8 |
+action_result.data.\*.trust_level | string | | 1 - Reasonably Ignore |
+action_result.data.\*.visualization | string | `url` | https://viz.greynoise.io/ip/1.1.1.1 |
+action_result.data.\*.business_service_intelligence.found | boolean | | False True |
+action_result.data.\*.business_service_intelligence.trust_level | string | | trusted |
+action_result.data.\*.internet_scanner_intelligence.found | boolean | | True False |
+action_result.data.\*.internet_scanner_intelligence.classification | string | | malicious benign |
 action_result.status | string | | success failed |
 action_result.message | string | | Lookup IP action successfully completed |
 action_result.summary | string | | |
@@ -238,7 +238,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.ip | string | `ip` | 71.6.135.131 |
+action_result.parameter.ip | string | `ip` | 8.8.8.8 |
 action_result.data.\*.ip | string | | 8.8.8.8 |
 action_result.data.\*.trust_level | string | | 1 - Reasonably Ignore |
 action_result.data.\*.visualization | string | | https://viz.greynoise.io/ip/1.1.1.1 |
@@ -318,7 +318,7 @@ action_result.data.\*.raw_data.\* | string | | { "scan":[ 0:{ "port":80 "protoco
 action_result.data.\*.raw_data.hassh.\* | string | | [{ "fingerprint":"c3a6cf0bf2e690ac8e1ecf6081f17a50" "port":443 }] |
 action_result.data.\*.raw_data.ja3.\* | string | | [{ "fingerprint":"c3a6cf0bf2e690ac8e1ecf6081f17a50" "port":443 }] |
 action_result.data.\*.raw_data.scan.\* | string | | [ { "port":23, "protocol":"TCP" }, { "port":80, "protocol":"TCP" }, { "port":8080, "protocol":"TCP" } ] |
-action_result.data.\*.raw_data.web.\* | string | | { "paths":[ "/" ], "useragents":[ "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36" ] } |
+action_result.data.\*.raw_data.web.\* | string | | { "paths":[ "/" ], "useragents":[ "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/8.8.8.8 Safari/537.36" ] } |
 action_result.data.\*.seen | boolean | | True False |
 action_result.data.\*.spoofable | boolean | | True False |
 action_result.data.\*.tags.\* | string | | Mirai Telnet Worm |
@@ -345,7 +345,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **query** | required | GNQL query | string | `greynoise query` |
 **size** | required | The number of results to return (warning: returning over 1000 results may degrade widget performance) | numeric | |
-**exclude_raw** | optional | Exclude the raw_data details from the query response | boolean | |
+**exclude_raw** | optional | If true, the raw data will not be included in the response | boolean | |
 **quick** | optional | If true, the response will only include the IP address and the classification or trust level | boolean | |
 
 #### Action Output
@@ -356,7 +356,7 @@ action_result.parameter.query | string | `greynoise query` | metadata.organizati
 action_result.parameter.quick | boolean | | True |
 action_result.parameter.exclude_raw | boolean | | False |
 action_result.parameter.size | numeric | | 1000 |
-action_result.data.\*.data.\*.ip | string | | 203.210.181.107 |
+action_result.data.\*.data.\*.ip | string | | 8.8.8.8 |
 action_result.data.\*.data.\*.trust_level | string | | |
 action_result.data.\*.data.\*.visualization | string | | https://viz.greynoise.io/ip/1.1.1.1 |
 action_result.data.\*.data.\*.business_service_intelligence.name | string | | |
@@ -421,7 +421,7 @@ action_result.data.\*.data.\*.internet_scanner_intelligence.raw_data.ja3.\*.fing
 action_result.data.\*.actor | string | | Shodan.io |
 action_result.data.\*.classification | string | | benign malicious |
 action_result.data.\*.first_seen | string | | 2020-12-25 |
-action_result.data.\*.ip | string | `ip` | 71.6.135.131 |
+action_result.data.\*.ip | string | `ip` | 8.8.8.8 |
 action_result.data.\*.last_seen | string | | 2020-12-25 |
 action_result.data.\*.metadata.\* | string | | { "country":"United States" "country_code":"US" "city":"Seattle" "organization":"Org. Name" "rdns":"crawl-66-249-79-17.testbot.com" "asn":"AS521" "tor":false "category":"education" "os":"Windows 7/8" } |
 action_result.data.\*.raw_data.\* | string | | { "scan":[ 0:{ "port":80 "protocol":"TCP" } ] "web":{ "paths":[ 0:"/robots.txt" ] "useragents":[ 0:"test/5.0 (compatible; testbot/2.1; +http://www.test.com/bot.html)" ] } "ja3":[ 0:{ "fingerprint":"c3a6cf0bf2e690ac8e1ecf6081f17a50" "port":443 } ] } |
@@ -452,14 +452,14 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.ips | string | | 71.6.135.131,111.111.111.111 |
-action_result.data.\*.\*.ip | string | `ip` | 115.60.214.27 |
-action_result.data.\*.\*.trust_level | string | | 1 - Reasonably Ignore |
-action_result.data.\*.\*.visualization | string | `url` | https://viz.greynoise.io/ip/1.1.1.1 |
-action_result.data.\*.\*.business_service_intelligence.found | boolean | | False True |
-action_result.data.\*.\*.business_service_intelligence.trust_level | string | | trusted |
-action_result.data.\*.\*.internet_scanner_intelligence.found | boolean | | True False |
-action_result.data.\*.\*.internet_scanner_intelligence.classification | string | | malicious benign |
+action_result.parameter.ips | string | | 8.8.8.8,8.8.4.4 |
+action_result.data.\*.ip | string | `ip` | 8.8.8.8 |
+action_result.data.\*.trust_level | string | | 1 - Reasonably Ignore |
+action_result.data.\*.visualization | string | `url` | https://viz.greynoise.io/ip/1.1.1.1 |
+action_result.data.\*.business_service_intelligence.found | boolean | | False True |
+action_result.data.\*.business_service_intelligence.trust_level | string | | trusted |
+action_result.data.\*.internet_scanner_intelligence.found | boolean | | True False |
+action_result.data.\*.internet_scanner_intelligence.classification | string | | malicious benign |
 action_result.status | string | | success failed |
 action_result.message | string | | Lookup IP action successfully completed |
 action_result.summary | string | | |
@@ -508,12 +508,12 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.ip | string | `ip` | 71.6.135.131 |
+action_result.parameter.ip | string | `ip` | 8.8.8.8 |
 action_result.parameter.days | numeric | | 30 |
 action_result.parameter.field | string | | classification |
 action_result.parameter.granularity | string | | 4d |
-action_result.data.\*.metadata.ip | string | `ip` | 41.65.223.220 |
-action_result.data.\*.ip | string | | 65.18.121.215 |
+action_result.data.\*.metadata.ip | string | `ip` | 8.8.8.8 |
+action_result.data.\*.ip | string | | 8.8.8.8 |
 action_result.data.\*.metadata.field | string | | classification |
 action_result.data.\*.metadata.first_seen | string | | 2020-02-01 |
 action_result.data.\*.metadata.start | string | | 2025-05-08T04:46:22.037900129Z |
@@ -546,8 +546,8 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.parameter.cve_id | string | `cve` | 71.6.135.131 |
-action_result.data.\*.id | string | | CVE-2022-40684 |
+action_result.parameter.cve_id | string | `cve` | CVE-2024-12345 |
+action_result.data.\*.id | string | | CVE-2024-12345 |
 action_result.data.\*.details.vendor | string | | Fortinet |
 action_result.data.\*.details.product | string | | Multiple Products |
 action_result.data.\*.details.cve_cvss_score | numeric | | 9.8 |
