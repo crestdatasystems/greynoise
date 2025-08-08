@@ -26,12 +26,28 @@ and limitations under the License.
 {% block custom_tools %}{% endblock %}
 {% block widget_content %}
   <style>
+  .greynoise a:link {
+    color: rgb(35, 126, 170);
+  }
+
+  .dark-theme .greynoise a:link {
+    color: rgb(130, 175, 190);
+  }
+
   .greynoise .wf-table-horizontal {
     width: 100%;
     font-size: 12px;
     margin-bottom: 20px;
     border: 1px solid rgb(70, 70, 70);
     border-collapse: collapse;
+  }
+
+  .greynoise .wf-table-horizontal th {
+    font-weight: bold;
+    padding-left: 5px;
+    padding: 8px 10px;
+    text-align: center;
+    border: 1px solid #e1e6eb;
   }
 
   .dark-theme .greynoise .wf-table-horizontal th {
@@ -56,19 +72,26 @@ and limitations under the License.
     border: 1px solid rgb(70, 70, 70);
   }
 
-  .greynoise .wf-h3-style {
+  .dark-theme .greynoise .wf-h3-style {
       font-size: 20px;
       margin-top: 15px;
       margin-bottom: 5px;
-      color: rgb(200, 200, 200);
   }
 
+  .greynoise .wf-h3-style {
+    color: rgb(200, 200, 200);
+  }
+    
   .greynoise .wf-h4-style {
       font-size: 16px;
       text-align: center;
-      color: rgb(180, 180, 180);
       margin: 15px 0;
   }
+    
+  .dark-theme .greynoise .wf-h4-style {
+      color: rgb(180, 180, 180);
+  }
+
   .greynoise .malicious {
     color: #ff5252;
     font-weight: bold;
@@ -88,6 +111,11 @@ and limitations under the License.
     color: #d8e611;
     font-weight: bold;
   }
+
+  .greynoise .dataTables_filter input[type="search"], .greynoise .dataTables_filter input[type="search"]:hover {
+    border: 1px solid #aaa;
+  }
+
   </style>
   <div class="greynoise"
        style="overflow:scroll;

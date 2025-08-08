@@ -26,7 +26,12 @@ and limitations under the License.
 {% block custom_tools %}{% endblock %}
 {% block widget_content %}
   <style>
+
   .greynoise a:link {
+    color: rgb(35, 126, 170);
+  }
+
+  .dark-theme .greynoise a:link {
     color: rgb(130, 175, 190);
   }
 
@@ -49,10 +54,15 @@ and limitations under the License.
 
   .greynoise .wf-table-horizontal th {
     padding: 8px 10px;
-    border: 1px solid rgb(70, 70, 70);
-    background-color: rgba(40, 40, 40, 0.7);
+    padding-left: 5px;
     font-weight: bold;
     text-align: center;
+    border: 1px solid #e1e6eb;
+  }
+
+  .dark-theme .greynoise .wf-table-horizontal th {
+    border: 1px solid rgb(70, 70, 70);
+    background-color: rgba(40, 40, 40, 0.7);
   }
 
   .greynoise .wf-table-horizontal td {
@@ -68,20 +78,18 @@ and limitations under the License.
     color: rgb(200, 200, 200);
   }
 
+  .dark-theme .greynoise .wf-h3-style {
+    color: rgb(200, 200, 200);
+  }
+
   .greynoise .wf-h4-style {
     font-size: 16px;
     text-align: center;
-    color: rgb(180, 180, 180);
     margin: 15px 0;
   }
 
-  .dark-theme .greynoise .dataTable th {
-    font-weight: bold;
-    padding-left: 5px;
-    padding: 8px 10px;
-    border: 1px solid rgb(70, 70, 70);
-    background-color: rgba(40, 40, 40, 0.7);
-    text-align: center;
+  .dark-theme .greynoise .wf-h4-style {
+    color: rgb(180, 180, 180);
   }
 
   .dark-theme .greynoise .dataTable th.sorting {
@@ -100,33 +108,6 @@ and limitations under the License.
     font-weight: bold;
     background-color: rgba(50, 50, 50, 0.7);
     border-left: 4px solid rgb(130, 175, 190);
-  }
-
-  .greynoise .search-container {
-    margin-bottom: 20px;
-  }
-
-  .greynoise .search-box {
-    padding: 8px;
-    width: 250px;
-    border-radius: 4px;
-    border: 1px solid rgb(70, 70, 70);
-    background-color: rgba(30, 30, 30, 0.8);
-    color: white;
-  }
-
-  .greynoise .search-button {
-    padding: 8px 15px;
-    background-color: rgb(130, 175, 190);
-    border: none;
-    border-radius: 4px;
-    color: black;
-    cursor: pointer;
-    margin-left: 10px;
-  }
-
-  .greynoise .search-button:hover {
-    background-color: rgb(150, 195, 210);
   }
 
   .greynoise .malicious {
@@ -160,6 +141,11 @@ and limitations under the License.
     margin-top: 20px;
     margin-bottom: 20px;
   }
+
+  .greynoise .dataTables_filter input[type="search"], .greynoise .dataTables_filter input[type="search"]:hover {
+    border: 1px solid #aaa;
+  }
+
   </style>
   <script>
   // Initialize DataTable

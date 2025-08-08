@@ -27,8 +27,13 @@ and limitations under the License.
 {% block widget_content %}
   <style>
   .greynoise a:link {
+    color: rgb(35, 126, 170);
+  }
+
+  .dark-theme .greynoise a:link {
     color: rgb(130, 175, 190);
   }
+
 
   .greynoise a:hover {
       text-decoration: underline;
@@ -54,35 +59,19 @@ and limitations under the License.
   .greynoise .wf-table-vertical tr td:first-child {
     font-weight: bold;
     width: 30%;
+    text-transform: uppercase;
+  }
+  
+  .dark-theme .greynoise .wf-table-vertical tr td:first-child {
     background-color: rgba(40, 40, 40, 0.7);
-  }s
-
-  .greynoise .wf-table-horizontal {
-      width: 100%;
-      font-size: 12px;
-      margin-bottom: 20px;
-      border: 1px solid rgb(70, 70, 70);
-      border-collapse: collapse;
-  }
-
-  .greynoise .wf-table-horizontal-row {
-      text-transform: uppercase;
-      padding: 8px 10px;
-      border: 1px solid rgb(70, 70, 70);
-  }
-
-  .greynoise .wf-table-horizontal-head {
-      font-weight: bold;
-      width: 30%;
-      padding-left: 5px;
-      background-color: rgba(40, 40, 40, 0.7);
+    color: #6c818b;
   }
 
   .greynoise .wf-h3-style {
-  font-size: 20px;
-  margin-top: 15px;
-  margin-bottom: 5px;
-  color: rgb(200, 200, 200);
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: rgb(200, 200, 200);
   }
 
   .greynoise .wf-h4-style {
@@ -127,33 +116,6 @@ and limitations under the License.
       text-align: center;
   }
 
-  .greynoise .search-container {
-  margin-bottom: 20px;
-  }
-
-  .greynoise .search-box {
-    padding: 8px;
-    width: 250px;
-    border-radius: 4px;
-    border: 1px solid rgb(70, 70, 70);
-    background-color: rgba(30, 30, 30, 0.8);
-    color: white;
-  }
-
-  .greynoise .search-button {
-    padding: 8px 15px;
-    background-color: rgb(130, 175, 190);
-    border: none;
-    border-radius: 4px;
-    color: black;
-    cursor: pointer;
-    margin-left: 10px;
-  }
-
-  .greynoise .search-button:hover {
-    background-color: rgb(150, 195, 210);
-  }
-
   .greynoise .malicious {
     color: #ff5252;
     font-weight: bold;
@@ -185,6 +147,15 @@ and limitations under the License.
     margin-top: 20px;
     margin-bottom: 20px;
   }
+
+  .dark-theme .wf-table-horizontal-head {
+    background-color: #4F6A70 !important;
+    color: #e1e6eb !important;
+  }
+  .light-theme .wf-table-horizontal-head {
+    background-color: #c9d1d3 !important;
+  }
+
   </style>
   <div class="greynoise"
        style="overflow: auto;
@@ -210,7 +181,7 @@ and limitations under the License.
             <tbody>
               {% if result.0.details %}
                 <tr>
-                  <td colspan="2" class="center" class="wf-table-horizontal-head">Details</td>
+                  <td colspan="2" class="center wf-table-horizontal-head">Details</td>
                 </tr>
                 <tr>
                   <td>Vulnerability Name</td>
@@ -231,7 +202,7 @@ and limitations under the License.
               {% endif %}
               {% if result.0.exploitation_activity %}
                 <tr>
-                  <td colspan="2" class="center" class="wf-table-horizontal-head">Exploitation Activity</td>
+                  <td colspan="2" class="center wf-table-horizontal-head">Exploitation Activity</td>
                 </tr>
                 <tr>
                   <td>Activity Seen</td>
@@ -264,7 +235,7 @@ and limitations under the License.
               {% endif %}
               {% if result.0.exploitation_stats %}
                 <tr>
-                  <td colspan="2" class="center" class="wf-table-horizontal-head">Exploitation Stats</td>
+                  <td colspan="2" class="center wf-table-horizontal-head">Exploitation Stats</td>
                 </tr>
                 <tr>
                   <td>Available exploits</td>
@@ -281,7 +252,7 @@ and limitations under the License.
               {% endif %}
               {% if result.0.timeline %}
                 <tr>
-                  <td colspan="2" class="center" class="wf-table-horizontal-head">Timeline</td>
+                  <td colspan="2" class="center wf-table-horizontal-head">Timeline</td>
                 </tr>
                 <tr>
                   <td>CISA date</td>
@@ -294,7 +265,7 @@ and limitations under the License.
               {% endif %}
               {% if result.0.exploitation_details %}
                 <tr>
-                  <td colspan="2" class="center" class="wf-table-horizontal-head">Exploitation Details</td>
+                  <td colspan="2" class="center wf-table-horizontal-head">Exploitation Details</td>
                 </tr>
                 <tr>
                   <td>Attack Vector</td>
