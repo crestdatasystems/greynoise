@@ -208,7 +208,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.parameter.ip | string | `ip` | 115.60.214.27 |
 action_result.data.\*.\*.ip | string | `ip` | 115.60.214.27 |
 action_result.data.\*.\*.trust_level | string | | 1 - Reasonably Ignore |
-action_result.data.\*.\*.visualization | string | `url` | https://viz.greynoise.io/ip/115.60.214.27 |
+action_result.data.\*.\*.visualization | string | `url` | https://viz.greynoise.io/ip/1.1.1.1 |
 action_result.data.\*.\*.business_service_intelligence.found | boolean | | False True |
 action_result.data.\*.\*.business_service_intelligence.trust_level | string | | trusted |
 action_result.data.\*.\*.internet_scanner_intelligence.found | boolean | | True False |
@@ -241,11 +241,11 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.parameter.ip | string | `ip` | 71.6.135.131 |
 action_result.data.\*.ip | string | | 8.8.8.8 |
 action_result.data.\*.trust_level | string | | 1 - Reasonably Ignore |
-action_result.data.\*.visualization | string | | https://viz.greynoise.io/ip/8.8.8.8 |
+action_result.data.\*.visualization | string | | https://viz.greynoise.io/ip/1.1.1.1 |
 action_result.data.\*.business_service_intelligence.name | string | | Google Public DNS |
 action_result.data.\*.business_service_intelligence.found | boolean | | True False |
 action_result.data.\*.business_service_intelligence.category | string | | public_dns |
-action_result.data.\*.business_service_intelligence.reference | string | | https://developers.google.com/speed/public-dns/docs/isp#alternative |
+action_result.data.\*.business_service_intelligence.reference | string | | https://developers.test.com/speed/test/test/isp#alternative |
 action_result.data.\*.business_service_intelligence.description | string | | Google's global domain name system (DNS) resolution service. |
 action_result.data.\*.business_service_intelligence.explanation | string | | Public DNS services are used as alternatives to ISP's name servers. You may see devices on your network communicating with Google Public DNS over port 53/TCP or 53/UDP to resolve DNS lookups. |
 action_result.data.\*.business_service_intelligence.trust_level | string | | 1 |
@@ -337,7 +337,7 @@ Use the GreyNoise Query Language to run a query
 Type: **investigate** \
 Read only: **True**
 
-Please refer to <a target="_blank" rel="noopener noreferrer" href="https://docs.greynoise.io/reference/gnqlquery-1">https://docs.greynoise.io/reference/gnqlquery-1/a> for further information.
+Please refer to <a target="_blank" rel="noopener noreferrer" href="https://docs.greynoise.io/docs/using-the-greynoise-query-language-gnql">https://docs.greynoise.io/docs/using-the-greynoise-query-language-gnql/a> for further information.
 
 #### Action Parameters
 
@@ -358,7 +358,7 @@ action_result.parameter.exclude_raw | boolean | | False |
 action_result.parameter.size | numeric | | 1000 |
 action_result.data.\*.data.\*.ip | string | | 203.210.181.107 |
 action_result.data.\*.data.\*.trust_level | string | | |
-action_result.data.\*.data.\*.visualization | string | | https://viz.greynoise.io/ip/203.210.181.107 |
+action_result.data.\*.data.\*.visualization | string | | https://viz.greynoise.io/ip/1.1.1.1 |
 action_result.data.\*.data.\*.business_service_intelligence.name | string | | |
 action_result.data.\*.data.\*.business_service_intelligence.found | boolean | | True False |
 action_result.data.\*.data.\*.business_service_intelligence.category | string | | |
@@ -455,7 +455,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.parameter.ips | string | | 71.6.135.131,111.111.111.111 |
 action_result.data.\*.\*.ip | string | `ip` | 115.60.214.27 |
 action_result.data.\*.\*.trust_level | string | | 1 - Reasonably Ignore |
-action_result.data.\*.\*.visualization | string | `url` | https://viz.greynoise.io/ip/115.60.214.27 |
+action_result.data.\*.\*.visualization | string | `url` | https://viz.greynoise.io/ip/1.1.1.1 |
 action_result.data.\*.\*.business_service_intelligence.found | boolean | | False True |
 action_result.data.\*.\*.business_service_intelligence.trust_level | string | | trusted |
 action_result.data.\*.\*.internet_scanner_intelligence.found | boolean | | True False |
