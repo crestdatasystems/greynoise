@@ -2,6 +2,7 @@
   "appid": "3af2ef2d-6e4a-4e74-8f20-4d6030625561",
   "name": "GreyNoise for SOAR",
   "description": "This app provides investigative capabilities using the GreyNoise plugin",
+  "verbose": "The GreyNoise Enrichment plugin for Phantom enriches observables to identify activity associated with mass-internet scanning, creating more time to investigate other higher priority observables. This enrichment provides context into IP behavior: intent, tags, first seen, last seen, geo-data, ports, OS, and JA3.",
   "type": "reputation",
   "product_vendor": "GreyNoise",
   "logo": "logo_greynoise.svg",
@@ -12,21 +13,17 @@
   "publisher": "GreyNoise",
   "license": "Copyright (c) GreyNoise, 2019-2025",
   "app_version": "2.3.3",
-    "utctime_updated": "2025-08-05T17:19:45.000000Z",
+  "utctime_updated": "2025-08-05T17:19:45.000000Z",
   "package_name": "phantom_greynoise",
   "main_module": "greynoise_connector.py",
-    "min_phantom_version": "6.4.1",
+  "min_phantom_version": "6.4.1",
   "fips_compliant": false,
-    "webhook": {
-        "handler": "greynoise_webhook.handle_webhook",
-        "requires_auth": false,
-        "ip_allowlist": [
-            "0.0.0.0/0"
-        ],
-        "allowed_headers": [
-            "Content-Type"
-        ]
-    },
+  "webhook": {
+    "handler": "greynoise_webhook.handle_webhook",
+    "requires_auth": false,
+    "ip_allowlist": ["0.0.0.0/0"],
+    "allowed_headers": ["Content-Type"]
+  },
   "configuration": {
     "api_key": {
       "description": "API Key for GreyNoise",
@@ -69,9 +66,7 @@
         "ip": {
           "description": "IP to query",
           "data_type": "string",
-          "contains": [
-            "ip"
-          ],
+          "contains": ["ip"],
           "primary": true,
           "required": true,
           "order": 0
@@ -81,85 +76,55 @@
         {
           "data_path": "action_result.parameter.ip",
           "data_type": "string",
-          "contains": [
-            "ip"
-          ],
-          "example_values": [
-            "115.60.214.27"
-          ]
+          "contains": ["ip"],
+          "example_values": ["115.60.214.27"]
         },
         {
           "data_path": "action_result.data.*.*.ip",
           "data_type": "string",
-          "contains": [
-            "ip"
-          ],
-          "example_values": [
-            "115.60.214.27"
-                    ]
+          "contains": ["ip"],
+          "example_values": ["115.60.214.27"]
         },
         {
           "data_path": "action_result.data.*.*.trust_level",
           "data_type": "string",
-          "example_values": [
-              "1 - Reasonably Ignore"
-          ]
+          "example_values": ["1 - Reasonably Ignore"]
         },
         {
           "data_path": "action_result.data.*.*.visualization",
           "data_type": "string",
-          "contains": [
-            "url"
-          ],
-          "example_values": [
-            "https://viz.greynoise.io/ip/1.1.1.1"
-                    ]
+          "contains": ["url"],
+          "example_values": ["https://viz.greynoise.io/ip/1.1.1.1"]
         },
         {
           "data_path": "action_result.data.*.*.business_service_intelligence.found",
           "data_type": "boolean",
-          "example_values": [
-            false,
-            true
-                    ]
+          "example_values": [false, true]
         },
         {
           "data_path": "action_result.data.*.*.business_service_intelligence.trust_level",
           "data_type": "string",
-          "example_values": [
-            "trusted"
-                    ]
+          "example_values": ["trusted"]
         },
         {
           "data_path": "action_result.data.*.*.internet_scanner_intelligence.found",
           "data_type": "boolean",
-          "example_values": [
-            true,
-            false
-                    ]
+          "example_values": [true, false]
         },
         {
           "data_path": "action_result.data.*.*.internet_scanner_intelligence.classification",
           "data_type": "string",
-          "example_values": [
-            "malicious",
-            "benign"
-                    ]
+          "example_values": ["malicious", "benign"]
         },
         {
           "data_path": "action_result.status",
           "data_type": "string",
-          "example_values": [
-            "success",
-            "failed"
-          ]
+          "example_values": ["success", "failed"]
         },
         {
           "data_path": "action_result.message",
           "data_type": "string",
-          "example_values": [
-            "Lookup IP action successfully completed"
-          ]
+          "example_values": ["Lookup IP action successfully completed"]
         },
         {
           "data_path": "action_result.summary",
@@ -168,16 +133,12 @@
         {
           "data_path": "summary.total_objects",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         },
         {
           "data_path": "summary.total_objects_successful",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         }
       ],
       "render": {
@@ -200,9 +161,7 @@
         "ip": {
           "description": "IP to query",
           "data_type": "string",
-          "contains": [
-            "ip"
-          ],
+          "contains": ["ip"],
           "primary": true,
           "required": true,
           "order": 0
@@ -212,387 +171,302 @@
         {
           "data_path": "action_result.parameter.ip",
           "data_type": "string",
-          "contains": [
-            "ip"
-          ],
+          "contains": ["ip"],
+          "example_values": ["71.6.135.131"]
+        },
+        {
+          "data_path": "action_result.data.*.ip",
+          "data_type": "string",
+          "example_values": ["8.8.8.8"]
+        },
+        {
+          "data_path": "action_result.data.*.trust_level",
+          "data_type": "string",
+          "example_values": ["1 - Reasonably Ignore"]
+        },
+        {
+          "data_path": "action_result.data.*.visualization",
+          "data_type": "string",
+          "example_values": ["https://viz.greynoise.io/ip/1.1.1.1"]
+        },
+        {
+          "data_path": "action_result.data.*.business_service_intelligence.name",
+          "data_type": "string",
+          "example_values": ["Google Public DNS"]
+        },
+        {
+          "data_path": "action_result.data.*.business_service_intelligence.found",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.data.*.business_service_intelligence.category",
+          "data_type": "string",
+          "example_values": ["public_dns"]
+        },
+        {
+          "data_path": "action_result.data.*.business_service_intelligence.reference",
+          "data_type": "string",
           "example_values": [
-            "71.6.135.131"
+            "https://developers.test.com/speed/test/test/isp#alternative"
           ]
         },
         {
-            "data_path": "action_result.data.*.ip",
-            "data_type": "string",
-            "example_values": [
-                "8.8.8.8"
-            ]
+          "data_path": "action_result.data.*.business_service_intelligence.description",
+          "data_type": "string",
+          "example_values": [
+            "Google's global domain name system (DNS) resolution service."
+          ]
         },
         {
-            "data_path": "action_result.data.*.trust_level",
-            "data_type": "string",
-            "example_values": [
-                "1 - Reasonably Ignore"
-            ]
+          "data_path": "action_result.data.*.business_service_intelligence.explanation",
+          "data_type": "string",
+          "example_values": [
+            "Public DNS services are used as alternatives to ISP's name servers. You may see devices on your network communicating with Google Public DNS over port 53/TCP or 53/UDP to resolve DNS lookups."
+          ]
         },
         {
-            "data_path": "action_result.data.*.visualization",
-            "data_type": "string",
-            "example_values": [
-                "https://viz.greynoise.io/ip/1.1.1.1"
-            ]
+          "data_path": "action_result.data.*.business_service_intelligence.trust_level",
+          "data_type": "string",
+          "example_values": ["1"]
         },
         {
-            "data_path": "action_result.data.*.business_service_intelligence.name",
-            "data_type": "string",
-            "example_values": [
-                "Google Public DNS"
-            ]
+          "data_path": "action_result.data.*.business_service_intelligence.last_updated",
+          "data_type": "string",
+          "example_values": ["2025-08-06T13:10:58Z"]
         },
         {
-            "data_path": "action_result.data.*.business_service_intelligence.found",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.bot",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.business_service_intelligence.category",
-            "data_type": "string",
-            "example_values": [
-                "public_dns"
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.tor",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.business_service_intelligence.reference",
-            "data_type": "string",
-            "example_values": [
-                "https://developers.test.com/speed/test/test/isp#alternative"
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.vpn",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.business_service_intelligence.description",
-            "data_type": "string",
-            "example_values": [
-                "Google's global domain name system (DNS) resolution service."
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.actor",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.business_service_intelligence.explanation",
-            "data_type": "string",
-            "example_values": [
-                "Public DNS services are used as alternatives to ISP's name servers. You may see devices on your network communicating with Google Public DNS over port 53/TCP or 53/UDP to resolve DNS lookups."
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.found",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.business_service_intelligence.trust_level",
-            "data_type": "string",
-            "example_values": [
-                "1"
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.os",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.business_service_intelligence.last_updated",
-            "data_type": "string",
-            "example_values": [
-                "2025-08-06T13:10:58Z"
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.asn",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.bot",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.rdns",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.tor",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.domain",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.vpn",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.mobile",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.actor",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.region",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.found",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.carrier",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.os",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.category",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.asn",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.latitude",
+          "data_type": "numeric"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.rdns",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.longitude",
+          "data_type": "numeric"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.domain",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.datacenter",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.mobile",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.rdns_parent",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.region",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.sensor_hits",
+          "data_type": "numeric"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.carrier",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.source_city",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.category",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.organization",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.latitude",
-            "data_type": "numeric"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.sensor_count",
+          "data_type": "numeric"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.longitude",
-            "data_type": "numeric"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.rdns_validated",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.datacenter",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.source_country",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.rdns_parent",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.single_destination",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.sensor_hits",
-            "data_type": "numeric"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.source_country_code",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.source_city",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.raw_data.source.bytes",
+          "data_type": "numeric"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.organization",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.last_seen",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.sensor_count",
-            "data_type": "numeric"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.spoofable",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.rdns_validated",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.first_seen",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.source_country",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.vpn_service",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.single_destination",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.classification",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.metadata.source_country_code",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.last_seen_timestamp",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.raw_data.source.bytes",
-            "data_type": "numeric"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.id",
+          "data_type": "string",
+          "example_values": ["fddc4698-fb29-4fd6-946f-5598100fe716"]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.last_seen",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.name",
+          "data_type": "string",
+          "example_values": ["MSSQL Login Attempt"]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.spoofable",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.slug",
+          "data_type": "string",
+          "example_values": ["mssql-login-attempt"]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.first_seen",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.created",
+          "data_type": "string",
+          "example_values": ["2024-10-28"]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.vpn_service",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.category",
+          "data_type": "string",
+          "example_values": ["activity"]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.classification",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.intention",
+          "data_type": "string",
+          "example_values": ["suspicious"]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.last_seen_timestamp",
-            "data_type": "string"
+          "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.updated_at",
+          "data_type": "string",
+          "example_values": ["2025-08-06T19:35:46.749018Z"]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.id",
-            "data_type": "string",
-            "example_values": [
-                "fddc4698-fb29-4fd6-946f-5598100fe716"
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.description",
+          "data_type": "string",
+          "example_values": [
+            "IP addresses with this tag have been observed attempting to perform a Microsoft SQL (MSSQL) login."
+          ]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.name",
-            "data_type": "string",
-            "example_values": [
-                "MSSQL Login Attempt"
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.recommend_block",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.slug",
-            "data_type": "string",
-            "example_values": [
-                "mssql-login-attempt"
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.raw_data.scan.*.port",
+          "data_type": "numeric",
+          "example_values": [10083]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.created",
-            "data_type": "string",
-            "example_values": [
-                "2024-10-28"
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.raw_data.scan.*.protocol",
+          "data_type": "string",
+          "example_values": ["tcp"]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.category",
-            "data_type": "string",
-            "example_values": [
-                "activity"
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.raw_data.ja3.*.port",
+          "data_type": "numeric",
+          "example_values": [9042]
         },
         {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.intention",
-            "data_type": "string",
-            "example_values": [
-                "suspicious"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.updated_at",
-            "data_type": "string",
-            "example_values": [
-                "2025-08-06T19:35:46.749018Z"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.description",
-            "data_type": "string",
-            "example_values": [
-                "IP addresses with this tag have been observed attempting to perform a Microsoft SQL (MSSQL) login."
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.tags.*.recommend_block",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.raw_data.scan.*.port",
-            "data_type": "numeric",
-            "example_values": [
-                10083
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.raw_data.scan.*.protocol",
-            "data_type": "string",
-            "example_values": [
-                "tcp"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.raw_data.ja3.*.port",
-            "data_type": "numeric",
-            "example_values": [
-                9042
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.internet_scanner_intelligence.raw_data.ja3.*.fingerprint",
-            "data_type": "string",
-            "example_values": [
-                "19e29534fd49dd27d09234e639c4057e"
-            ]
+          "data_path": "action_result.data.*.internet_scanner_intelligence.raw_data.ja3.*.fingerprint",
+          "data_type": "string",
+          "example_values": ["19e29534fd49dd27d09234e639c4057e"]
         },
         {
           "data_path": "action_result.data.*.actor",
           "data_type": "string",
-          "example_values": [
-            "Shodan.io"
-          ]
+          "example_values": ["Shodan.io"]
         },
         {
           "data_path": "action_result.data.*.bot",
           "data_type": "boolean",
-          "example_values": [
-            true,
-            false
-          ]
+          "example_values": [true, false]
         },
         {
           "data_path": "action_result.data.*.classification",
           "data_type": "string",
-          "example_values": [
-            "benign",
-            "malicious"
-          ]
+          "example_values": ["benign", "malicious"]
         },
         {
           "data_path": "action_result.data.*.cve.*",
           "data_type": "string",
-          "example_values": [
-            "CVE-2021-12345",
-            "CVE-2023-5678"
-          ]
+          "example_values": ["CVE-2021-12345", "CVE-2023-5678"]
         },
         {
           "data_path": "action_result.data.*.first_seen",
           "data_type": "string",
-          "example_values": [
-            "2020-12-25"
-          ]
+          "example_values": ["2020-12-25"]
         },
         {
           "data_path": "action_result.data.*.last_seen",
           "data_type": "string",
-          "example_values": [
-            "2020-12-25"
-          ]
+          "example_values": ["2020-12-25"]
         },
         {
           "data_path": "action_result.data.*.metadata.*",
@@ -604,91 +478,62 @@
         {
           "data_path": "action_result.data.*.metadata.asn",
           "data_type": "string",
-          "example_values": [
-            "AS12345"
-          ]
+          "example_values": ["AS12345"]
         },
         {
           "data_path": "action_result.data.*.metadata.category",
           "data_type": "string",
-          "example_values": [
-            "isp"
-          ]
+          "example_values": ["isp"]
         },
         {
           "data_path": "action_result.data.*.metadata.city",
           "data_type": "string",
-          "example_values": [
-            "Madrid"
-          ]
+          "example_values": ["Madrid"]
         },
         {
           "data_path": "action_result.data.*.metadata.destination_countries.*",
           "data_type": "string",
-          "example_values": [
-            "Spain",
-            "United Kingdom",
-            "Turkey"
-          ]
+          "example_values": ["Spain", "United Kingdom", "Turkey"]
         },
         {
           "data_path": "action_result.data.*.metadata.destination_country_codes.*",
           "data_type": "string",
-          "example_values": [
-            "ES",
-            "GB",
-            "TR"
-          ]
+          "example_values": ["ES", "GB", "TR"]
         },
         {
           "data_path": "action_result.data.*.metadata.organization",
           "data_type": "string",
-          "example_values": [
-            "Acme, Inc"
-          ]
+          "example_values": ["Acme, Inc"]
         },
         {
           "data_path": "action_result.data.*.metadata.os",
           "data_type": "string",
-          "example_values": [
-            "Linux 3"
-          ]
+          "example_values": ["Linux 3"]
         },
         {
           "data_path": "action_result.data.*.metadata.rdns",
           "data_type": "string",
-          "example_values": [
-            "bot.acme.lcl"
-          ]
+          "example_values": ["bot.acme.lcl"]
         },
         {
           "data_path": "action_result.data.*.metadata.region",
           "data_type": "string",
-          "example_values": [
-            "Madrid"
-          ]
+          "example_values": ["Madrid"]
         },
         {
           "data_path": "action_result.data.*.metadata.source_country",
           "data_type": "string",
-          "example_values": [
-            "Spain"
-          ]
+          "example_values": ["Spain"]
         },
         {
           "data_path": "action_result.data.*.metadata.source_country_code",
           "data_type": "string",
-          "example_values": [
-            "ES"
-          ]
+          "example_values": ["ES"]
         },
         {
           "data_path": "action_result.data.*.metadata.tor",
           "data_type": "boolean",
-          "example_values": [
-            true,
-            false
-          ]
+          "example_values": [true, false]
         },
         {
           "data_path": "action_result.data.*.raw_data.*",
@@ -728,56 +573,37 @@
         {
           "data_path": "action_result.data.*.seen",
           "data_type": "boolean",
-          "example_values": [
-            true,
-            false
-          ]
+          "example_values": [true, false]
         },
         {
           "data_path": "action_result.data.*.spoofable",
           "data_type": "boolean",
-          "example_values": [
-            true,
-            false
-          ]
+          "example_values": [true, false]
         },
         {
           "data_path": "action_result.data.*.tags.*",
           "data_type": "string",
-          "example_values": [
-            "Mirai",
-            "Telnet Worm"
-          ]
+          "example_values": ["Mirai", "Telnet Worm"]
         },
         {
           "data_path": "action_result.data.*.vpn",
           "data_type": "boolean",
-          "example_values": [
-            true,
-            false
-          ]
+          "example_values": [true, false]
         },
         {
           "data_path": "action_result.data.*.vpn_service",
           "data_type": "string",
-          "example_values": [
-            "PRETTY_VPN"
-          ]
+          "example_values": ["PRETTY_VPN"]
         },
         {
           "data_path": "action_result.status",
           "data_type": "string",
-          "example_values": [
-            "success",
-            "failed"
-          ]
+          "example_values": ["success", "failed"]
         },
         {
           "data_path": "action_result.message",
           "data_type": "string",
-          "example_values":[
-            "IP Reputation action successfully completed"
-          ]
+          "example_values": ["IP Reputation action successfully completed"]
         },
         {
           "data_path": "action_result.summary",
@@ -786,16 +612,12 @@
         {
           "data_path": "summary.total_objects",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         },
         {
           "data_path": "summary.total_objects_successful",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         }
       ],
       "render": {
@@ -816,9 +638,7 @@
         "query": {
           "description": "GNQL query",
           "data_type": "string",
-          "contains": [
-            "greynoise query"
-          ],
+          "contains": ["greynoise query"],
           "primary": true,
           "required": true,
           "order": 0
@@ -847,9 +667,7 @@
         {
           "data_path": "action_result.parameter.query",
           "data_type": "string",
-          "contains": [
-            "greynoise query"
-          ],
+          "contains": ["greynoise query"],
           "example_values": [
             "metadata.organization:your_organization classification:malicious",
             "8.0.0.0/8"
@@ -858,462 +676,342 @@
         {
           "data_path": "action_result.parameter.quick",
           "data_type": "boolean",
-          "example_values":[
-            "True"
-          ]
+          "example_values": ["True"]
         },
         {
           "data_path": "action_result.parameter.exclude_raw",
           "data_type": "boolean",
-          "example_values":[
-            "False"
-          ]
+          "example_values": ["False"]
         },
         {
           "data_path": "action_result.parameter.size",
           "data_type": "numeric",
+          "example_values": [1000]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.ip",
+          "data_type": "string",
+          "example_values": ["203.210.181.107"]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.trust_level",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.data.*.visualization",
+          "data_type": "string",
+          "example_values": ["https://viz.greynoise.io/ip/1.1.1.1"]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.business_service_intelligence.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.data.*.business_service_intelligence.found",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.business_service_intelligence.category",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.data.*.business_service_intelligence.reference",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.data.*.business_service_intelligence.description",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.data.*.business_service_intelligence.explanation",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.data.*.business_service_intelligence.trust_level",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.data.*.business_service_intelligence.last_updated",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.bot",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tor",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.vpn",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.id",
+          "data_type": "string",
+          "example_values": ["23e6932c-e2bd-48cf-80b8-aa98ae9276c4"]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.name",
+          "data_type": "string",
+          "example_values": ["Open Proxy Scanner"]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.slug",
+          "data_type": "string",
+          "example_values": ["open-proxy-scanner"]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.created",
+          "data_type": "string",
+          "example_values": ["2020-04-07"]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.category",
+          "data_type": "string",
+          "example_values": ["activity"]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.intention",
+          "data_type": "string",
+          "example_values": ["malicious"]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.updated_at",
+          "data_type": "string",
+          "example_values": ["2025-08-06T19:35:47.874643Z"]
+        },
+        {
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.description",
+          "data_type": "string",
           "example_values": [
-            1000
+            "IP addresses with this tag have been observed crawling the Internet for unauthenticated web proxies and testing if they are functional."
           ]
         },
         {
-            "data_path": "action_result.data.*.data.*.ip",
-            "data_type": "string",
-            "example_values": [
-                "203.210.181.107"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.recommend_block",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.data.*.trust_level",
-            "data_type": "string"
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.actor",
+          "data_type": "string",
+          "example_values": ["unknown"]
         },
         {
-            "data_path": "action_result.data.*.data.*.visualization",
-            "data_type": "string",
-            "example_values": [
-                "https://viz.greynoise.io/ip/1.1.1.1"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.found",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.data.*.business_service_intelligence.name",
-            "data_type": "string"
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.os",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.data.*.business_service_intelligence.found",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.asn",
+          "data_type": "string",
+          "example_values": ["AS45899"]
         },
         {
-            "data_path": "action_result.data.*.data.*.business_service_intelligence.category",
-            "data_type": "string"
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.rdns",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.data.*.business_service_intelligence.reference",
-            "data_type": "string"
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.domain",
+          "data_type": "string",
+          "example_values": ["vnpt.vn"]
         },
         {
-            "data_path": "action_result.data.*.data.*.business_service_intelligence.description",
-            "data_type": "string"
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.mobile",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.data.*.business_service_intelligence.explanation",
-            "data_type": "string"
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.region",
+          "data_type": "string",
+          "example_values": ["Th\u1eeba Thi\u00ean Hu\u1ebf Province"]
         },
         {
-            "data_path": "action_result.data.*.data.*.business_service_intelligence.trust_level",
-            "data_type": "string"
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.carrier",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.data.*.business_service_intelligence.last_updated",
-            "data_type": "string"
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.category",
+          "data_type": "string",
+          "example_values": ["isp"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.bot",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.latitude",
+          "data_type": "numeric",
+          "example_values": [16.4619]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tor",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.longitude",
+          "data_type": "numeric",
+          "example_values": [107.5955]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.vpn",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.datacenter",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.id",
-            "data_type": "string",
-            "example_values": [
-                "23e6932c-e2bd-48cf-80b8-aa98ae9276c4"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.rdns_parent",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.name",
-            "data_type": "string",
-            "example_values": [
-                "Open Proxy Scanner"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.sensor_hits",
+          "data_type": "numeric",
+          "example_values": [38303]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.slug",
-            "data_type": "string",
-            "example_values": [
-                "open-proxy-scanner"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.source_city",
+          "data_type": "string",
+          "example_values": ["Hu\u1ebf"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.created",
-            "data_type": "string",
-            "example_values": [
-                "2020-04-07"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.organization",
+          "data_type": "string",
+          "example_values": ["VNPT Corp"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.category",
-            "data_type": "string",
-            "example_values": [
-                "activity"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.sensor_count",
+          "data_type": "numeric",
+          "example_values": [5]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.intention",
-            "data_type": "string",
-            "example_values": [
-                "malicious"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.rdns_validated",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.updated_at",
-            "data_type": "string",
-            "example_values": [
-                "2025-08-06T19:35:47.874643Z"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.source_country",
+          "data_type": "string",
+          "example_values": ["Vietnam"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.description",
-            "data_type": "string",
-            "example_values": [
-                "IP addresses with this tag have been observed crawling the Internet for unauthenticated web proxies and testing if they are functional."
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.single_destination",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.tags.*.recommend_block",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.source_country_code",
+          "data_type": "string",
+          "example_values": ["VN"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.actor",
-            "data_type": "string",
-            "example_values": [
-                "unknown"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.raw_data.scan.*.port",
+          "data_type": "numeric",
+          "example_values": [1001]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.found",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.raw_data.scan.*.protocol",
+          "data_type": "string",
+          "example_values": ["tcp"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.os",
-            "data_type": "string"
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.raw_data.source.bytes",
+          "data_type": "numeric",
+          "example_values": [2054653]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.asn",
-            "data_type": "string",
-            "example_values": [
-                "AS45899"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.last_seen",
+          "data_type": "string",
+          "example_values": ["2025-08-07"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.rdns",
-            "data_type": "string"
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.spoofable",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.domain",
-            "data_type": "string",
-            "example_values": [
-                "vnpt.vn"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.first_seen",
+          "data_type": "string",
+          "example_values": ["2025-08-06"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.mobile",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.vpn_service",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.region",
-            "data_type": "string",
-            "example_values": [
-                "Th\u1eeba Thi\u00ean Hu\u1ebf Province"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.classification",
+          "data_type": "string",
+          "example_values": ["malicious"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.carrier",
-            "data_type": "string"
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.last_seen_timestamp",
+          "data_type": "string",
+          "example_values": ["2025-08-07 00:00:35"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.category",
-            "data_type": "string",
-            "example_values": [
-                "isp"
-            ]
+          "data_path": "action_result.data.*.request_metadata.count",
+          "data_type": "numeric",
+          "example_values": [1727718]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.latitude",
-            "data_type": "numeric",
-            "example_values": [
-                16.4619
-            ]
+          "data_path": "action_result.data.*.request_metadata.query",
+          "data_type": "string",
+          "example_values": ["classification:malicious"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.longitude",
-            "data_type": "numeric",
-            "example_values": [
-                107.5955
-            ]
+          "data_path": "action_result.data.*.request_metadata.scroll",
+          "data_type": "string",
+          "example_values": [
+            "FGluY2x1ZGVfY29udGV4dF91dWlkDnF1ZXJ5VGhlbkZldGNoAhZmeVI3dE1WUVFxQ216bGNuR3B0VnJ3AAAAAAQVqCIWZF9Tdzc3Yk1Td1MwRXRPcFFwR1NOURZpdUFkYmlxNVJWQ0otbG5hR1Q5NjBBAAAAAANxuBgWUHFxZDZVbHJSb2VLTE05eWdFSFV4QQ=="
+          ]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.datacenter",
-            "data_type": "string"
+          "data_path": "action_result.data.*.request_metadata.message",
+          "data_type": "string"
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.rdns_parent",
-            "data_type": "string"
+          "data_path": "action_result.data.*.request_metadata.complete",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.sensor_hits",
-            "data_type": "numeric",
-            "example_values": [
-                38303
-            ]
+          "data_path": "action_result.data.*.request_metadata.adjusted_query",
+          "data_type": "string",
+          "example_values": ["(classification:malicious) last_seen:90d"]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.source_city",
-            "data_type": "string",
-            "example_values": [
-                "Hu\u1ebf"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.raw_data.ja3.*.port",
+          "data_type": "numeric",
+          "example_values": [8001]
         },
         {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.organization",
-            "data_type": "string",
-            "example_values": [
-                "VNPT Corp"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.sensor_count",
-            "data_type": "numeric",
-            "example_values": [
-                5
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.rdns_validated",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.source_country",
-            "data_type": "string",
-            "example_values": [
-                "Vietnam"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.single_destination",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.metadata.source_country_code",
-            "data_type": "string",
-            "example_values": [
-                "VN"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.raw_data.scan.*.port",
-            "data_type": "numeric",
-            "example_values": [
-                1001
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.raw_data.scan.*.protocol",
-            "data_type": "string",
-            "example_values": [
-                "tcp"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.raw_data.source.bytes",
-            "data_type": "numeric",
-            "example_values": [
-                2054653
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.last_seen",
-            "data_type": "string",
-            "example_values": [
-                "2025-08-07"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.spoofable",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.first_seen",
-            "data_type": "string",
-            "example_values": [
-                "2025-08-06"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.vpn_service",
-            "data_type": "string"
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.classification",
-            "data_type": "string",
-            "example_values": [
-                "malicious"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.last_seen_timestamp",
-            "data_type": "string",
-            "example_values": [
-                "2025-08-07 00:00:35"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.request_metadata.count",
-            "data_type": "numeric",
-            "example_values": [
-                1727718
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.request_metadata.query",
-            "data_type": "string",
-            "example_values": [
-                "classification:malicious"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.request_metadata.scroll",
-            "data_type": "string",
-            "example_values": [
-                "FGluY2x1ZGVfY29udGV4dF91dWlkDnF1ZXJ5VGhlbkZldGNoAhZmeVI3dE1WUVFxQ216bGNuR3B0VnJ3AAAAAAQVqCIWZF9Tdzc3Yk1Td1MwRXRPcFFwR1NOURZpdUFkYmlxNVJWQ0otbG5hR1Q5NjBBAAAAAANxuBgWUHFxZDZVbHJSb2VLTE05eWdFSFV4QQ=="
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.request_metadata.message",
-            "data_type": "string"
-        },
-        {
-            "data_path": "action_result.data.*.request_metadata.complete",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.request_metadata.adjusted_query",
-            "data_type": "string",
-            "example_values": [
-                "(classification:malicious) last_seen:90d"
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.raw_data.ja3.*.port",
-            "data_type": "numeric",
-            "example_values": [
-                8001
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.raw_data.ja3.*.fingerprint",
-            "data_type": "string",
-            "example_values": [
-                "19e29534fd49dd27d09234e639c4057e"
-            ]
+          "data_path": "action_result.data.*.data.*.internet_scanner_intelligence.raw_data.ja3.*.fingerprint",
+          "data_type": "string",
+          "example_values": ["19e29534fd49dd27d09234e639c4057e"]
         },
         {
           "data_path": "action_result.data.*.actor",
           "data_type": "string",
-          "example_values": [
-            "Shodan.io"
-          ]
+          "example_values": ["Shodan.io"]
         },
         {
           "data_path": "action_result.data.*.classification",
           "data_type": "string",
-          "example_values": [
-            "benign",
-            "malicious"
-          ]
+          "example_values": ["benign", "malicious"]
         },
         {
           "data_path": "action_result.data.*.first_seen",
           "data_type": "string",
-          "example_values": [
-            "2020-12-25"
-          ]
+          "example_values": ["2020-12-25"]
         },
         {
           "data_path": "action_result.data.*.ip",
           "data_type": "string",
-          "contains": [
-            "ip"
-          ],
-          "example_values": [
-            "71.6.135.131"
-          ]
+          "contains": ["ip"],
+          "example_values": ["71.6.135.131"]
         },
         {
           "data_path": "action_result.data.*.last_seen",
           "data_type": "string",
-          "example_values": [
-            "2020-12-25"
-          ]
+          "example_values": ["2020-12-25"]
         },
         {
           "data_path": "action_result.data.*.metadata.*",
@@ -1332,33 +1030,22 @@
         {
           "data_path": "action_result.data.*.seen",
           "data_type": "boolean",
-          "example_values": [
-            true,
-            false
-          ]
+          "example_values": [true, false]
         },
         {
           "data_path": "action_result.data.*.tags.*",
           "data_type": "string",
-          "example_values": [
-            "Mirai",
-            "Telnet Worm"
-          ]
+          "example_values": ["Mirai", "Telnet Worm"]
         },
         {
           "data_path": "action_result.status",
           "data_type": "string",
-          "example_values": [
-            "success",
-            "failed"
-          ]
+          "example_values": ["success", "failed"]
         },
         {
           "data_path": "action_result.message",
           "data_type": "string",
-          "example_values":[
-            "GNQL Query action successfully completed"
-          ]
+          "example_values": ["GNQL Query action successfully completed"]
         },
         {
           "data_path": "action_result.summary",
@@ -1367,16 +1054,12 @@
         {
           "data_path": "summary.total_objects",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         },
         {
           "data_path": "summary.total_objects_successful",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         }
       ],
       "render": {
@@ -1395,7 +1078,7 @@
       "read_only": true,
       "parameters": {
         "ips": {
-                    "description": "IPs to query(comma-separated)",
+          "description": "IPs to query(comma-separated)",
           "data_type": "string",
           "required": true,
           "order": 0
@@ -1405,82 +1088,54 @@
         {
           "data_path": "action_result.parameter.ips",
           "data_type": "string",
-          "example_values": [
-            "71.6.135.131,111.111.111.111"
-          ]
+          "example_values": ["71.6.135.131,111.111.111.111"]
         },
         {
           "data_path": "action_result.data.*.*.ip",
           "data_type": "string",
-          "contains": [
-            "ip"
-          ],
-          "example_values": [
-            "115.60.214.27"
-                    ]
+          "contains": ["ip"],
+          "example_values": ["115.60.214.27"]
         },
         {
-            "data_path": "action_result.data.*.*.trust_level",
-            "data_type": "string",
-            "example_values": [
-                "1 - Reasonably Ignore"
-            ]
+          "data_path": "action_result.data.*.*.trust_level",
+          "data_type": "string",
+          "example_values": ["1 - Reasonably Ignore"]
         },
         {
           "data_path": "action_result.data.*.*.visualization",
           "data_type": "string",
-          "contains": [
-            "url"
-          ],
-          "example_values": [
-            "https://viz.greynoise.io/ip/1.1.1.1"
-                    ]
+          "contains": ["url"],
+          "example_values": ["https://viz.greynoise.io/ip/1.1.1.1"]
         },
         {
           "data_path": "action_result.data.*.*.business_service_intelligence.found",
           "data_type": "boolean",
-          "example_values": [
-            false,
-            true
-                    ]
+          "example_values": [false, true]
         },
         {
           "data_path": "action_result.data.*.*.business_service_intelligence.trust_level",
           "data_type": "string",
-          "example_values": [
-            "trusted"
-                    ]
+          "example_values": ["trusted"]
         },
         {
           "data_path": "action_result.data.*.*.internet_scanner_intelligence.found",
           "data_type": "boolean",
-          "example_values": [
-            true,
-            false
-                    ]
+          "example_values": [true, false]
         },
         {
           "data_path": "action_result.data.*.*.internet_scanner_intelligence.classification",
           "data_type": "string",
-          "example_values": [
-            "malicious",
-            "benign"
-                    ]
+          "example_values": ["malicious", "benign"]
         },
         {
           "data_path": "action_result.status",
           "data_type": "string",
-          "example_values": [
-            "success",
-            "failed"
-          ]
+          "example_values": ["success", "failed"]
         },
         {
           "data_path": "action_result.message",
           "data_type": "string",
-          "example_values": [
-            "Lookup IP action successfully completed"
-          ]
+          "example_values": ["Lookup IP action successfully completed"]
         },
         {
           "data_path": "action_result.summary",
@@ -1489,16 +1144,12 @@
         {
           "data_path": "summary.total_objects",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         },
         {
           "data_path": "summary.total_objects_successful",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         }
       ],
       "render": {
@@ -1551,9 +1202,7 @@
         "ip": {
           "description": "IP to get timeline information",
           "data_type": "string",
-          "contains": [
-            "ip"
-          ],
+          "contains": ["ip"],
           "primary": true,
           "required": true,
           "order": 0
@@ -1582,7 +1231,7 @@
           "order": 2
         },
         "granularity": {
-                    "description": "Granularity of activity date ranges .This can be either in hour(1h) or in day(1d)",
+          "description": "Granularity of activity date ranges .This can be either in hour(1h) or in day(1d)",
           "data_type": "string",
           "default": "1d",
           "order": 3
@@ -1592,129 +1241,89 @@
         {
           "data_path": "action_result.parameter.ip",
           "data_type": "string",
-          "contains": [
-            "ip"
-          ],
-          "example_values": [
-            "71.6.135.131"
-          ]
+          "contains": ["ip"],
+          "example_values": ["71.6.135.131"]
         },
         {
           "data_path": "action_result.parameter.days",
           "data_type": "numeric",
-          "example_values": [
-            30
-          ]
+          "example_values": [30]
         },
         {
           "data_path": "action_result.parameter.field",
           "data_type": "string",
-          "example_values": [
-            "classification"
-          ]
+          "example_values": ["classification"]
         },
         {
           "data_path": "action_result.parameter.granularity",
           "data_type": "string",
-          "example_values": [
-            "4d"
-          ]
+          "example_values": ["4d"]
         },
         {
           "data_path": "action_result.data.*.metadata.ip",
           "data_type": "string",
-          "contains": [
-            "ip"
-          ],
-          "example_values": [
-            "41.65.223.220"
-          ]
+          "contains": ["ip"],
+          "example_values": ["41.65.223.220"]
         },
         {
-            "data_path": "action_result.data.*.ip",
-            "data_type": "string",
-            "example_values": [
-                "65.18.121.215"
-            ]
+          "data_path": "action_result.data.*.ip",
+          "data_type": "string",
+          "example_values": ["65.18.121.215"]
         },
         {
           "data_path": "action_result.data.*.metadata.field",
           "data_type": "string",
-          "example_values": [
-            "classification"
-          ]
+          "example_values": ["classification"]
         },
         {
           "data_path": "action_result.data.*.metadata.first_seen",
           "data_type": "string",
-          "example_values": [
-            "2020-02-01"
-          ]
+          "example_values": ["2020-02-01"]
         },
         {
           "data_path": "action_result.data.*.metadata.start",
           "data_type": "string",
-          "example_values": [
-            "2025-05-08T04:46:22.037900129Z"
-          ]
+          "example_values": ["2025-05-08T04:46:22.037900129Z"]
         },
         {
           "data_path": "action_result.data.*.metadata.end",
           "data_type": "string",
-          "example_values": [
-            "2025-08-06T04:46:22.037900129Z"
-          ]
+          "example_values": ["2025-08-06T04:46:22.037900129Z"]
         },
         {
           "data_path": "action_result.data.*.metadata.granularity",
           "data_type": "string",
-          "example_values": [
-            "4d"
-          ]
+          "example_values": ["4d"]
         },
         {
           "data_path": "action_result.data.*.metadata.metric",
           "data_type": "string",
-          "example_values": [
-            "count"
-          ]
+          "example_values": ["count"]
         },
         {
           "data_path": "action_result.data.*.results.*.data",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         },
         {
           "data_path": "action_result.data.*.results.*.label",
           "data_type": "string",
-          "example_values": [
-            "suspicious",
-            "malicious"
-          ]
+          "example_values": ["suspicious", "malicious"]
         },
         {
           "data_path": "action_result.data.*.results.*.timestamp",
           "data_type": "string",
-          "example_values": [
-            "2025-06-25T00:00:00Z"
-          ]
+          "example_values": ["2025-06-25T00:00:00Z"]
         },
         {
           "data_path": "action_result.status",
           "data_type": "string",
-          "example_values": [
-            "success",
-            "failed"
-          ]
+          "example_values": ["success", "failed"]
         },
         {
           "data_path": "action_result.message",
           "data_type": "string",
-          "example_values": [
-            "Lookup IP Timeline action successfully completed"
-          ]
+          "example_values": ["Lookup IP Timeline action successfully completed"]
         },
         {
           "data_path": "action_result.summary",
@@ -1723,16 +1332,12 @@
         {
           "data_path": "summary.total_objects",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         },
         {
           "data_path": "summary.total_objects_successful",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         }
       ],
       "render": {
@@ -1744,214 +1349,161 @@
     },
     {
       "action": "get cve details",
-            "description": "Retrieve details about a specific Common Vulnerabilities and Exposures (CVE)",
+      "description": "Retrieve details about a specific Common Vulnerabilities and Exposures (CVE)",
       "type": "investigate",
       "identifier": "get_cve_details",
       "read_only": true,
       "parameters": {
         "cve_id": {
-                    "description": "The CVE ID to query (e.g., CVE-2024-12345)",
+          "description": "The CVE ID to query (e.g., CVE-2024-12345)",
           "data_type": "string",
           "required": true,
-                    "primary": true,
-                    "order": 0,
-                    "contains": [
-                        "cve"
-                    ]
+          "primary": true,
+          "order": 0,
+          "contains": ["cve"]
         }
       },
       "output": [
         {
           "data_path": "action_result.parameter.cve_id",
           "data_type": "string",
-          "contains": [
-                        "cve"
-          ],
+          "contains": ["cve"],
+          "example_values": ["71.6.135.131"]
+        },
+        {
+          "data_path": "action_result.data.*.id",
+          "data_type": "string",
+          "example_values": ["CVE-2022-40684"]
+        },
+        {
+          "data_path": "action_result.data.*.details.vendor",
+          "data_type": "string",
+          "example_values": ["Fortinet"]
+        },
+        {
+          "data_path": "action_result.data.*.details.product",
+          "data_type": "string",
+          "example_values": ["Multiple Products"]
+        },
+        {
+          "data_path": "action_result.data.*.details.cve_cvss_score",
+          "data_type": "numeric",
+          "example_values": [9.8]
+        },
+        {
+          "data_path": "action_result.data.*.details.vulnerability_name",
+          "data_type": "string",
           "example_values": [
-            "71.6.135.131"
+            "Fortinet Multiple Products Authentication Bypass Vulnerability"
           ]
         },
         {
-            "data_path": "action_result.data.*.id",
-            "data_type": "string",
-            "example_values": [
-                "CVE-2022-40684"
-            ]
+          "data_path": "action_result.data.*.details.published_to_nist_nvd",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.details.vendor",
-            "data_type": "string",
-            "example_values": [
-                "Fortinet"
-            ]
+          "data_path": "action_result.data.*.details.vulnerability_description",
+          "data_type": "string",
+          "example_values": [
+            "An authentication bypass using an alternate path or channel [CWE-288] in Fortinet FortiOS version 7.2.0 through 7.2.1 and 7.0.0 through 7.0.6, FortiProxy version 7.2.0 and version 7.0.0 through 7.0.6 and FortiSwitchManager version 7.2.0 and 7.0.0 allows an unauthenticated atttacker to perform operations on the administrative interface via specially crafted HTTP or HTTPS requests."
+          ]
         },
         {
-            "data_path": "action_result.data.*.details.product",
-            "data_type": "string",
-            "example_values": [
-                "Multiple Products"
-            ]
+          "data_path": "action_result.data.*.timeline.cve_published_date",
+          "data_type": "string",
+          "example_values": ["2022-10-18T14:15:09Z"]
         },
         {
-            "data_path": "action_result.data.*.details.cve_cvss_score",
-            "data_type": "numeric",
-            "example_values": [
-                9.8
-            ]
+          "data_path": "action_result.data.*.timeline.cisa_kev_date_added",
+          "data_type": "string",
+          "example_values": ["2022-10-11T00:00:00Z"]
         },
         {
-            "data_path": "action_result.data.*.details.vulnerability_name",
-            "data_type": "string",
-            "example_values": [
-                "Fortinet Multiple Products Authentication Bypass Vulnerability"
-            ]
+          "data_path": "action_result.data.*.timeline.cve_last_updated_date",
+          "data_type": "string",
+          "example_values": ["2025-02-19T19:37:18Z"]
         },
         {
-            "data_path": "action_result.data.*.details.published_to_nist_nvd",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.timeline.first_known_published_date",
+          "data_type": "string",
+          "example_values": ["2022-10-10T00:00:00Z"]
         },
         {
-            "data_path": "action_result.data.*.details.vulnerability_description",
-            "data_type": "string",
-            "example_values": [
-                "An authentication bypass using an alternate path or channel [CWE-288] in Fortinet FortiOS version 7.2.0 through 7.2.1 and 7.0.0 through 7.0.6, FortiProxy version 7.2.0 and version 7.0.0 through 7.0.6 and FortiSwitchManager version 7.2.0 and 7.0.0 allows an unauthenticated atttacker to perform operations on the administrative interface via specially crafted HTTP or HTTPS requests."
-            ]
+          "data_path": "action_result.data.*.exploitation_stats.number_of_available_exploits",
+          "data_type": "numeric",
+          "example_values": [30]
         },
         {
-            "data_path": "action_result.data.*.timeline.cve_published_date",
-            "data_type": "string",
-            "example_values": [
-                "2022-10-18T14:15:09Z"
-            ]
+          "data_path": "action_result.data.*.exploitation_stats.number_of_botnets_exploiting_vulnerability",
+          "data_type": "numeric"
         },
         {
-            "data_path": "action_result.data.*.timeline.cisa_kev_date_added",
-            "data_type": "string",
-            "example_values": [
-                "2022-10-11T00:00:00Z"
-            ]
+          "data_path": "action_result.data.*.exploitation_stats.number_of_threat_actors_exploiting_vulnerability",
+          "data_type": "numeric",
+          "example_values": [4]
         },
         {
-            "data_path": "action_result.data.*.timeline.cve_last_updated_date",
-            "data_type": "string",
-            "example_values": [
-                "2025-02-19T19:37:18Z"
-            ]
+          "data_path": "action_result.data.*.exploitation_details.epss_score",
+          "data_type": "numeric",
+          "example_values": [0.94427]
         },
         {
-            "data_path": "action_result.data.*.timeline.first_known_published_date",
-            "data_type": "string",
-            "example_values": [
-                "2022-10-10T00:00:00Z"
-            ]
+          "data_path": "action_result.data.*.exploitation_details.attack_vector",
+          "data_type": "string",
+          "example_values": ["NETWORK"]
         },
         {
-            "data_path": "action_result.data.*.exploitation_stats.number_of_available_exploits",
-            "data_type": "numeric",
-            "example_values": [
-                30
-            ]
+          "data_path": "action_result.data.*.exploitation_details.exploit_found",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.exploitation_stats.number_of_botnets_exploiting_vulnerability",
-            "data_type": "numeric"
+          "data_path": "action_result.data.*.exploitation_details.exploitation_registered_in_kev",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.exploitation_stats.number_of_threat_actors_exploiting_vulnerability",
-            "data_type": "numeric",
-            "example_values": [
-                4
-            ]
+          "data_path": "action_result.data.*.exploitation_activity.activity_seen",
+          "data_type": "boolean",
+          "example_values": [true, false]
         },
         {
-            "data_path": "action_result.data.*.exploitation_details.epss_score",
-            "data_type": "numeric",
-            "example_values": [
-                0.94427
-            ]
+          "data_path": "action_result.data.*.exploitation_activity.benign_ip_count_1d",
+          "data_type": "numeric"
         },
         {
-            "data_path": "action_result.data.*.exploitation_details.attack_vector",
-            "data_type": "string",
-            "example_values": [
-                "NETWORK"
-            ]
+          "data_path": "action_result.data.*.exploitation_activity.threat_ip_count_1d",
+          "data_type": "numeric",
+          "example_values": [4]
         },
         {
-            "data_path": "action_result.data.*.exploitation_details.exploit_found",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.exploitation_activity.benign_ip_count_10d",
+          "data_type": "numeric"
         },
         {
-            "data_path": "action_result.data.*.exploitation_details.exploitation_registered_in_kev",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.exploitation_activity.benign_ip_count_30d",
+          "data_type": "numeric"
         },
         {
-            "data_path": "action_result.data.*.exploitation_activity.activity_seen",
-            "data_type": "boolean",
-            "example_values": [
-                true,
-                false
-            ]
+          "data_path": "action_result.data.*.exploitation_activity.threat_ip_count_10d",
+          "data_type": "numeric",
+          "example_values": [12]
         },
         {
-            "data_path": "action_result.data.*.exploitation_activity.benign_ip_count_1d",
-            "data_type": "numeric"
-        },
-        {
-            "data_path": "action_result.data.*.exploitation_activity.threat_ip_count_1d",
-            "data_type": "numeric",
-            "example_values": [
-                4
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.exploitation_activity.benign_ip_count_10d",
-            "data_type": "numeric"
-        },
-        {
-            "data_path": "action_result.data.*.exploitation_activity.benign_ip_count_30d",
-            "data_type": "numeric"
-        },
-        {
-            "data_path": "action_result.data.*.exploitation_activity.threat_ip_count_10d",
-            "data_type": "numeric",
-            "example_values": [
-                12
-            ]
-        },
-        {
-            "data_path": "action_result.data.*.exploitation_activity.threat_ip_count_30d",
-            "data_type": "numeric",
-            "example_values": [
-                22
-            ]
+          "data_path": "action_result.data.*.exploitation_activity.threat_ip_count_30d",
+          "data_type": "numeric",
+          "example_values": [22]
         },
         {
           "data_path": "action_result.status",
           "data_type": "string",
-          "example_values": [
-            "success",
-            "failed"
-          ]
+          "example_values": ["success", "failed"]
         },
         {
           "data_path": "action_result.message",
           "data_type": "string",
-          "example_values":[
-            "Get CVE Details action successfully completed"
-          ]
+          "example_values": ["Get CVE Details action successfully completed"]
         },
         {
           "data_path": "action_result.summary",
@@ -1960,16 +1512,12 @@
         {
           "data_path": "summary.total_objects",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         },
         {
           "data_path": "summary.total_objects_successful",
           "data_type": "numeric",
-          "example_values": [
-            1
-          ]
+          "example_values": [1]
         }
       ],
       "render": {
