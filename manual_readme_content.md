@@ -1,16 +1,16 @@
 ## ⚠️ Playbook Backward Compatibility
 
 - GreyNoise SDK version is upgraded to v3.0.1 in connector version 3.0.0.
-- With this version, There are changes in:
+- With this version, there are changes in:
 
-1. Data path for various actions.
+1. Data paths for various actions.
 1. CEF fields ingested via on-poll action.
-1. Functionality of **community lookup ip** and **riot lookup ip** can be achived via **ip reputation** action.
+1. Functionality of **community lookup ip** and **riot lookup ip** can be achieved via **ip reputation** action.
 1. **similar noise ips** action is removed.
 
 ## Configure Webhook in Connector
 
-- Connector version 3.0.0 supports receving data via webook from GreyNoise. The detailed steps to configure webhooks in connector are available below:
+- Connector version 3.0.0 supports receiving data via webhook from GreyNoise. The detailed steps to configure webhooks in connector are available below:
 
 ### Configure Administration Settings
 
@@ -19,7 +19,7 @@
 
 ### Configure Webhook in Connector
 
-1. The webhook can be enable from Webhook Settings tab in Asset Configuration page of connector.
+1. The webhook can be enabled from the Webhook Settings tab in Asset Configuration page of connector.
 1. On the Webhook Settings tab, enable the "Enable webhooks for this asset" checkbox to enable the webhook for this asset. Modifying any other settings in this tab may cause issues in data ingestion.
 1. After saving the Asset Configuration page, the webhook URL will be displayed in the Webhook Settings tab under "URL for this webhook" field.
 1. Copy the webhook URL to add it to GreyNoise.
@@ -31,7 +31,7 @@
 1. Before setting up the webhook in GreyNoise, the URL can be tested using Postman, curl, or similar tools.
 1. Test the webhook URL by sending a POST request to it.
 1. The request body should be in JSON format and must include the following details:
-   - To Test Alert ingestion webhook, send a POST request to the webhook URL with the following JSON body:
+   - To Test Alert ingestion via webhook, send a POST request to the webhook URL with the following JSON body:
      ```json
      {
          "timestamp": "2023-10-05T14:55:00Z",
@@ -64,7 +64,7 @@
          "alert_link": "https://viz.example.com/account/alerts?alert=12345"
      }
      ```
-   - To test IP Feed ingestion webhook, send a POST request to the webhook URL with the following JSON body:
+   - To test IP Feed ingestion via webhook, send a POST request to the webhook URL with the following JSON body:
      ```json
      {
          "event_type": "ip-classification-change",
@@ -75,7 +75,7 @@
          "workspace_id": "e4a5be2e-1be0-4105-a5e2-51e6a5525fa0"
      }
      ```
-   - To test CVE Feed ingestion webhook, send a POST request to the webhook URL with the following JSON body:
+   - To test CVE Feed ingestion via webhook, send a POST request to the webhook URL with the following JSON body:
      ```json
      {
          "cve": "CVE-2022-31717",
@@ -115,20 +115,20 @@ To configure a webhook in GreyNoise:
 
 ### Alerts Ingestion
 
-- For every alert triggerd by GreyNoise, new container/event will be created in Splunk SOAR instance.
-- Container/event name will be in format: "GreyNoise Alert: {Alert Name}: {Alert Type}: {Alert Timestamp} UTC"
-- Connector will also add tag `greynoise-alert` to the container/event, which can be use to filter the alerts in Playbooks.
+- For every alert triggered by GreyNoise, a new container/event will be created in Splunk SOAR instance.
+- Container/event name will be in the format: "GreyNoise Alert: {Alert Name}: {Alert Type}: {Alert Timestamp} UTC"
+- Connector will also add tag `greynoise-alert` to the container/event, which can be used to filter the alerts in Playbooks.
 - For all the details about IP address, separate artifact will be created.
-- Artifact will also have tag `greynoise-alert`, which can be use to filter the IP addresses in Playbooks.
-- NOTE: Currently only 10 recent IP addresses will be ingested for an alert due to limitiation from GreyNoise.
+- Artifact will also have tag `greynoise-alert`, which can be used to filter the IP addresses in Playbooks.
+- Note: Currently only 10 recent IP addresses will be ingested for an alert due to a limitation from GreyNoise.
 
 ### Feeds Ingestion
 
-- For feeds a single container/event will be created in Splunk SOAR instance for particular day.
-- Container/event name will be in format: "GreyNoise Feed: {Current Date} UTC"
-- Connector will also add tag `greynoise-feed` to the container/event, which can be use to filter the feeds in Playbooks.
+- For feeds, a single container/event will be created in Splunk SOAR instance for a particular day.
+- Container/event name will be in the format: "GreyNoise Feed: {Current Date} UTC"
+- Connector will also add tag `greynoise-feed` to the container/event, which can be used to filter the feeds in Playbooks.
 - For all the details about IP Classification Change and CVE Status Change, separate artifacts will be created.
-- Artifact will have tag `greynoise-feed-ip` for artifacts create via IP Classification Change and `greynoise-feed-cve` for artifacts create via CVE Status Change.
+- Artifact will have tag `greynoise-feed-ip` for artifacts created via IP Classification Change and `greynoise-feed-cve` for artifacts created via CVE Status Change.
 
 ## Playbooks
 

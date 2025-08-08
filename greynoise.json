@@ -1543,8 +1543,8 @@
         },
         {
             "action": "noise ip timeline",
-            "description": "Lookup Similar internet scanner IP using GreyNoise's IP Similarity tool",
-            "verbose": "The GreyNoise IP Similarity tool allows for analysts to identify IP addresses within the GreyNoise internet scanning dataset that are using a similar scanning profile.",
+            "description": "GreyNoise IP Timeline lookup for events matching a specific field",
+            "verbose": "The GreyNoise IP Timeline shows historical data on an IP address filtered by a specific field.",
             "type": "investigate",
             "identifier": "lookup_ip_timeline",
             "read_only": true,
