@@ -90,7 +90,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.ip",
+                    "data_path": "action_result.data.*.ip",
                     "data_type": "string",
                     "contains": [
                         "ip"
@@ -100,14 +100,14 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.trust_level",
+                    "data_path": "action_result.data.*.trust_level",
                     "data_type": "string",
                     "example_values": [
                         "1 - Reasonably Ignore"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.visualization",
+                    "data_path": "action_result.data.*.visualization",
                     "data_type": "string",
                     "contains": [
                         "url"
@@ -117,7 +117,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.business_service_intelligence.found",
+                    "data_path": "action_result.data.*.business_service_intelligence.found",
                     "data_type": "boolean",
                     "example_values": [
                         false,
@@ -125,14 +125,14 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.business_service_intelligence.trust_level",
+                    "data_path": "action_result.data.*.business_service_intelligence.trust_level",
                     "data_type": "string",
                     "example_values": [
                         "trusted"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.internet_scanner_intelligence.found",
+                    "data_path": "action_result.data.*.internet_scanner_intelligence.found",
                     "data_type": "boolean",
                     "example_values": [
                         true,
@@ -140,7 +140,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.internet_scanner_intelligence.classification",
+                    "data_path": "action_result.data.*.internet_scanner_intelligence.classification",
                     "data_type": "string",
                     "example_values": [
                         "malicious",
@@ -832,7 +832,7 @@
                     "order": 1
                 },
                 "exclude_raw": {
-                    "description": "Exclude the raw_data details from the query response",
+                    "description": "if true, the raw data will not be included in the response",
                     "data_type": "boolean",
                     "default": false,
                     "order": 2
@@ -1411,7 +1411,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.ip",
+                    "data_path": "action_result.data.*.ip",
                     "data_type": "string",
                     "contains": [
                         "ip"
@@ -1421,14 +1421,14 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.trust_level",
+                    "data_path": "action_result.data.*.trust_level",
                     "data_type": "string",
                     "example_values": [
                         "1 - Reasonably Ignore"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.visualization",
+                    "data_path": "action_result.data.*.visualization",
                     "data_type": "string",
                     "contains": [
                         "url"
@@ -1438,7 +1438,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.business_service_intelligence.found",
+                    "data_path": "action_result.data.*.business_service_intelligence.found",
                     "data_type": "boolean",
                     "example_values": [
                         false,
@@ -1446,14 +1446,14 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.business_service_intelligence.trust_level",
+                    "data_path": "action_result.data.*.business_service_intelligence.trust_level",
                     "data_type": "string",
                     "example_values": [
                         "trusted"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.internet_scanner_intelligence.found",
+                    "data_path": "action_result.data.*.internet_scanner_intelligence.found",
                     "data_type": "boolean",
                     "example_values": [
                         true,
@@ -1461,7 +1461,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.*.internet_scanner_intelligence.classification",
+                    "data_path": "action_result.data.*.internet_scanner_intelligence.classification",
                     "data_type": "string",
                     "example_values": [
                         "malicious",

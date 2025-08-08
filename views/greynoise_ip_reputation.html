@@ -209,7 +209,7 @@ and limitations under the License.
                 <td>
                   <a href="javascript:;"
                      onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ result.0.ip }}' }], 0, {{ container.id }}, null, false);">
-                    <span class="fa fa-caret-down" style="font-size: smaller;"></span> IP: {{ result.0.ip }}
+                    {{ result.0.ip }} <span class="fa fa-caret-down" style="font-size: smaller;"></span>
                   </a>
                 </td>
                 <td>{{ result.0.internet_scanner_intelligence.actor | default:"None" }}</td>
@@ -263,7 +263,7 @@ and limitations under the License.
                 <td>
                   <a href="javascript:;"
                      onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ result.0.ip }}' }], 0, {{ container.id }}, null, false);">
-                    <span class="fa fa-caret-down" style="font-size: smaller;"></span> IP: {{ result.0.ip }}
+                    {{ result.0.ip }}<span class="fa fa-caret-down" style="font-size: smaller;"></span>
                   </a>
                 </td>
                 <td>{{ result.0.business_service_intelligence.name | default:"-" }}</td>

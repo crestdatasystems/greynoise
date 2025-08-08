@@ -44,7 +44,7 @@ class GreyNoiseConnector(BaseConnector):
         self._session = None
         self._app_version = None
         self._api_key = None
-        self._integration_name = "splunk-soar-v3.0.0"
+        self._integration_name = f"splunk-soar-v{self.get_app_json().get("app_version")}"
 
     def _get_error_message_from_exception(self, e):
         """
@@ -205,9 +205,6 @@ class GreyNoiseConnector(BaseConnector):
         return action_result, query_success, message
 
     def _greynoise_multi_ip(self, ip, action_result):
-        # remove any spaces before querying
-        ip = ip.replace(" ", "")
-
         query_success = True
 
         try:
@@ -217,7 +214,9 @@ class GreyNoiseConnector(BaseConnector):
             message = f"{ERROR_MESSAGE}: {self._get_error_message_from_exception(e)}"
             return action_result, query_success, message
 
-        action_result.add_data(result_data)
+        for i in result_data:
+            action_result.add_data(i)
+
         message = LOOKUP_IPS_SUCCESS_MESSAGE
 
         try:
