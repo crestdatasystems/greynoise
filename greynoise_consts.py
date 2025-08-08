@@ -59,3 +59,26 @@ GREYNOISE_FEED_IP_TAG = "greynoise-feed-ip"
 HTTP_OK = 200
 HTTP_BAD_REQUEST = 400
 HTTP_METHOD_NOT_ALLOWED = 405
+DEFAULT_SIZE_FOR_GNQL_QUERY = 100
+PAGINATOR_MAX_SIZE = 1000
+
+TIMELINE_VALUE_LIST = [
+    "classification",
+    "source_org",
+    "source_asn",
+    "source_rdns",
+    "http_path",
+    "http_user_agent",
+    "destination_port",
+    "tag_ids",
+]
+
+LOOKUP_IP_SUCCESS_MESSAGE = "Lookup IP action successfully completed"
+IP_REPUTATION_SUCCESS_MESSAGE = "IP Reputation action successfully completed"
+LOOKUP_IPS_SUCCESS_MESSAGE = "Lookup IPs action successfully completed"
+TEST_CONNECTIVITY_SUCCESS_MESSAGE = "Test Connectivity Passed"
+GET_CVE_DETAILS_SUCCESS_MESSAGE = "Get CVE Details action successfully completed"
+GNQL_QUERY_SUCCESS_MESSAGE = "GNQL Query action successfully completed"
+LOOKUP_IP_TIMELINE_SUCCESS_MESSAGE = "Lookup IP Timeline action successfully completed"
+ON_POLL_DEFAULT_QUERY_ERROR_MESSAGE = "Default on poll query unchanged, please enter a valid GNQL query"
+NO_DATA_FOUND_MESSAGE = "No Data Found"
