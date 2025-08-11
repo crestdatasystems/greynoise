@@ -225,7 +225,6 @@ class GreyNoiseConnector(BaseConnector):
 
         try:
             results = self._api_client.test_connection()
-            self.save_progress("Validated API Key. License type: {}, Expiration: {}".format(results["offering"], results["expiration"]))
         except Exception as e:
             self.save_progress(f"Test Connectivity Failed with error: {self._get_error_message_from_exception(e)}")
             return action_result.set_status(phantom.APP_ERROR)
