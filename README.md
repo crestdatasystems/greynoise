@@ -15,8 +15,10 @@ This app provides investigative capabilities using the GreyNoise plugin and supp
 
 1. Data paths for various actions.
 1. CEF fields ingested via on-poll action.
-1. Functionality of **community lookup ip** and **riot lookup ip** can be achieved via **ip reputation** action.
-1. **similar noise ips** action is removed.
+1. Removed the following actions:
+   - community lookup ip (use IP Reputation action instead)
+   - riot lookup ip (use IP Reputation action instead)
+   - similar noise ips
 
 ## Configure Webhook in Connector
 
@@ -500,9 +502,9 @@ The GreyNoise IP Timeline shows historical data on an IP address filtered by a s
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **ip** | required | IP to get timeline information | string | `ip` |
-**days** | optional | Number of days to show data for | numeric | |
+**days** | optional | Number of days to show data for (Default: 30) | numeric | |
 **field** | required | Field over which to show activity breakdown | string | |
-**granularity** | optional | Granularity of activity date ranges .This can be either in hour(1h) or in day(1d) | string | |
+**granularity** | optional | Granularity of activity date ranges .This can be either in hour(1h) or in day(1d) (Default: 1d) | string | |
 
 #### Action Output
 

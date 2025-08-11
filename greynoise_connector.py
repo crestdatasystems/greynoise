@@ -159,16 +159,6 @@ class GreyNoiseConnector(BaseConnector):
         Returns:
             bool: True if validation passes, False otherwise
         """
-        TIMELINE_VALUE_LIST = [
-            "classification",
-            "source_org",
-            "source_asn",
-            "source_rdns",
-            "http_path",
-            "http_user_agent",
-            "destination_port",
-            "tag_ids",
-        ]
 
         if field not in TIMELINE_VALUE_LIST:
             action_result.set_status(phantom.APP_ERROR, f"Invalid field parameter. Must be one of: {', '.join(TIMELINE_VALUE_LIST)}")
@@ -235,7 +225,6 @@ class GreyNoiseConnector(BaseConnector):
 
         try:
             results = self._api_client.test_connection()
-            self.save_progress("Validated API Key. License type: {}, Expiration: {}".format(results["offering"], results["expiration"]))
         except Exception as e:
             self.save_progress(f"Test Connectivity Failed with error: {self._get_error_message_from_exception(e)}")
             return action_result.set_status(phantom.APP_ERROR)
@@ -403,29 +392,26 @@ class GreyNoiseConnector(BaseConnector):
         ip = param["ip"]
         field = param.get("field", "classification")
 
+        # Optional parameters
+        days = param.get("days", 30)  # default to 30
+        granularity = param.get("granularity", "1d")  # default to 1d
+
+        # validate the days parameter
+        ret_val_days, days = self._validate_integer(action_result, days, "days", allow_zero=True)
+        if phantom.is_fail(ret_val_days):
+            return action_result.get_status()
+
         # Validate field parameter
         if not self._validate_timeline_field(field, action_result):
             return action_result
 
-        # Build optional parameters dict
-        api_params = {}
-
-        # Only add parameters if they're provided
-        if "days" in param:
-            api_params["days"] = param["days"]
-        if "granularity" in param:
-            api_params["granularity"] = param["granularity"]
         try:
-            results = self._api_client.timeline(ip, field=field, **api_params)
+            results = self._api_client.timeline(ip, field=field, days=days, granularity=granularity)
             action_result.add_data(results)
         except Exception as e:
             error_message = self._get_error_message_from_exception(e)
-            if "403" in error_message:
-                results = {"ip": param["ip"], "message": "Not allowed.", "activity": []}
-                action_result.add_data(results)
-                return action_result.set_status(phantom.APP_SUCCESS, NOISE_IP_TIMELINE_403_MESSAGE)
-            else:
-                return action_result.set_status(phantom.APP_ERROR, urllib.parse.unquote(error_message))
+            return action_result.set_status(phantom.APP_ERROR, error_message)
+
         return action_result.set_status(phantom.APP_SUCCESS, NOISE_IP_TIMELINE_SUCCESS_MESSAGE)
 
     def _lookup_ips(self, param):
