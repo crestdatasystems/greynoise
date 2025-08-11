@@ -16,8 +16,8 @@ This app provides investigative capabilities using the GreyNoise plugin and supp
 1. Data paths for various actions.
 1. CEF fields ingested via on-poll action.
 1. Removed the following actions:
-   - community lookup ip (use IP Reputation action instead)
-   - riot lookup ip (use IP Reputation action instead)
+   - community lookup ip (use ip reputation action instead)
+   - riot lookup ip (use ip reputation action instead)
    - similar noise ips
 
 ## Configure Webhook in Connector
