@@ -500,9 +500,9 @@ The GreyNoise IP Timeline shows historical data on an IP address filtered by a s
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **ip** | required | IP to get timeline information | string | `ip` |
-**days** | optional | Number of days to show data for | numeric | |
+**days** | optional | Number of days to show data for (Default: 30) | numeric | |
 **field** | required | Field over which to show activity breakdown | string | |
-**granularity** | optional | Granularity of activity date ranges .This can be either in hour(1h) or in day(1d) | string | |
+**granularity** | optional | Granularity of activity date ranges .This can be either in hour(1h) or in day(1d) (Default: 1d) | string | |
 
 #### Action Output
 

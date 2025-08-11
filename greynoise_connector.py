@@ -394,8 +394,8 @@ class GreyNoiseConnector(BaseConnector):
         field = param.get("field", "classification")
 
         # Optional parameters
-        days = param.get("days", 30) # default to 30
-        granularity = param.get("granularity", "1d") # default to 1d
+        days = param.get("days", 30)  # default to 30
+        granularity = param.get("granularity", "1d")  # default to 1d
 
         # validate the days parameter
         ret_val_days, days = self._validate_integer(action_result, days, "days", allow_zero=True)
