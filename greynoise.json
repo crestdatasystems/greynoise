@@ -1560,9 +1560,8 @@
                     "order": 0
                 },
                 "days": {
-                    "description": "Number of days to show data for",
+                    "description": "Number of days to show data for (Default: 30)",
                     "data_type": "numeric",
-                    "default": 1,
                     "order": 1
                 },
                 "field": {
@@ -1583,7 +1582,7 @@
                     "order": 2
                 },
                 "granularity": {
-                    "description": "Granularity of activity date ranges .This can be either in hour(1h) or in day(1d)",
+                    "description": "Granularity of activity date ranges .This can be either in hour(1h) or in day(1d) (Default: 1d)",
                     "data_type": "string",
                     "default": "1d",
                     "order": 3
