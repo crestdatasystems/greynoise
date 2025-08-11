@@ -5,7 +5,7 @@
 * Added following parameters in 'gnql_query' action:
     + exclude_raw
     + quick
-* Removed the following actions (now covered by the IP Reputation action):
-    + community lookup ip
+* Removed the following actions:
+    + community lookup ip (use IP Reputation action instead)
+    + riot lookup ip (use IP Reputation action instead)
     + similar noise ips
-    + riot lookup ip
