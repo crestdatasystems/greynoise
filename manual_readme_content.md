@@ -6,9 +6,9 @@
 1. Data paths for various actions.
 1. CEF fields ingested via on-poll action.
 1. Removed the following actions:
-    + community lookup ip (use IP Reputation action instead)
-    + riot lookup ip (use IP Reputation action instead)
-    + similar noise ips
+   - community lookup ip (use IP Reputation action instead)
+   - riot lookup ip (use IP Reputation action instead)
+   - similar noise ips
 
 ## Configure Webhook in Connector
 
