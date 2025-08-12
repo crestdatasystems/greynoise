@@ -175,8 +175,10 @@ and limitations under the License.
                     <td class="unknown">{{ ip.internet_scanner_intelligence.classification | default:"-" }}</td>
                   {% elif  ip.internet_scanner_intelligence.classification == "suspicious" %}
                     <td class="suspicious">{{ ip.internet_scanner_intelligence.classification | default:"-" }}</td>
-                  {% else %}
+                  {% elif ip.internet_scanner_intelligence.classification == "benign" %}
                     <td class="benign">{{ ip.internet_scanner_intelligence.classification | default:"-" }}</td>
+                  {% else %}
+                    <td>-</td>
                   {% endif %}
                   <td>{{ ip.internet_scanner_intelligence.spoofable }}</td>
                   <td>{{ ip.internet_scanner_intelligence.vpn_service | default:"-" }}</td>
