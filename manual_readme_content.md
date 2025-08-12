@@ -1,3 +1,16 @@
+This release incorporates API v3, designed to be easier to use and more powerful.
+It introduces support for new fields and capabilities to help you get more value from the GreyNoise platform. [Here’s a quick overview.](https://docs.greynoise.io/docs/api-v3-whats-new-vs-v2#/)
+
+As part of this update, we streamlined the offering by removing certain endpoints and deprecated some commands from our Splunk SOAR integration.
+The following commands are no longer supported in the GreyNoise for Splunk SOAR integration:
+
+* IP Timeline Daily Summary
+* IP Timeline Hourly Summary
+* IP Similarity
+
+If you have any questions about this transition, please don’t hesitate to reach out.
+You can find our updated API documentation linked [here](https://docs.greynoise.io/reference).
+
 ## ⚠️ Playbook Backward Compatibility
 
 - GreyNoise SDK version is upgraded to v3.0.1 in connector version 3.0.0.
