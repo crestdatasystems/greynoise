@@ -5,6 +5,10 @@
 * Added the following parameters to the 'gnql query' action:
   * exclude_raw
   * quick
+* Updated parameters in 'noise ip timeline' action:
+  * Removed: limit
+  * Added: field
+  * Added: granularity
 * Removed the following actions:
   * community lookup ip (use 'ip reputation' action instead)
   * riot lookup ip (use 'ip reputation' action instead)

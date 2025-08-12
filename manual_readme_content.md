@@ -1,12 +1,12 @@
 This release incorporates API v3, designed to be easier to use and more powerful.
 It introduces support for new fields and capabilities to help you get more value from the GreyNoise platform. [Here’s a quick overview.](https://docs.greynoise.io/docs/api-v3-whats-new-vs-v2#/)
 
-As part of this update, we streamlined the offering by removing certain endpoints and deprecated some commands from our Splunk SOAR integration.
-The following commands are no longer supported in the GreyNoise for Splunk SOAR integration:
+As part of this update, we streamlined the offering by removing certain endpoints and deprecated some actions from our Splunk SOAR integration.
+The following actions are no longer supported in the GreyNoise for Splunk SOAR integration:
 
-* IP Timeline Daily Summary
-* IP Timeline Hourly Summary
-* IP Similarity
+- community lookup ip (use ip reputation action instead)
+- riot lookup ip (use ip reputation action instead)
+- similar noise ips
 
 If you have any questions about this transition, please don’t hesitate to reach out.
 You can find our updated API documentation linked [here](https://docs.greynoise.io/reference).
@@ -15,13 +15,9 @@ You can find our updated API documentation linked [here](https://docs.greynoise.
 
 - GreyNoise SDK version is upgraded to v3.0.1 in connector version 3.0.0.
 - With this version, there are changes in:
-
-1. Data paths for various actions.
-1. CEF fields ingested via on-poll action.
-1. Removed the following actions:
-   - community lookup ip (use ip reputation action instead)
-   - riot lookup ip (use ip reputation action instead)
-   - similar noise ips
+  1. Data paths for various actions.
+  1. CEF fields ingested via on-poll action.
+  1. Certain actions have been removed (see above list); update playbooks to use the recommended replacement actions where applicable.
 
 ## Configure Webhook in Connector
 

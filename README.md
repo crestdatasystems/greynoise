@@ -8,17 +8,26 @@ Minimum Product Version: 6.4.1
 
 This app provides investigative capabilities using the GreyNoise plugin and supports receiving alerts and feeds via webhook from GreyNoise
 
+This release incorporates API v3, designed to be easier to use and more powerful.
+It introduces support for new fields and capabilities to help you get more value from the GreyNoise platform. [Here’s a quick overview.](https://docs.greynoise.io/docs/api-v3-whats-new-vs-v2#/)
+
+As part of this update, we streamlined the offering by removing certain endpoints and deprecated some actions from our Splunk SOAR integration.
+The following actions are no longer supported in the GreyNoise for Splunk SOAR integration:
+
+- community lookup ip (use ip reputation action instead)
+- riot lookup ip (use ip reputation action instead)
+- similar noise ips
+
+If you have any questions about this transition, please don’t hesitate to reach out.
+You can find our updated API documentation linked [here](https://docs.greynoise.io/reference).
+
 ## ⚠️ Playbook Backward Compatibility
 
 - GreyNoise SDK version is upgraded to v3.0.1 in connector version 3.0.0.
 - With this version, there are changes in:
-
-1. Data paths for various actions.
-1. CEF fields ingested via on-poll action.
-1. Removed the following actions:
-   - community lookup ip (use ip reputation action instead)
-   - riot lookup ip (use ip reputation action instead)
-   - similar noise ips
+  1. Data paths for various actions.
+  1. CEF fields ingested via on-poll action.
+  1. Certain actions have been removed (see above list); update playbooks to use the recommended replacement actions where applicable.
 
 ## Configure Webhook in Connector
 
@@ -242,6 +251,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.parameter.ip | string | `ip` | 8.8.8.8 |
 action_result.data.\*.ip | string | | 8.8.8.8 |
+action_result.data.\*.unseen_rep | boolean | | True |
 action_result.data.\*.trust_level | string | | 1 - Reasonably Ignore |
 action_result.data.\*.visualization | string | | https://viz.greynoise.io/ip/1.1.1.1 |
 action_result.data.\*.business_service_intelligence.name | string | | Google Public DNS |
