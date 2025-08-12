@@ -219,8 +219,10 @@ and limitations under the License.
                   <td class="unknown">unknown</td>
                 {% elif result.0.internet_scanner_intelligence.classification == "suspicious" %}
                   <td class="suspicious">suspicious</td>
+                {% elif result.0.internet_scanner_intelligence.classification == "benign" %}
+                  <td class="benign">benign</td>
                 {% else %}
-                  <div class="wf-h3-style">Not found in any identified Business Service or Internet Scanning Observations</div>
+                  <td>-</td>
                 {% endif %}
                 <td>{{ result.0.internet_scanner_intelligence.spoofable }}</td>
                 <td>{{ result.0.internet_scanner_intelligence.vpn_service | default:"None" }}</td>

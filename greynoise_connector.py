@@ -196,6 +196,8 @@ class GreyNoiseConnector(BaseConnector):
                 result_data["trust_level"] = TRUST_LEVELS.get(str(trust_level), trust_level)
             if not (business_service_intelligence or internet_scanner_intelligence):
                 result_data["unseen_rep"] = True
+            else:
+                result_data["unseen_rep"] = False
         except KeyError:
             query_success = False
             return action_result, query_success, API_PARSE_ERROR_MESSAGE

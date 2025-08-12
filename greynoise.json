@@ -228,6 +228,13 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.unseen_rep",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.trust_level",
                     "data_type": "string",
                     "example_values": [
