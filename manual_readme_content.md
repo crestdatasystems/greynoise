@@ -18,8 +18,10 @@ You can find our updated API documentation linked [here](https://docs.greynoise.
 
 1. Data paths for various actions.
 1. CEF fields ingested via on-poll action.
-1. Functionality of **community lookup ip** and **riot lookup ip** can be achieved via **ip reputation** action.
-1. **similar noise ips** action is removed.
+1. Removed the following actions:
+   - community lookup ip (use ip reputation action instead)
+   - riot lookup ip (use ip reputation action instead)
+   - similar noise ips
 
 ## Configure Webhook in Connector
 
